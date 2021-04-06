@@ -1,4 +1,5 @@
 import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/sales/sales_form.dart';
@@ -46,7 +47,7 @@ class SaleList extends StatelessWidget {
                     radius: 25,
                     backgroundColor: MyColors.appBarBackgroundColor,
                     child: Icon(
-                      Icons.people,
+                      AppIcoons.vendas,
                       size: 40,
                     ),
                   ),

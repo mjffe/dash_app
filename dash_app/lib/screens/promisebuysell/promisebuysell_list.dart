@@ -1,18 +1,18 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/helppers/app_icons.dart';
-import 'package:dashapp/models/scriptures.dart';
+import 'package:dashapp/models/promisebuysell.dart';
 import 'package:dashapp/models/user.dart';
-import 'package:dashapp/screens/scriptures/scripture_form.dart';
+import 'package:dashapp/screens/promisebuysell/promisebuysell_form.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ScripturesList extends StatelessWidget {
+class PromiseBuySellList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
-    final raisings = Provider.of<List<ScripturesItem>>(context) ?? [];
+    final raisings = Provider.of<List<PromiseBuySellItem>>(context) ?? [];
 
     //return Text('sdfsdf');
     return ListView.builder(
@@ -30,7 +30,7 @@ class ScripturesList extends StatelessWidget {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${raisings[index].name} ');
                     DatabaseService(uid: user.uid, docid: raisings[index].id)
-                        .deleteScriptureData();
+                        .deletePromiseBuySellData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(AppLocalizations.of(context)
@@ -48,7 +48,7 @@ class ScripturesList extends StatelessWidget {
                     radius: 25,
                     backgroundColor: MyColors.appBarBackgroundColor,
                     child: Icon(
-                      AppIcoons.escrituras,
+                      AppIcoons.promecacompravenda,
                       size: 40,
                     ),
                   ),
@@ -59,7 +59,7 @@ class ScripturesList extends StatelessWidget {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
-                          child: ScripturesForm(user.uid,
+                          child: PromiseBuySellForm(user.uid,
                               raisings[index].id), //SettingsForm(userid),
                         );
                       }),

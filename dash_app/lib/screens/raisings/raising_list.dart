@@ -47,7 +47,7 @@ class RaisingList extends StatelessWidget {
                     radius: 25,
                     backgroundColor: MyColors.appBarBackgroundColor,
                     child: Icon(
-                      Icons.people,
+                      Icons.home,
                       size: 40,
                     ),
                   ),

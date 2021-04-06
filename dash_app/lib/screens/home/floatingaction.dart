@@ -1,4 +1,9 @@
+import 'package:dashapp/screens/invoicing/invoicing_form.dart';
 import 'package:dashapp/screens/leads/lead_form.dart';
+import 'package:dashapp/screens/mediationcontract/mediationcontract_form.dart';
+import 'package:dashapp/screens/promisebuysell/promisebuysell_form.dart';
+import 'package:dashapp/screens/proposal/proposal_form.dart';
+import 'package:dashapp/screens/prospectingtime/prospectingtime_form.dart';
 import 'package:dashapp/screens/raisings/raising_form.dart';
 import 'package:dashapp/screens/sales/sales_form.dart';
 import 'package:dashapp/screens/scriptures/scripture_form.dart';
@@ -83,40 +88,77 @@ class FoatingAction {
         );
       case 6:
         return FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                  child:
+                      MediationContractForm(userid, ''), //SettingsForm(userid),
+                );
+              }),
           backgroundColor: bgcolor,
           child: icon,
         );
       case 7:
         return FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                  child: ProposalForm(userid, ''), //SettingsForm(userid),
+                );
+              }),
           backgroundColor: bgcolor,
           child: icon,
         );
       case 8:
         return FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                  child: PromiseBuySellForm(userid, ''), //SettingsForm(userid),
+                );
+              }),
           backgroundColor: bgcolor,
           child: icon,
         );
       case 9:
         return FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                  child:
+                      ProspectingTimeForm(userid, ''), //SettingsForm(userid),
+                );
+              }),
           backgroundColor: bgcolor,
           child: icon,
         );
       case 10:
         return FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+                  child: InvoicingForm(userid, ''), //SettingsForm(userid),
+                );
+              }),
           backgroundColor: bgcolor,
           child: icon,
         );
-      case 11:
-        return FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: bgcolor,
-          child: icon,
-        );
+      // case 11:
+      //   return FloatingActionButton(
+      //     onPressed: () {},
+      //     backgroundColor: bgcolor,
+      //     child: icon,
+      //   );
       case 20:
         return FloatingActionButton(
           onPressed: () {},

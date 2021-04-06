@@ -2,10 +2,19 @@ import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/authenticate/sign_out.dart';
+import 'package:dashapp/screens/invoicing/invoicing.dart';
 import 'package:dashapp/screens/leads/lead.dart';
+import 'package:dashapp/screens/mediationcontract/mediationcontract.dart';
+import 'package:dashapp/screens/promisebuysell/promisebuysell.dart';
+import 'package:dashapp/screens/proposal/proposal.dart';
+import 'package:dashapp/screens/prospectingtime/prospectingtime.dart';
+import 'package:dashapp/screens/raisings/raising.dart';
+import 'package:dashapp/screens/sales/sale.dart';
+import 'package:dashapp/screens/scriptures/scripture.dart';
+import 'package:dashapp/screens/service_presentation/servicepresentation.dart';
 import 'package:dashapp/shared/app_bar.dart';
 import 'package:dashapp/shared/colors.dart';
-import 'package:dashapp/shared/floatingaction.dart';
+import 'package:dashapp/screens/home/floatingaction.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,79 +36,80 @@ class _HomeState extends State<Home> {
 
     _onSelectItem(int index) {
       setState(() => _selectedIndex = index);
+      Navigator.of(context).pop();
+    }
+
+    String _getScreenName(int index) {
       switch (index) {
         case 0:
           {
-            setState(() => _screenName = 'Dashboard');
+            return AppLocalizations.of(context).translate('dashboard');
           }
           break;
         case 1:
           {
-            setState(() => _screenName = 'Leads');
+            return AppLocalizations.of(context).translate('leads');
           }
           break;
         case 2:
           {
-            setState(() => _screenName = 'Raising');
+            return AppLocalizations.of(context).translate('raising');
           }
           break;
         case 3:
           {
-            setState(() => _screenName = 'Sales');
+            return AppLocalizations.of(context).translate('sales');
           }
           break;
         case 4:
           {
-            setState(() => _screenName = 'Scriptures');
+            return AppLocalizations.of(context).translate('scriptures');
           }
           break;
         case 5:
           {
-            setState(() => _screenName = 'Service Presentation');
+            return AppLocalizations.of(context)
+                .translate('service_presentation');
           }
           break;
         case 6:
           {
-            setState(() => _screenName = 'Mediation Contract');
+            return AppLocalizations.of(context).translate('mediation_contract');
           }
           break;
         case 7:
           {
-            setState(() => _screenName = 'Proposal');
+            return AppLocalizations.of(context).translate('proposal');
           }
           break;
         case 8:
           {
-            setState(() => _screenName = 'Promise to Buy and Sell');
+            return AppLocalizations.of(context).translate('promise_buy_sell');
           }
           break;
         case 9:
           {
-            setState(() => _screenName = 'Prospecting Time');
+            return AppLocalizations.of(context).translate('prospecting_time');
           }
           break;
         case 10:
           {
-            setState(() => _screenName = 'Invoicing');
-          }
-          break;
-        case 11:
-          {
-            setState(() => _screenName = 'Sales');
+            return AppLocalizations.of(context).translate('invoicing');
           }
           break;
         case 20:
           {
-            setState(() => _screenName = 'Objectives');
+            return AppLocalizations.of(context).translate('objectives');
           }
           break;
         case 21:
           {
-            setState(() => _screenName = 'Settings');
+            return AppLocalizations.of(context).translate('settings');
           }
           break;
+        default:
+          return AppLocalizations.of(context).translate('dashboard');
       }
-      Navigator.of(context).pop();
     }
 
     _getDrawerItem(int pos) {
@@ -109,27 +119,25 @@ class _HomeState extends State<Home> {
         case 1:
           return Lead();
         case 2:
-          return Text(AppLocalizations.of(context).translate('first_string'));
+          return Raising();
         case 3:
-          return Text("Tela 2");
+          return Sale();
         case 4:
-          return Text("Tela 2");
+          return Scriptures();
         case 5:
-          return Text("Tela 2");
-        case 5:
-          return Text("Tela 2");
+          return ServicePresentation();
         case 6:
-          return Text("Tela 2");
+          return MediationContract();
         case 7:
-          return Text("Tela 2");
+          return Proposal();
         case 8:
-          return Text("Tela 2");
+          return PromiseBuySell();
         case 9:
-          return Text("Tela 2");
+          return ProspectingTime();
         case 10:
-          return Text("Tela 2");
-        case 11:
-          return Text("Tela 2");
+          return Invoicing();
+        // case 11:
+        //   return Text("Tela 2");
         case 20:
           return Text("Tela 2");
         case 21:
@@ -140,7 +148,7 @@ class _HomeState extends State<Home> {
     return Container(
       child: Scaffold(
         backgroundColor: MyColors.appBarBackgroundColor,
-        appBar: customAppBar(_screenName).bar(),
+        appBar: customAppBar(_getScreenName(_selectedIndex)).bar(),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,

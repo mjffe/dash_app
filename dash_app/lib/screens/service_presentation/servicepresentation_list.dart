@@ -1,4 +1,5 @@
 import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/servicepresentation.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/service_presentation/servicepresentation_form.dart';
@@ -49,7 +50,7 @@ class ServicePresentationList extends StatelessWidget {
                     radius: 25,
                     backgroundColor: MyColors.appBarBackgroundColor,
                     child: Icon(
-                      Icons.people,
+                      AppIcoons.apresentacaoservico,
                       size: 40,
                     ),
                   ),

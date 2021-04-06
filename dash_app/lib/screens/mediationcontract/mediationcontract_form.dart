@@ -1,22 +1,23 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/models/scriptures.dart';
+import 'package:dashapp/models/mediationcontract.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
 import 'package:dashapp/shared/loading.dart';
 import 'package:flutter/material.dart';
 
-class ScripturesForm extends StatefulWidget {
-  ScripturesForm(this.userId, this.docId);
+class MediationContractForm extends StatefulWidget {
+  MediationContractForm(this.userId, this.docId);
   final String userId;
   final String docId;
 
   @override
-  _ScripturesFormState createState() => _ScripturesFormState(userId, docId);
+  _MediationContractFormState createState() =>
+      _MediationContractFormState(userId, docId);
 }
 
-class _ScripturesFormState extends State<ScripturesForm> {
-  _ScripturesFormState(this.userId, this.docId);
+class _MediationContractFormState extends State<MediationContractForm> {
+  _MediationContractFormState(this.userId, this.docId);
   final String userId;
   final String docId;
   final _formkey = GlobalKey<FormState>();
@@ -34,7 +35,7 @@ class _ScripturesFormState extends State<ScripturesForm> {
         child: Column(
           children: <Widget>[
             Text(
-              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('scriptures')}',
+              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('raising')}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -58,7 +59,7 @@ class _ScripturesFormState extends State<ScripturesForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createScriptureData(_name ?? '', '');
+                        .createMediationContractData(_name ?? '');
                     Navigator.pop(context);
                   }
                 }),
@@ -66,23 +67,19 @@ class _ScripturesFormState extends State<ScripturesForm> {
         ),
       );
     else {
-      return StreamBuilder<ScripturesItem>(
-          stream: DatabaseService(uid: userId, docid: docId).scriptureData,
+      return StreamBuilder<MediationContractItem>(
+          stream:
+              DatabaseService(uid: userId, docid: docId).mediationcontractData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              ScripturesItem scriptureData = snapshot.data;
-              // setState(() {
-              //   _name = leadData.name;
-              //   _email = leadData.email;
-              //   _phone = leadData.phone;
-              // });
-              _name = scriptureData.name;
+              MediationContractItem data = snapshot.data;
+              _name = data.name;
               return Form(
                 key: _formkey,
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('scriptures')}',
+                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('raising')}',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: 20.0),
@@ -107,7 +104,9 @@ class _ScripturesFormState extends State<ScripturesForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateScriptureData(_name ?? '', '');
+                                .updateMediationContractData(
+                              _name ?? '',
+                            );
                             Navigator.pop(context);
                           }
                         }),

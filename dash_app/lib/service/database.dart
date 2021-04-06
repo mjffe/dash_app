@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dashapp/models/brew.dart';
+import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/lead.dart';
+import 'package:dashapp/models/mediationcontract.dart';
+import 'package:dashapp/models/promisebuysell.dart';
+import 'package:dashapp/models/proposal.dart';
+import 'package:dashapp/models/prospectingtime.dart';
 import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/models/scriptures.dart';
@@ -208,6 +213,191 @@ class DatabaseService {
     }
   }
 
+//create Mediation Contract
+  Future<void> createMediationContractData(String name) async {
+    return await userCollection.doc(uid).collection('mediationcontract').add({
+      'name': name,
+    });
+  }
+
+//update Mediation Contract
+  Future<void> updateMediationContractData(String name) async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('mediationcontract')
+          .doc(docid)
+          .set({
+        'name': name,
+      });
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+// delete Mediation Contract
+  Future<void> deleteMediationContractData() async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('mediationcontract')
+          .doc(docid)
+          .delete();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+//create proposal
+  Future<void> createProposalData(String name) async {
+    return await userCollection.doc(uid).collection('proposal').add({
+      'name': name,
+    });
+  }
+
+//update proposal
+  Future<void> updateProposalData(String name) async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('proposal')
+          .doc(docid)
+          .set({
+        'name': name,
+      });
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+// delete proposal
+  Future<void> deleteProposalData() async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('proposal')
+          .doc(docid)
+          .delete();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+//create promisebuysell
+  Future<void> createpPromiseBuySellData(String name) async {
+    return await userCollection.doc(uid).collection('promisebuysell').add({
+      'name': name,
+    });
+  }
+
+//update promisebuysell
+  Future<void> updatePromiseBuySellData(String name) async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('promisebuysell')
+          .doc(docid)
+          .set({
+        'name': name,
+      });
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+// delete promisebuysell
+  Future<void> deletePromiseBuySellData() async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('promisebuysell')
+          .doc(docid)
+          .delete();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+//create prospectingtime
+  Future<void> createProspectingTimeData(String name) async {
+    return await userCollection.doc(uid).collection('prospectingtime').add({
+      'name': name,
+    });
+  }
+
+//update prospectingtime
+  Future<void> updateProspectingTimeData(String name) async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('prospectingtime')
+          .doc(docid)
+          .set({
+        'name': name,
+      });
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+// delete prospectingtime
+  Future<void> deleteProspectingTimeData() async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('prospectingtime')
+          .doc(docid)
+          .delete();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+//create invoicing
+  Future<void> createInvoicingData(String name) async {
+    return await userCollection.doc(uid).collection('invoicing').add({
+      'name': name,
+    });
+  }
+
+//update invoicing
+  Future<void> updateInvoicingData(String name) async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('invoicing')
+          .doc(docid)
+          .set({
+        'name': name,
+      });
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+// delete invoicing
+  Future<void> deleteInvoicingData() async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('invoicing')
+          .doc(docid)
+          .delete();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
   // brew list from snapshot
   List<Brew> _brewListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
@@ -373,5 +563,97 @@ class DatabaseService {
         .doc(docid)
         .snapshots()
         .map((doc) => ServicePresentationItem.fromFirestore(doc));
+  }
+
+//Obten a lista de mediationcontract de um utilizador
+  Stream<List<MediationContractItem>> getmediationcontracts(FirebaseUser user) {
+    var ref = userCollection.doc(user.uid).collection('mediationcontract');
+
+    return ref.snapshots().map((list) => list.docs
+        .map((doc) => MediationContractItem.fromFirestore(doc))
+        .toList());
+  }
+
+  //Obten um mediationcontract especifica
+  Stream<MediationContractItem> get mediationcontractData {
+    return userCollection
+        .doc(uid)
+        .collection('mediationcontract')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => MediationContractItem.fromFirestore(doc));
+  }
+
+//Obten a lista de proposal de um utilizador
+  Stream<List<ProposalItem>> getproposals(FirebaseUser user) {
+    var ref = userCollection.doc(user.uid).collection('proposal');
+
+    return ref.snapshots().map((list) =>
+        list.docs.map((doc) => ProposalItem.fromFirestore(doc)).toList());
+  }
+
+  //Obten um proposal especifica
+  Stream<ProposalItem> get proposalData {
+    return userCollection
+        .doc(uid)
+        .collection('proposal')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => ProposalItem.fromFirestore(doc));
+  }
+
+//Obten a lista de promisebuysell de um utilizador
+  Stream<List<PromiseBuySellItem>> getpromisesbuysell(FirebaseUser user) {
+    var ref = userCollection.doc(user.uid).collection('promisebuysell');
+
+    return ref.snapshots().map((list) =>
+        list.docs.map((doc) => PromiseBuySellItem.fromFirestore(doc)).toList());
+  }
+
+  //Obten um promisebuysell especifica
+  Stream<PromiseBuySellItem> get promisebuysellData {
+    return userCollection
+        .doc(uid)
+        .collection('promisebuysell')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => PromiseBuySellItem.fromFirestore(doc));
+  }
+
+//Obten a lista de prospectingtime de um utilizador
+  Stream<List<ProspectingTimeItem>> getprospectingtime(FirebaseUser user) {
+    var ref = userCollection.doc(user.uid).collection('prospectingtime');
+
+    return ref.snapshots().map((list) => list.docs
+        .map((doc) => ProspectingTimeItem.fromFirestore(doc))
+        .toList());
+  }
+
+  //Obten um prospectingtime especifica
+  Stream<ProspectingTimeItem> get prospectingtimeData {
+    return userCollection
+        .doc(uid)
+        .collection('prospectingtime')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => ProspectingTimeItem.fromFirestore(doc));
+  }
+
+//Obten a lista de invoicing de um utilizador
+  Stream<List<InvoicingItem>> getinvoices(FirebaseUser user) {
+    var ref = userCollection.doc(user.uid).collection('invoicing');
+
+    return ref.snapshots().map((list) =>
+        list.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList());
+  }
+
+  //Obten um invoicing especifica
+  Stream<InvoicingItem> get invoicingData {
+    return userCollection
+        .doc(uid)
+        .collection('invoicing')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => InvoicingItem.fromFirestore(doc));
   }
 }
