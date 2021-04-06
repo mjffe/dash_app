@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "214219942801",
+    "project_id": "dashbase-c4040",
+    "storage_bucket": "dashbase-c4040.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:214219942801:android:2b1a7a792715ed2a83c830",
+        "android_client_info": {
+          "package_name": "com.example.dashapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "214219942801-tbfstv7c8gkmd4peda6c8kn0067ei39f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwvmlGk2UiZ5WoRm87tuxBPC4RXPi5-mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "214219942801-tbfstv7c8gkmd4peda6c8kn0067ei39f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
