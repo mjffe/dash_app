@@ -1,9 +1,9 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/scriptures.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/scriptures/scripture_form.dart';
 import 'package:dashapp/service/database.dart';
+import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

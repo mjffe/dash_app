@@ -5,6 +5,7 @@ import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
 import 'package:dashapp/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class InvoicingForm extends StatefulWidget {
   InvoicingForm(this.userId, this.docId);
@@ -23,6 +24,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
 
   // form values
   String _name = '';
+  int _value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,21 @@ class _InvoicingFormState extends State<InvoicingForm> {
                   : null,
               onChanged: (val) => setState(() => _name = val),
             ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              decoration: textInputDecoration.copyWith(
+                hintText: AppLocalizations.of(context).translate('value'),
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              initialValue: _name,
+              validator: (val) => val.isEmpty
+                  ? AppLocalizations.of(context).translate('validvalue')
+                  : null,
+              onChanged: (val) => setState(() => _value = int.parse(val)),
+            ),
             SizedBox(height: 10.0),
             RaisedButton(
                 color: MyColors.lightBlue,
@@ -58,7 +75,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createInvoicingData(_name ?? '');
+                        .createInvoicingData(_name ?? '', _value ?? 0);
                     Navigator.pop(context);
                   }
                 }),
@@ -92,6 +109,23 @@ class _InvoicingFormState extends State<InvoicingForm> {
                           : null,
                       onChanged: (val) => setState(() => _name = val),
                     ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      decoration: textInputDecoration.copyWith(
+                        hintText:
+                            AppLocalizations.of(context).translate('value'),
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
+                      initialValue: _value.toString(),
+                      validator: (val) => val.isEmpty
+                          ? AppLocalizations.of(context).translate('validvalue')
+                          : null,
+                      onChanged: (val) =>
+                          setState(() => _value = int.parse(val)),
+                    ),
                     SizedBox(height: 10.0),
                     RaisedButton(
                         color: MyColors.lightBlue,
@@ -102,9 +136,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateInvoicingData(
-                              _name ?? '',
-                            );
+                                .updateInvoicingData(_name ?? '', _value ?? 0);
                             Navigator.pop(context);
                           }
                         }),

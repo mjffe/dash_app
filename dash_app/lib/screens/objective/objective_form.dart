@@ -1,5 +1,5 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/models/proposal.dart';
+import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
@@ -7,17 +7,17 @@ import 'package:dashapp/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ProposalForm extends StatefulWidget {
-  ProposalForm(this.userId, this.docId);
+class ObjectiveForm extends StatefulWidget {
+  ObjectiveForm(this.userId, this.docId);
   final String userId;
   final String docId;
 
   @override
-  _ProposalFormState createState() => _ProposalFormState(userId, docId);
+  _ObjectiveFormState createState() => _ObjectiveFormState(userId, docId);
 }
 
-class _ProposalFormState extends State<ProposalForm> {
-  _ProposalFormState(this.userId, this.docId);
+class _ObjectiveFormState extends State<ObjectiveForm> {
+  _ObjectiveFormState(this.userId, this.docId);
   final String userId;
   final String docId;
   final _formkey = GlobalKey<FormState>();
@@ -75,7 +75,7 @@ class _ProposalFormState extends State<ProposalForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createProposalData(_name ?? '', _value ?? 0);
+                        .createObjectiveData(_name ?? '', _value ?? 0);
                     Navigator.pop(context);
                   }
                 }),
@@ -83,11 +83,11 @@ class _ProposalFormState extends State<ProposalForm> {
         ),
       );
     else {
-      return StreamBuilder<ProposalItem>(
-          stream: DatabaseService(uid: userId, docid: docId).proposalData,
+      return StreamBuilder<ObjectiveItem>(
+          stream: DatabaseService(uid: userId, docid: docId).objectiveData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              ProposalItem data = snapshot.data;
+              ObjectiveItem data = snapshot.data;
               _name = data.name;
               return Form(
                 key: _formkey,
@@ -136,7 +136,7 @@ class _ProposalFormState extends State<ProposalForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateProposalData(_name ?? '', _value ?? 0);
+                                .updateObjectiveData(_name ?? '', _value ?? 0);
                             Navigator.pop(context);
                           }
                         }),

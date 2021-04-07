@@ -9,7 +9,10 @@ class ServicePresentationItem {
     return ServicePresentationItem(
       id: doc.id,
       name: data['name'] ?? '',
-      createdon: data['createdon'] ?? new DateTime.now(),
+      createdon: data['createdon'] != null && data['createdon'] != ''
+          ? DateTime.fromMillisecondsSinceEpoch(
+              (data['createdon']).seconds * 1000)
+          : new DateTime.now(),
     );
   }
   final String id;

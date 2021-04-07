@@ -1,21 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RaisingItem {
-  RaisingItem({this.id, this.name, this.createdon});
+class ObjectiveItem {
+  ObjectiveItem({this.id, this.name, this.createdon, this.value});
 
-  factory RaisingItem.fromFirestore(DocumentSnapshot doc) {
+  factory ObjectiveItem.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
 
-    return RaisingItem(
+    return ObjectiveItem(
       id: doc.id,
       name: data['name'] ?? '',
       createdon: data['createdon'] != null && data['createdon'] != ''
           ? DateTime.fromMillisecondsSinceEpoch(
               (data['createdon']).seconds * 1000)
           : new DateTime.now(),
+      value: data['value'] ?? 0,
     );
   }
   final String id;
   final String name;
   final DateTime createdon;
+  final int value;
 }

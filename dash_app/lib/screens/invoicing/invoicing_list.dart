@@ -1,9 +1,9 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/invoicing/invoicing_form.dart';
 import 'package:dashapp/service/database.dart';
+import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +12,11 @@ class InvoicingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
-    final raisings = Provider.of<List<InvoicingItem>>(context) ?? [];
+    final invoicing = Provider.of<List<InvoicingItem>>(context) ?? [];
 
     //return Text('sdfsdf');
     return ListView.builder(
-        itemCount: raisings.length,
+        itemCount: invoicing.length,
         itemBuilder: (context, index) {
           return //LeadTile(brew: brews[index]);
               Padding(
@@ -28,8 +28,8 @@ class InvoicingList extends StatelessWidget {
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
-                    print('name:${raisings[index].name} ');
-                    DatabaseService(uid: user.uid, docid: raisings[index].id)
+                    print('name:${invoicing[index].name} ');
+                    DatabaseService(uid: user.uid, docid: invoicing[index].id)
                         .deleteInvoicingData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -52,7 +52,9 @@ class InvoicingList extends StatelessWidget {
                       size: 40,
                     ),
                   ),
-                  title: Text(raisings[index].name),
+                  title: Text(invoicing[index].name),
+                  subtitle: Text(
+                      '${AppLocalizations.of(context).translate('value')}:${invoicing[index].value} '),
                   onTap: () => showModalBottomSheet(
                       context: context,
                       builder: (context) {
@@ -60,7 +62,7 @@ class InvoicingList extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
                           child: InvoicingForm(user.uid,
-                              raisings[index].id), //SettingsForm(userid),
+                              invoicing[index].id), //SettingsForm(userid),
                         );
                       }),
                 ),

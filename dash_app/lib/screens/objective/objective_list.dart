@@ -1,23 +1,22 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/models/servicepresentation.dart';
+import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/models/user.dart';
-import 'package:dashapp/screens/service_presentation/servicepresentation_form.dart';
+import 'package:dashapp/screens/objective/objective_form.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ServicePresentationList extends StatelessWidget {
+class ObjectiveList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
-    final servicePresentation =
-        Provider.of<List<ServicePresentationItem>>(context) ?? [];
+    final objective = Provider.of<List<ObjectiveItem>>(context) ?? [];
 
     //return Text('sdfsdf');
     return ListView.builder(
-        itemCount: servicePresentation.length,
+        itemCount: objective.length,
         itemBuilder: (context, index) {
           return //LeadTile(brew: brews[index]);
               Padding(
@@ -29,10 +28,9 @@ class ServicePresentationList extends StatelessWidget {
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
-                    print('name:${servicePresentation[index].name} ');
-                    DatabaseService(
-                            uid: user.uid, docid: servicePresentation[index].id)
-                        .deleteServicePresentationData();
+                    print('name:${objective[index].name} ');
+                    DatabaseService(uid: user.uid, docid: objective[index].id)
+                        .deleteObjectiveData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(AppLocalizations.of(context)
@@ -50,21 +48,21 @@ class ServicePresentationList extends StatelessWidget {
                     radius: 25,
                     backgroundColor: MyColors.appBarBackgroundColor,
                     child: Icon(
-                      AppIcoons.apresentacaoservico,
+                      AppIcoons.objetivo,
                       size: 40,
                     ),
                   ),
-                  title: Text(servicePresentation[index].name),
+                  title: Text(objective[index].name),
+                  subtitle: Text(
+                      '${AppLocalizations.of(context).translate('value')}:${objective[index].value} '),
                   onTap: () => showModalBottomSheet(
                       context: context,
                       builder: (context) {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
-                          child: ServicePresentationForm(
-                              user.uid,
-                              servicePresentation[index]
-                                  .id), //SettingsForm(userid),
+                          child: ObjectiveForm(user.uid,
+                              objective[index].id), //SettingsForm(userid),
                         );
                       }),
                 ),

@@ -63,7 +63,7 @@ class _SaleFormState extends State<SaleForm> {
               validator: (val) => val.isEmpty
                   ? AppLocalizations.of(context).translate('validvalue')
                   : null,
-              onChanged: (val) => setState(() => _name = val),
+              onChanged: (val) => setState(() => _value = int.parse(val)),
             ),
             SizedBox(height: 10.0),
             RaisedButton(
@@ -75,7 +75,7 @@ class _SaleFormState extends State<SaleForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createRaisingData(_name ?? '');
+                        .createSaleData(_name ?? '', _value ?? 0);
                     Navigator.pop(context);
                   }
                 }),
@@ -125,11 +125,12 @@ class _SaleFormState extends State<SaleForm> {
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
                       ],
-                      initialValue: _name,
+                      initialValue: _value.toString(),
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validvalue')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) =>
+                          setState(() => _value = int.parse(val)),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(

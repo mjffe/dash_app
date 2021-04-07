@@ -1,9 +1,9 @@
 import 'widgets/dash_Counters.dart';
 import 'widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
-import 'widgets/dash_invoice.dart';
-import 'widgets/dash_piechart.dart';
-import 'widgets/dash_prospection.dart';
+import 'screens/dashboard/dash_invoice.dart';
+import 'screens/dashboard/dash_piechart.dart';
+import 'screens/dashboard/dash_prospection.dart';
 
 class Dash extends StatefulWidget {
   Dash({Key key}) : super(key: key);

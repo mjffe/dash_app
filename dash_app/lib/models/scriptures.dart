@@ -9,8 +9,13 @@ class ScripturesItem {
     return ScripturesItem(
       id: doc.id,
       name: data['name'] ?? '',
-      date: data['date'] ?? new DateTime.now(),
-      createdon: data['createdon'] ?? new DateTime.now(),
+      date: data['date'] != ''
+          ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
+          : new DateTime.now(),
+      createdon: data['createdon'] != null && data['createdon'] != ''
+          ? DateTime.fromMillisecondsSinceEpoch(
+              (data['createdon']).seconds * 1000)
+          : new DateTime.now(),
     );
   }
   final String id;

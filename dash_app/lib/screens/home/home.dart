@@ -1,10 +1,11 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/authenticate/sign_out.dart';
+import 'package:dashapp/screens/dashboard/dashboard.dart';
 import 'package:dashapp/screens/invoicing/invoicing.dart';
 import 'package:dashapp/screens/leads/lead.dart';
 import 'package:dashapp/screens/mediationcontract/mediationcontract.dart';
+import 'package:dashapp/screens/objective/objective.dart';
 import 'package:dashapp/screens/promisebuysell/promisebuysell.dart';
 import 'package:dashapp/screens/proposal/proposal.dart';
 import 'package:dashapp/screens/prospectingtime/prospectingtime.dart';
@@ -13,6 +14,7 @@ import 'package:dashapp/screens/sales/sale.dart';
 import 'package:dashapp/screens/scriptures/scripture.dart';
 import 'package:dashapp/screens/service_presentation/servicepresentation.dart';
 import 'package:dashapp/shared/app_bar.dart';
+import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/screens/home/floatingaction.dart';
 import 'package:flutter/material.dart';
@@ -115,7 +117,7 @@ class _HomeState extends State<Home> {
     _getDrawerItem(int pos) {
       switch (pos) {
         case 0:
-          return Text("Tela 1");
+          return Dash();
         case 1:
           return Lead();
         case 2:
@@ -139,7 +141,7 @@ class _HomeState extends State<Home> {
         // case 11:
         //   return Text("Tela 2");
         case 20:
-          return Text("Tela 2");
+          return Objective();
         case 21:
           return SignOut();
       }
@@ -274,7 +276,7 @@ class _HomeState extends State<Home> {
                       AppLocalizations.of(context).translate('objectives')),
                   selected: 20 == _selectedIndex,
                   onTap: () {
-                    _onSelectItem(0);
+                    _onSelectItem(20);
                   }),
               ListTile(
                   leading: Icon(Icons.settings),

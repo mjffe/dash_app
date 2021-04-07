@@ -3,6 +3,7 @@ import 'package:dashapp/models/brew.dart';
 import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/lead.dart';
 import 'package:dashapp/models/mediationcontract.dart';
+import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/models/promisebuysell.dart';
 import 'package:dashapp/models/proposal.dart';
 import 'package:dashapp/models/prospectingtime.dart';
@@ -34,6 +35,7 @@ class DatabaseService {
       'email': email,
       'name': name,
       'telefone': phone,
+      'createdon': new DateTime.now()
     });
   }
 
@@ -67,9 +69,10 @@ class DatabaseService {
 
   //create raisings
   Future<void> createRaisingData(String name) async {
-    return await userCollection.doc(uid).collection('raisings').add({
-      'name': name,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('raisings')
+        .add({'name': name, 'createdon': new DateTime.now()});
   }
 
 //update raisings
@@ -104,10 +107,10 @@ class DatabaseService {
 
   //create sales
   Future<void> createSaleData(String name, int value) async {
-    return await userCollection.doc(uid).collection('sales').add({
-      'name': name,
-      'value': value,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('sales')
+        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
   }
 
 //update raisings
@@ -139,10 +142,10 @@ class DatabaseService {
 
 //create scriptures
   Future<void> createScriptureData(String name, String date) async {
-    return await userCollection.doc(uid).collection('scriptures').add({
-      'name': name,
-      'date': date,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('scriptures')
+        .add({'name': name, 'date': date, 'createdon': new DateTime.now()});
   }
 
 //update scriptures
@@ -178,9 +181,10 @@ class DatabaseService {
 
 //create Service Presentation
   Future<void> createServicePresentationData(String name) async {
-    return await userCollection.doc(uid).collection('servicepresentation').add({
-      'name': name,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('servicepresentation')
+        .add({'name': name, 'createdon': new DateTime.now()});
   }
 
 //update Service Presentation
@@ -215,9 +219,10 @@ class DatabaseService {
 
 //create Mediation Contract
   Future<void> createMediationContractData(String name) async {
-    return await userCollection.doc(uid).collection('mediationcontract').add({
-      'name': name,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('mediationcontract')
+        .add({'name': name, 'createdon': new DateTime.now()});
   }
 
 //update Mediation Contract
@@ -251,22 +256,21 @@ class DatabaseService {
   }
 
 //create proposal
-  Future<void> createProposalData(String name) async {
-    return await userCollection.doc(uid).collection('proposal').add({
-      'name': name,
-    });
+  Future<void> createProposalData(String name, int value) async {
+    return await userCollection
+        .doc(uid)
+        .collection('proposal')
+        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
   }
 
 //update proposal
-  Future<void> updateProposalData(String name) async {
+  Future<void> updateProposalData(String name, int value) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
-          .set({
-        'name': name,
-      });
+          .set({'name': name, 'value': value});
     } catch (error) {
       print(error.toString());
       return null;
@@ -289,9 +293,10 @@ class DatabaseService {
 
 //create promisebuysell
   Future<void> createpPromiseBuySellData(String name) async {
-    return await userCollection.doc(uid).collection('promisebuysell').add({
-      'name': name,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('promisebuysell')
+        .add({'name': name, 'createdon': new DateTime.now()});
   }
 
 //update promisebuysell
@@ -326,9 +331,10 @@ class DatabaseService {
 
 //create prospectingtime
   Future<void> createProspectingTimeData(String name) async {
-    return await userCollection.doc(uid).collection('prospectingtime').add({
-      'name': name,
-    });
+    return await userCollection
+        .doc(uid)
+        .collection('prospectingtime')
+        .add({'name': name, 'createdon': new DateTime.now()});
   }
 
 //update prospectingtime
@@ -362,22 +368,21 @@ class DatabaseService {
   }
 
 //create invoicing
-  Future<void> createInvoicingData(String name) async {
-    return await userCollection.doc(uid).collection('invoicing').add({
-      'name': name,
-    });
+  Future<void> createInvoicingData(String name, int value) async {
+    return await userCollection
+        .doc(uid)
+        .collection('invoicing')
+        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
   }
 
 //update invoicing
-  Future<void> updateInvoicingData(String name) async {
+  Future<void> updateInvoicingData(String name, int value) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('invoicing')
           .doc(docid)
-          .set({
-        'name': name,
-      });
+          .set({'name': name, 'value': value});
     } catch (error) {
       print(error.toString());
       return null;
@@ -390,6 +395,42 @@ class DatabaseService {
       return await userCollection
           .doc(uid)
           .collection('invoicing')
+          .doc(docid)
+          .delete();
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+//create invoicing
+  Future<void> createObjectiveData(String name, int value) async {
+    return await userCollection
+        .doc(uid)
+        .collection('objective')
+        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
+  }
+
+//update invoicing
+  Future<void> updateObjectiveData(String name, int value) async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('objective')
+          .doc(docid)
+          .set({'name': name, 'value': value});
+    } catch (error) {
+      print(error.toString());
+      return null;
+    }
+  }
+
+// delete invoicing
+  Future<void> deleteObjectiveData() async {
+    try {
+      return await userCollection
+          .doc(uid)
+          .collection('objective')
           .doc(docid)
           .delete();
     } catch (error) {
@@ -655,5 +696,23 @@ class DatabaseService {
         .doc(docid)
         .snapshots()
         .map((doc) => InvoicingItem.fromFirestore(doc));
+  }
+
+//Obten a lista de invoicing de um utilizador
+  Stream<List<ObjectiveItem>> getobjectives(FirebaseUser user) {
+    var ref = userCollection.doc(user.uid).collection('objective');
+
+    return ref.snapshots().map((list) =>
+        list.docs.map((doc) => ObjectiveItem.fromFirestore(doc)).toList());
+  }
+
+  //Obten um invoicing especifica
+  Stream<ObjectiveItem> get objectiveData {
+    return userCollection
+        .doc(uid)
+        .collection('objective')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => ObjectiveItem.fromFirestore(doc));
   }
 }

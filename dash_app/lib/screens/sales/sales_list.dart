@@ -1,9 +1,9 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/helppers/app_icons.dart';
 import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/sales/sales_form.dart';
 import 'package:dashapp/service/database.dart';
+import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,7 @@ class SaleList extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
     final sales = Provider.of<List<SaleItem>>(context) ?? [];
-    print('List of leads: ${sales.length}');
+    print('List of sales: ${sales.length}');
     //return Text('sdfsdf');
     return ListView.builder(
         itemCount: sales.length,
