@@ -3,8 +3,11 @@ import 'package:dashapp/models/prospectingtime.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
+import 'package:dashapp/shared/decimalinput.dart';
 import 'package:dashapp/shared/loading.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ProspectingTimeForm extends StatefulWidget {
   ProspectingTimeForm(this.userId, this.docId);
@@ -24,6 +27,11 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
 
   // form values
   String _name = '';
+  String _nameUpdated;
+  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDateUpdated;
+  double _duration = 0;
+  double _durationUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +57,37 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
                   : null,
               onChanged: (val) => setState(() => _name = val),
             ),
+            SizedBox(height: 20.0),
+            DateTimePicker(
+              dateMask: 'dd/MM/yyyy',
+              initialValue: '',
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              dateLabelText: 'Date',
+              onChanged: (val) =>
+                  setState(() => _selectedDate = DateTime.parse(val)),
+              validator: (val) => val.isEmpty
+                  ? AppLocalizations.of(context).translate('validname')
+                  : null,
+              //onSaved: (val) => print(val),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              decoration: textInputDecoration.copyWith(
+                hintText: AppLocalizations.of(context).translate('duration'),
+              ),
+              inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              // keyboardType: TextInputType.number,
+              // inputFormatters: <TextInputFormatter>[
+              //   FilteringTextInputFormatter.digitsOnly
+              // ],
+              initialValue: _name,
+              validator: (val) => val.isEmpty
+                  ? AppLocalizations.of(context).translate('validduration')
+                  : null,
+              onChanged: (val) => setState(() => _duration = double.parse(val)),
+            ),
             SizedBox(height: 10.0),
             RaisedButton(
                 color: MyColors.lightBlue,
@@ -59,7 +98,8 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createProspectingTimeData(_name ?? '');
+                        .createProspectingTimeData(_name ?? '',
+                            _selectedDate ?? DateTime.now(), _duration ?? 0);
                     Navigator.pop(context);
                   }
                 }),
@@ -92,7 +132,45 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
+                    ),
+                    SizedBox(height: 20.0),
+                    DateTimePicker(
+                      dateMask: 'dd/MM/yyyy',
+                      initialValue: _selectedDate.toString(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      decoration: textInputDecoration,
+                      dateLabelText: 'Date',
+                      onChanged: (val) => setState(
+                          () => _selectedDateUpdated = DateTime.parse(val)),
+                      validator: (val) => val.isEmpty
+                          ? AppLocalizations.of(context).translate('validname')
+                          : null,
+                      //onSaved: (val) => print(val),
+                    ),
+                    SizedBox(height: 20.0),
+                    TextFormField(
+                      decoration: textInputDecoration.copyWith(
+                        hintText:
+                            AppLocalizations.of(context).translate('duration'),
+                      ),
+                      inputFormatters: [
+                        DecimalTextInputFormatter(decimalRange: 2)
+                      ],
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      // keyboardType: TextInputType.number,
+                      // inputFormatters: <TextInputFormatter>[
+                      //   FilteringTextInputFormatter.digitsOnly
+                      // ],
+                      initialValue: _duration.toString(),
+                      validator: (val) => val.isEmpty
+                          ? AppLocalizations.of(context)
+                              .translate('validduration')
+                          : null,
+                      onChanged: (val) =>
+                          setState(() => _durationUpdated = double.parse(val)),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -105,8 +183,9 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
                                 .updateProspectingTimeData(
-                              _name ?? '',
-                            );
+                                    _nameUpdated ?? _name,
+                                    _selectedDateUpdated ?? _selectedDate,
+                                    _durationUpdated ?? _duration);
                             Navigator.pop(context);
                           }
                         }),

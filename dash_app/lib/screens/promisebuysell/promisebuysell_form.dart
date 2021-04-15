@@ -24,6 +24,7 @@ class _PromiseBuySellFormState extends State<PromiseBuySellForm> {
 
   // form values
   String _name = '';
+  String _nameUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _PromiseBuySellFormState extends State<PromiseBuySellForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -104,7 +105,7 @@ class _PromiseBuySellFormState extends State<PromiseBuySellForm> {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
                                 .updatePromiseBuySellData(
-                              _name ?? '',
+                              _nameUpdated ?? _name,
                             );
                             Navigator.pop(context);
                           }

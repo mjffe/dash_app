@@ -24,6 +24,7 @@ class _ServicePresentationFormState extends State<ServicePresentationForm> {
 
   // form values
   String _name = '';
+  String _nameUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,7 @@ class _ServicePresentationFormState extends State<ServicePresentationForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -110,7 +111,7 @@ class _ServicePresentationFormState extends State<ServicePresentationForm> {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
                                 .updateServicePresentationData(
-                              _name ?? '',
+                              _nameUpdated ?? _name,
                             );
                             Navigator.pop(context);
                           }

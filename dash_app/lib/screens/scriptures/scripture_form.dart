@@ -23,6 +23,7 @@ class _ScripturesFormState extends State<ScripturesForm> {
 
   // form values
   String _name = '';
+  String _nameUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,7 @@ class _ScripturesFormState extends State<ScripturesForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -107,7 +108,7 @@ class _ScripturesFormState extends State<ScripturesForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateScriptureData(_name ?? '', '');
+                                .updateScriptureData(_nameUpdated ?? _name, '');
                             Navigator.pop(context);
                           }
                         }),

@@ -1,8 +1,10 @@
+import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/dash_counters.dart';
 import 'package:dashapp/screens/dashboard/dash_invoice.dart';
 import 'package:dashapp/screens/dashboard/dash_piechart.dart';
 import 'package:dashapp/screens/dashboard/dash_prospection.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Dash extends StatefulWidget {
   Dash({Key key}) : super(key: key);
@@ -14,17 +16,18 @@ class Dash extends StatefulWidget {
 class _DashState extends State<Dash> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<FirebaseUser>(context);
+
     return SingleChildScrollView(
         child: Stack(children: <Widget>[
       //Stack(children: <Widget>[
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Dash_Counters(),
+          Dash_Counters(user.uid),
           Dash_PieChart(),
-          //PieChartSample1(),
-          Dash_Prospection(),
-          Dash_Invoice()
+          Dash_ProspectingTime(),
+          //Dash_Invoice()
         ],
       )
     ]));

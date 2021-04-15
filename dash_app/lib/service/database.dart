@@ -330,15 +330,19 @@ class DatabaseService {
   }
 
 //create prospectingtime
-  Future<void> createProspectingTimeData(String name) async {
-    return await userCollection
-        .doc(uid)
-        .collection('prospectingtime')
-        .add({'name': name, 'createdon': new DateTime.now()});
+  Future<void> createProspectingTimeData(
+      String name, DateTime date, double duration) async {
+    return await userCollection.doc(uid).collection('prospectingtime').add({
+      'name': name,
+      'date': date,
+      'duration': duration,
+      'createdon': new DateTime.now()
+    });
   }
 
 //update prospectingtime
-  Future<void> updateProspectingTimeData(String name) async {
+  Future<void> updateProspectingTimeData(
+      String name, DateTime date, double duration) async {
     try {
       return await userCollection
           .doc(uid)
@@ -346,6 +350,8 @@ class DatabaseService {
           .doc(docid)
           .set({
         'name': name,
+        'date': date,
+        'duration': duration,
       });
     } catch (error) {
       print(error.toString());
@@ -515,11 +521,27 @@ class DatabaseService {
   // }
 
   //Obten a lista de leads de um utilizador
-  Stream<List<LeadItem>> getleads(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('leads');
+  Stream<List<LeadItem>> getleads() {
+    var ref = userCollection.doc(uid).collection('leads');
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => LeadItem.fromFirestore(doc)).toList());
+  }
+
+  Stream<QuerySnapshot> getleadscount2(String userid) {
+    var ref = userCollection.doc(uid).collection('leads');
+
+    return ref.snapshots();
+  }
+
+  //Obten um lead especifica
+  Stream<LeadItem> get getleadscount {
+    return userCollection
+        .doc(uid)
+        .collection('leads')
+        .doc(docid)
+        .snapshots()
+        .map((doc) => LeadItem.fromFirestore(doc));
   }
 
   //Obten um lead especifica

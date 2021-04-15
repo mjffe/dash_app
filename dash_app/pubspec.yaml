@@ -37,6 +37,8 @@ dependencies:
   cloud_firestore: ^1.0.3
   provider: ^5.0.0
   flutter_spinkit: "^4.1.2"
+  rxdart: ^0.24.0
+  date_time_picker: ^2.0.0
 
   
 dev_dependencies:

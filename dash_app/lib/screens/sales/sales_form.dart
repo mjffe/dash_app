@@ -24,7 +24,9 @@ class _SaleFormState extends State<SaleForm> {
 
   // form values
   String _name = '';
+  String _nameUpdated;
   int _value = 0;
+  int _valueUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +115,7 @@ class _SaleFormState extends State<SaleForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
@@ -130,7 +132,7 @@ class _SaleFormState extends State<SaleForm> {
                           ? AppLocalizations.of(context).translate('validvalue')
                           : null,
                       onChanged: (val) =>
-                          setState(() => _value = int.parse(val)),
+                          setState(() => _valueUpdated = int.parse(val)),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -143,8 +145,8 @@ class _SaleFormState extends State<SaleForm> {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
                                 .updateSaleData(
-                              _name ?? '',
-                              _value ?? 0,
+                              _nameUpdated ?? _name,
+                              _valueUpdated ?? _value,
                             );
                             Navigator.pop(context);
                           }

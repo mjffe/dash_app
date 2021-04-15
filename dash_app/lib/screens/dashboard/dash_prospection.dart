@@ -1,15 +1,59 @@
+import 'package:dashapp/models/prospectingtime.dart';
+import 'package:dashapp/models/user.dart';
+import 'package:dashapp/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import "package:collection/collection.dart";
 
-class Dash_Prospection extends StatefulWidget {
-  Dash_Prospection({Key key}) : super(key: key);
+class Dash_ProspectingTime extends StatelessWidget {
+  //final AuthService _auth = AuthService();
 
   @override
-  _Dash_ProspectionState createState() => _Dash_ProspectionState();
+  Widget build(BuildContext context) {
+    final user = Provider.of<FirebaseUser>(context);
+
+    return StreamProvider<List<ProspectingTimeItem>>.value(
+      initialData: null,
+      value: DatabaseService().getprospectingtime(user),
+      child: Dash_Prospection(),
+    );
+  }
 }
 
-class _Dash_ProspectionState extends State<Dash_Prospection> {
+class Dash_Prospection extends StatelessWidget {
+  const Dash_Prospection({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final raisings = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
+    print('List of Prospection: ${raisings}');
+    if (raisings != null) {
+      Map newMap = groupBy(raisings, (obj) => obj['datemonth']);
+      Map groupedAndSum = Map();
+      newMap.forEach((k, v) {
+        groupedAndSum[k] = {
+          'group': k,
+          'list': v,
+          'sumOfduration':
+              v.fold(0, (prev, element) => prev + element['duration']),
+        };
+      });
+      print(groupedAndSum.toString());
+    }
+    return Text('data');
+  }
+}
+
+class Dash_Prospection2 extends StatefulWidget {
+  Dash_Prospection2({Key key}) : super(key: key);
+
+  @override
+  _Dash_Prospection2State createState() => _Dash_Prospection2State();
+}
+
+class _Dash_Prospection2State extends State<Dash_Prospection2> {
   List<_SalesData> data = [
     _SalesData('Jan', 35),
     _SalesData('Feb', 28),
@@ -27,6 +71,20 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
 
   @override
   Widget build(BuildContext context) {
+    final raisings = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
+
+    Map newMap = groupBy(raisings, (obj) => obj['datemonth']);
+    Map groupedAndSum = Map();
+    newMap.forEach((k, v) {
+      groupedAndSum[k] = {
+        'group': k,
+        'list': v,
+        'sumOfduration':
+            v.fold(0, (prev, element) => prev + element['duration']),
+      };
+    });
+
+    print(groupedAndSum.toString());
     return Container(
         child: Container(
       // height: 150.0,

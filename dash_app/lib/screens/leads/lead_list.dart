@@ -14,7 +14,7 @@ class LeadList extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
     final leads = Provider.of<List<LeadItem>>(context) ?? [];
-    print('List of leads: ${leads}');
+    //print('List of leads: ${leads}');
     //return Text('sdfsdf');
     return ListView.builder(
         itemCount: leads.length,

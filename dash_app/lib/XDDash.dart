@@ -1,9 +1,10 @@
-import 'widgets/dash_Counters.dart';
+import 'package:dashapp/screens/dashboard/dash_counters.dart';
+import 'package:dashapp/screens/dashboard/dash_invoice.dart';
+import 'package:dashapp/screens/dashboard/dash_piechart.dart';
+import 'package:dashapp/screens/dashboard/dash_prospection.dart';
+
 import 'widgets/drawerMenu.dart';
 import 'package:flutter/material.dart';
-import 'screens/dashboard/dash_invoice.dart';
-import 'screens/dashboard/dash_piechart.dart';
-import 'screens/dashboard/dash_prospection.dart';
 
 class Dash extends StatefulWidget {
   Dash({Key key}) : super(key: key);
@@ -37,10 +38,10 @@ class _DashState extends State<Dash> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Dash_Counters(),
+              Dash_Counters(''),
               Dash_PieChart(),
               //PieChartSample1(),
-              Dash_Prospection(),
+              Dash_Prospection2(),
               Dash_Invoice()
             ],
           )

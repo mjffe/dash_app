@@ -24,7 +24,9 @@ class _ProposalFormState extends State<ProposalForm> {
 
   // form values
   String _name = '';
+  String _nameUpdated;
   int _value = 0;
+  int _valueUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +109,7 @@ class _ProposalFormState extends State<ProposalForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
@@ -124,7 +126,7 @@ class _ProposalFormState extends State<ProposalForm> {
                           ? AppLocalizations.of(context).translate('validvalue')
                           : null,
                       onChanged: (val) =>
-                          setState(() => _value = int.parse(val)),
+                          setState(() => _valueUpdated = int.parse(val)),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -136,7 +138,8 @@ class _ProposalFormState extends State<ProposalForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateProposalData(_name ?? '', _value ?? 0);
+                                .updateProposalData(_nameUpdated ?? _name,
+                                    _valueUpdated ?? _value);
                             Navigator.pop(context);
                           }
                         }),

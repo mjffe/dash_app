@@ -1,14 +1,32 @@
+import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_lead.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_raising.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_sales.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_scriptures.dart';
 import 'package:dashapp/shared/app_icons.dart';
 import 'package:flutter/material.dart';
 
 class Dash_Counters extends StatefulWidget {
-  Dash_Counters({Key key}) : super(key: key);
+  Dash_Counters(this.userId);
+  final String userId;
 
   @override
-  _Dash_CountersState createState() => _Dash_CountersState();
+  _Dash_CountersState createState() => _Dash_CountersState(userId);
 }
 
 class _Dash_CountersState extends State<Dash_Counters> {
+  _Dash_CountersState(this.userId) {
+    // Stream<QuerySnapshot> fleadsCount =
+    //     DatabaseService().getleadscount2(userId);
+    // fleadsCount.hashCode ?? setState(() => leadsCount = 50);
+  }
+  final String userId;
+
+  int leadsCount = 0;
+  int angariacaoCount = 0;
+  int vendasCount = 0;
+  int escriturasCount = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -50,20 +68,22 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                       ),
                                     ),
                                     Text(
-                                      "Angariação",
+                                      AppLocalizations.of(context)
+                                          .translate('raising'),
                                       style: TextStyle(
                                           color: Colors.black,
                                           letterSpacing: 1,
                                           fontSize: 14),
                                     ),
                                   ]),
-                                  Text(
-                                    "6",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  )
+                                  RaisingsCount(userId),
+                                  // Text(
+                                  //   angariacaoCount.toString(),
+                                  //   style: TextStyle(
+                                  //       color: Colors.black,
+                                  //       fontSize: 24,
+                                  //       fontWeight: FontWeight.bold),
+                                  // )
                                 ]),
                           ),
                           Container(
@@ -83,21 +103,15 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                       ),
                                     ),
                                     Text(
-                                      "Lead",
+                                      AppLocalizations.of(context)
+                                          .translate('leads'),
                                       style: TextStyle(
                                           color: Colors.black,
                                           letterSpacing: 1,
                                           fontSize: 14),
                                     ),
                                   ]),
-                                  Text(
-                                    "26",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        letterSpacing: 1,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  )
+                                  LeadCount(userId),
                                 ]),
                             //color: Colors.blue,
                           ),
@@ -121,20 +135,22 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                       ),
                                     ),
                                     Text(
-                                      "Vendas",
+                                      AppLocalizations.of(context)
+                                          .translate('sales'),
                                       style: TextStyle(
                                           color: Colors.black,
                                           letterSpacing: 1,
                                           fontSize: 14),
                                     ),
                                   ]),
-                                  Text(
-                                    "9",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  )
+                                  SalesCount(userId),
+                                  // Text(
+                                  //   vendasCount.toString(),
+                                  //   style: TextStyle(
+                                  //       color: Colors.black,
+                                  //       fontSize: 24,
+                                  //       fontWeight: FontWeight.bold),
+                                  // )
                                 ]),
                             //color: Colors.yellow,
                           ),
@@ -154,20 +170,22 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                       ),
                                     ),
                                     Text(
-                                      "Escrituras",
+                                      AppLocalizations.of(context)
+                                          .translate('scriptures'),
                                       style: TextStyle(
                                           color: Colors.black,
                                           letterSpacing: 1,
                                           fontSize: 14),
                                     ),
                                   ]),
-                                  Text(
-                                    "16",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold),
-                                  )
+                                  ScripturesCount(userId),
+                                  // Text(
+                                  //   escriturasCount.toString(),
+                                  //   style: TextStyle(
+                                  //       color: Colors.black,
+                                  //       fontSize: 24,
+                                  //       fontWeight: FontWeight.bold),
+                                  // )
                                 ]),
                             //color: Colors.red,
                           ),

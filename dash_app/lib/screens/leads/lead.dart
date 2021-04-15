@@ -16,7 +16,7 @@ class Lead extends StatelessWidget {
 
     return StreamProvider<List<LeadItem>>.value(
       initialData: null,
-      value: DatabaseService().getleads(user),
+      value: DatabaseService(uid: user.uid).getleads(),
       child: Scaffold(
         backgroundColor: MyColors.appBarBackgroundColor,
         body: LeadList(),

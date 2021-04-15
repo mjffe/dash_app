@@ -1,5 +1,10 @@
+import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/models/piechart.dart';
+import 'package:dashapp/models/user.dart';
+import 'package:dashapp/screens/dashboard/dash_piechart_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
 
 class Dash_PieChart extends StatefulWidget {
   // Dash_PieChart({Key key}) : super(key: key);
@@ -23,18 +28,114 @@ class _Dash_PieChartState extends State<Dash_PieChart> {
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           child: new Padding(
               padding: EdgeInsets.all(3),
-              child: new Center(child: PieChartSample2()))),
+              child: new Center(child: PieChartStreamData0()
+                  //PieChartSample2(2, 3, 4, 1)
+                  //PieChartSample2()
+                  ))),
     ));
   }
 }
 
-class PieChartSample2 extends StatefulWidget {
+// class PieChartStreamData extends StatefulWidget {
+//   PieChartStreamData({Key key}) : super(key: key);
+
+//   @override
+//   _PieChartStreamDataState createState() => _PieChartStreamDataState();
+// }
+
+// class _PieChartStreamDataState extends State<PieChartStreamData> {
+//   static Widget create(BuildContext context) {
+//     final user = Provider.of<FirebaseUser>(context);
+//     return Provider<PieChartViewModel>(
+//       create: (_) => PieChartViewModel(userId: user.uid),
+//       child: PieChartStreamData(),
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final viewModel = Provider.of<PieChartViewModel>(context, listen: false);
+//     return StreamBuilder<PieChartItem>(
+//         stream: viewModel.moviesUserFavouritesStream(),
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             PieChartSample2(snapshot.data.apsCount, snapshot.data.cmiCount,
+//                 snapshot.data.propostasCount, snapshot.data.cpvcCount);
+//           }
+//         });
+//   }
+// }
+class PieChartStreamData0 extends StatelessWidget {
+  const PieChartStreamData0({Key key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => PieChart2State();
+  Widget build(BuildContext context) {
+    final user = Provider.of<FirebaseUser>(context);
+    return Provider<PieChartViewModel>(
+      create: (_) => PieChartViewModel(userId: user.uid),
+      child: PieChartStreamData(),
+    );
+  }
+}
+
+class PieChartStreamData extends StatelessWidget {
+  //const PieChartStreamData({Key key}) : super(key: key);
+
+  // static Widget create(BuildContext context) {
+  //   final user = Provider.of<FirebaseUser>(context);
+  //   return Provider<PieChartViewModel>(
+  //     create: (_) => PieChartViewModel(userId: user.uid),
+  //     child: PieChartStreamData(),
+  //   );
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = Provider.of<PieChartViewModel>(context, listen: false);
+    return StreamBuilder<PieChartItem>(
+        stream: viewModel.moviesUserFavouritesStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return PieChartSample2(
+                snapshot.data.apsCount,
+                snapshot.data.cmiCount,
+                snapshot.data.propostasCount,
+                snapshot.data.cpvcCount);
+          }
+          return CircularProgressIndicator();
+          //Text('Loading');
+          //return PieChartSample2(2, 2, 2, 2);
+        });
+  }
+}
+
+class PieChartSample2 extends StatefulWidget {
+  PieChartSample2(
+    this.aps,
+    this.cmi,
+    this.pro,
+    this.cpvc,
+  );
+  int aps;
+  int cmi;
+  int pro;
+  int cpvc;
+  @override
+  State<StatefulWidget> createState() => PieChart2State(aps, cmi, pro, cpvc);
 }
 
 class PieChart2State extends State {
+  PieChart2State(int aps, int cmi, int pro, int cpvc) {
+    apsCount = aps.toDouble();
+    cmiCount = cmi.toDouble();
+    propostasCount = pro.toDouble();
+    cpvcCount = cpvc.toDouble();
+  }
   int touchedIndex = -1;
+  double apsCount;
+  double cmiCount;
+  double propostasCount;
+  double cpvcCount;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +180,8 @@ class PieChart2State extends State {
               children: <Widget>[
                 Indicator(
                   color: Color(0xffD81159), //0xff0293ee
-                  text: 'APS',
+                  text: AppLocalizations.of(context)
+                      .translate('service_presentation'),
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 0 ? FontWeight.bold : FontWeight.normal,
@@ -89,7 +191,8 @@ class PieChart2State extends State {
                 ),
                 Indicator(
                   color: Color(0xffFFBC42), //0xfff8b250
-                  text: 'CMI',
+                  text: AppLocalizations.of(context)
+                      .translate('mediation_contract'),
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 1 ? FontWeight.bold : FontWeight.normal,
@@ -99,7 +202,7 @@ class PieChart2State extends State {
                 ),
                 Indicator(
                   color: Color(0xff845bef), //0xff845bef
-                  text: 'Propostas',
+                  text: AppLocalizations.of(context).translate('proposal'),
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 2 ? FontWeight.bold : FontWeight.normal,
@@ -109,7 +212,8 @@ class PieChart2State extends State {
                 ),
                 Indicator(
                   color: Color(0xff218380), //0xff13d38e
-                  text: 'CPCV',
+                  text: AppLocalizations.of(context)
+                      .translate('promise_buy_sell'),
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 3 ? FontWeight.bold : FontWeight.normal,
@@ -136,9 +240,9 @@ class PieChart2State extends State {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xffD81159), //0xff0293ee 
-            value: 40,
-            title: '40',
+            color: const Color(0xffD81159), //0xff0293ee
+            value: apsCount,
+            title: apsCount.toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -148,8 +252,8 @@ class PieChart2State extends State {
         case 1:
           return PieChartSectionData(
             color: const Color(0xffFFBC42), //0xfff8b250
-            value: 30,
-            title: '30',
+            value: cmiCount,
+            title: cmiCount.toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -159,8 +263,8 @@ class PieChart2State extends State {
         case 2:
           return PieChartSectionData(
             color: const Color(0xff845bef),
-            value: 20,
-            title: '20',
+            value: propostasCount,
+            title: propostasCount.toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -170,8 +274,8 @@ class PieChart2State extends State {
         case 3:
           return PieChartSectionData(
             color: const Color(0xff218380), //0xff13d38e
-            value: 15,
-            title: '15',
+            value: cpvcCount,
+            title: cpvcCount.toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,

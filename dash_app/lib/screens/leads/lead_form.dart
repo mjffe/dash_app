@@ -26,6 +26,9 @@ class _LeadFormState extends State<LeadForm> {
   String _name = '';
   String _email = '';
   String _phone = '';
+  String _nameUpdated;
+  String _emailUpdated;
+  String _phoneUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +126,7 @@ class _LeadFormState extends State<LeadForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validname')
                           : null,
-                      onChanged: (val) => setState(() => _name = val),
+                      onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
@@ -135,7 +138,7 @@ class _LeadFormState extends State<LeadForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validemail')
                           : null,
-                      onChanged: (val) => setState(() => _email = val),
+                      onChanged: (val) => setState(() => _emailUpdated = val),
                     ),
                     SizedBox(height: 20.0),
                     TextFormField(
@@ -147,7 +150,7 @@ class _LeadFormState extends State<LeadForm> {
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validphone')
                           : null,
-                      onChanged: (val) => setState(() => _phone = val),
+                      onChanged: (val) => setState(() => _phoneUpdated = val),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -160,7 +163,9 @@ class _LeadFormState extends State<LeadForm> {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
                                 .updateLeadData(
-                                    _name ?? '', _email ?? '', _phone ?? '');
+                                    _nameUpdated ?? _name,
+                                    _emailUpdated ?? _email,
+                                    _phoneUpdated ?? _phone);
                             Navigator.pop(context);
                           }
                         }),

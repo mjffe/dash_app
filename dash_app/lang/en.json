@@ -29,12 +29,15 @@
   "data_deleted":"record is deleted",
   "new_lead":"New Lead",
   "update_lead":"Update Lead",
+  
 
   "SalePage":"SalePage",
   "new_sale":"New Sale",
   "update_sale":"Update Sale",
   "value":"Value",
   "validvalue":"Please enter a Value",
+  "duration":"Duration",
+  "validduration":"Please enter a Duration",
 
   "SharedPage":"SharedPage",
   "create":"Create",
