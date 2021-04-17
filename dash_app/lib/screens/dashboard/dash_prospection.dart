@@ -1,3 +1,5 @@
+import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/models/dash.dart';
 import 'package:dashapp/models/prospectingtime.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/service/database.dart';
@@ -22,116 +24,108 @@ class Dash_ProspectingTime extends StatelessWidget {
   }
 }
 
-class Dash_Prospection extends StatelessWidget {
-  const Dash_Prospection({Key key}) : super(key: key);
+class Dash_Prospection extends StatefulWidget {
+  //Dash_Prospection2({Key key}) : super(key: key);
+
+  @override
+  _Dash_ProspectionState createState() => _Dash_ProspectionState();
+}
+
+class _Dash_ProspectionState extends State<Dash_Prospection> {
+  List<Dash> data;
 
   @override
   Widget build(BuildContext context) {
-    final raisings = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
-    print('List of Prospection: ${raisings}');
-    if (raisings != null) {
-      Map newMap = groupBy(raisings, (obj) => obj['datemonth']);
+    final prospections = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
+    //print('List of Prospection: ${prospections.length}');
+    if (prospections != null) if (prospections.length > 0) {
+      //print('List of Prospection: ${prospections[0]}');
+      Map newMap =
+          groupBy(prospections, (ProspectingTimeItem obj) => obj.datemonth);
+      if (newMap == null) {
+        return Text('data3');
+      }
       Map groupedAndSum = Map();
       newMap.forEach((k, v) {
         groupedAndSum[k] = {
-          'group': k,
-          'list': v,
-          'sumOfduration':
-              v.fold(0, (prev, element) => prev + element['duration']),
+          // 'group': k,
+          // 'list': v,
+          'sumOfduration': v.fold(0,
+              (prev, ProspectingTimeItem element) => prev + element.duration),
         };
       });
-      print(groupedAndSum.toString());
-    }
-    return Text('data');
-  }
-}
-
-class Dash_Prospection2 extends StatefulWidget {
-  Dash_Prospection2({Key key}) : super(key: key);
-
-  @override
-  _Dash_Prospection2State createState() => _Dash_Prospection2State();
-}
-
-class _Dash_Prospection2State extends State<Dash_Prospection2> {
-  List<_SalesData> data = [
-    _SalesData('Jan', 35),
-    _SalesData('Feb', 28),
-    _SalesData('Mar', 34),
-    _SalesData('Abr', 32),
-    _SalesData('Mai', 40),
-    _SalesData('Jun', 33),
-    _SalesData('Jul', 39),
-    _SalesData('Ago', 25),
-    _SalesData('Set', 26),
-    _SalesData('Oct', 42),
-    _SalesData('Nov', 39),
-    _SalesData('Dec', 29)
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final raisings = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
-
-    Map newMap = groupBy(raisings, (obj) => obj['datemonth']);
-    Map groupedAndSum = Map();
-    newMap.forEach((k, v) {
-      groupedAndSum[k] = {
-        'group': k,
-        'list': v,
-        'sumOfduration':
-            v.fold(0, (prev, element) => prev + element['duration']),
-      };
-    });
-
-    print(groupedAndSum.toString());
-    return Container(
+      data = groupedAndSum.entries
+          .map((entry) => Dash(entry.key, entry.value['sumOfduration'],
+              AppLocalizations.of(context).locale.languageCode))
+          .toList();
+      data.sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
+      //data.sortBy((Dash element) => element.monthNumber);
+      // .sortedBy((Dash element) => element.monthNumber);
+      //print(data.toString());
+      return Container(
+          child: Container(
+        // height: 150.0,
+        // width: 300.0,
+        padding: new EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+        color: Colors.transparent,
         child: Container(
-      // height: 150.0,
-      // width: 300.0,
-      padding: new EdgeInsets.all(10.0),
-      color: Colors.transparent,
+            decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            child: new Padding(
+                padding: EdgeInsets.all(2),
+                child: new Center(
+                  child: SfCartesianChart(
+                      primaryXAxis: CategoryAxis(),
+                      // Chart title
+                      title: ChartTitle(
+                          text: AppLocalizations.of(context)
+                              .translate('ProspectingTimeTitle')),
+                      // Enable legend
+                      legend: Legend(isVisible: false),
+                      // Enable tooltip
+                      tooltipBehavior: TooltipBehavior(enable: true),
+                      //backgroundColor
+                      backgroundColor: Colors.grey[100],
+
+                      //onChartTouchInteractionDown: SelectionChangedHandler(),
+                      //borderColor: Colors.red,// cor a volta do grafico
+                      //series
+                      series: <ChartSeries<Dash, String>>[
+                        BarSeries<Dash, String>(
+                          dataSource: data,
+                          xValueMapper: (Dash sales, _) => sales.month,
+                          yValueMapper: (Dash sales, _) => sales.value,
+                          name: AppLocalizations.of(context)
+                              .translate('ProspectingTimeName'),
+
+                          // Enable data label
+                          dataLabelSettings:
+                              DataLabelSettings(isVisible: false),
+                          color: Color(0xff4ea8de), //118ab2 // 5390d9 //4ea8de
+                        )
+                      ]),
+                ))),
+      ));
+    }
+
+    // por defeito mostra um loading até o stream encontrar dados
+    return Container(
       child: Container(
+        // height: 150.0,
+        // width: 300.0,
+        padding: new EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+        color: Colors.transparent,
+        child: Container(
           decoration: BoxDecoration(
               color: Colors.grey[100],
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           child: new Padding(
-              padding: EdgeInsets.all(2),
-              child: new Center(
-                child: SfCartesianChart(
-                    primaryXAxis: CategoryAxis(),
-                    // Chart title
-                    title: ChartTitle(text: 'Prospecting Time'),
-                    // Enable legend
-                    legend: Legend(isVisible: false),
-                    // Enable tooltip
-                    tooltipBehavior: TooltipBehavior(enable: true),
-                    //backgroundColor
-                    backgroundColor: Colors.grey[100],
-
-                    //onChartTouchInteractionDown: SelectionChangedHandler(),
-                    //borderColor: Colors.red,// cor a volta do grafico
-                    //series
-                    series: <ChartSeries<_SalesData, String>>[
-                      BarSeries<_SalesData, String>(
-                        dataSource: data,
-                        xValueMapper: (_SalesData sales, _) => sales.year,
-                        yValueMapper: (_SalesData sales, _) => sales.sales,
-                        name: 'Time',
-
-                        // Enable data label
-                        dataLabelSettings: DataLabelSettings(isVisible: false),
-                        color: Color(0xff4ea8de), //118ab2 // 5390d9 //4ea8de
-                      )
-                    ]),
-              ))),
-    ));
+            padding: EdgeInsets.all(2),
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
   }
-}
-
-class _SalesData {
-  _SalesData(this.year, this.sales);
-
-  final String year;
-  final double sales;
 }

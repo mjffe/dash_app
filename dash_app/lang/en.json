@@ -44,5 +44,21 @@
   "update":"Update",
   "new": "New",
 
+  "Jan":"Jan",
+  "Feb":"Feb",
+  "Mar":"Mar",
+  "Apr":"Apr",
+  "May":"May",
+  "Jun":"Jun",
+  "Jul":"Jul",
+  "Aug":"Aug",
+  "Set":"Set",
+  "Oct":"Oct",
+  "Nov":"Nov",
+  "Dec":"Dec",
+
+  "ProspectingTimeTitle":"Prospecting Time",
+  "ProspectingTimeName":"Time",
+
   "end":"end"
 }

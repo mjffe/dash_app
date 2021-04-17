@@ -1,4 +1,20 @@
 {
   "first_string": "Olá Ahoj! Toto je prvá správa.",
-  "second_string": "Ak ti tento tutoriál pomáha, daj mu like a prihlás sa na odber u Reso Codera "
+  "second_string": "Ak ti tento tutoriál pomáha, daj mu like a prihlás sa na odber u Reso Codera ",
+
+  "Jan":"Jan",
+  "Feb":"Feb",
+  "Mar":"Mar",
+  "Apr":"Apr",
+  "May":"Mai",
+  "Jun":"Jun",
+  "Jul":"Jul",
+  "Aug":"Ago",
+  "Set":"Set",
+  "Oct":"Oct",
+  "Nov":"Nov",
+  "Dec":"Dec",
+
+
+  "end":"end"
 }

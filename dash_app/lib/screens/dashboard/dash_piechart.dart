@@ -20,7 +20,7 @@ class _Dash_PieChartState extends State<Dash_PieChart> {
         child: Container(
       // height: 150.0,
       // width: 300.0,
-      padding: new EdgeInsets.all(10.0),
+      padding: new EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
       color: Colors.transparent,
       child: Container(
           decoration: BoxDecoration(
@@ -242,7 +242,7 @@ class PieChart2State extends State {
           return PieChartSectionData(
             color: const Color(0xffD81159), //0xff0293ee
             value: apsCount,
-            title: apsCount.toString(),
+            title: apsCount.toInt().toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -253,7 +253,7 @@ class PieChart2State extends State {
           return PieChartSectionData(
             color: const Color(0xffFFBC42), //0xfff8b250
             value: cmiCount,
-            title: cmiCount.toString(),
+            title: cmiCount.toInt().toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -264,7 +264,7 @@ class PieChart2State extends State {
           return PieChartSectionData(
             color: const Color(0xff845bef),
             value: propostasCount,
-            title: propostasCount.toString(),
+            title: propostasCount.toInt().toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -275,7 +275,7 @@ class PieChart2State extends State {
           return PieChartSectionData(
             color: const Color(0xff218380), //0xff13d38e
             value: cpvcCount,
-            title: cpvcCount.toString(),
+            title: cpvcCount.toInt().toString(),
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,

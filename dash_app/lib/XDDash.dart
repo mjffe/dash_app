@@ -41,7 +41,7 @@ class _DashState extends State<Dash> {
               Dash_Counters(''),
               Dash_PieChart(),
               //PieChartSample1(),
-              Dash_Prospection2(),
+              //Dash_Prospection2(),
               Dash_Invoice()
             ],
           )

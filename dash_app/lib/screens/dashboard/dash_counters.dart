@@ -33,7 +33,8 @@ class _Dash_CountersState extends State<Dash_Counters> {
       child: Container(
         // height: 150.0,
         // width: 300.0,
-        padding: new EdgeInsets.all(10.0),
+        padding: new EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 2.5),
+        //symmetric(vertical: 2.5, horizontal: 5),
         color: Colors.transparent,
         child: Container(
             decoration: BoxDecoration(
