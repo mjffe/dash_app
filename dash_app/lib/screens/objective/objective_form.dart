@@ -3,9 +3,12 @@ import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
+import 'package:dashapp/shared/decimalinput.dart';
 import 'package:dashapp/shared/loading.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
 class ObjectiveForm extends StatefulWidget {
   ObjectiveForm(this.userId, this.docId);
@@ -24,9 +27,11 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
 
   // form values
   String _name = '';
-  int _value = 0;
+  double _value = 0;
   String _nameUpdated;
-  int _valueUpdated;
+  double _valueUpdated;
+  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDateUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +62,52 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
               decoration: textInputDecoration.copyWith(
                 hintText: AppLocalizations.of(context).translate('value'),
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               initialValue: _name,
               validator: (val) => val.isEmpty
                   ? AppLocalizations.of(context).translate('validvalue')
                   : null,
-              onChanged: (val) => setState(() => _value = int.parse(val)),
+              onChanged: (val) => setState(() => _value = double.parse(val)),
             ),
+            SizedBox(height: 20.0),
+            RaisedButton(
+                onPressed: () {
+                  showMonthPicker(
+                    context: context,
+                    firstDate: DateTime(DateTime.now().year - 1, 5),
+                    lastDate: DateTime(DateTime.now().year + 1, 9),
+                    initialDate: _selectedDate,
+                    locale: AppLocalizations.of(context).locale,
+                  ).then((date) {
+                    if (date != null) {
+                      setState(() {
+                        _selectedDate = date;
+                      });
+                    }
+                  });
+                },
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Text('Target'),
+                    SizedBox(width: 10.0),
+                    Icon(Icons.calendar_today),
+                  ],
+                )),
+            // DateTimePicker(
+            //   dateMask: 'MM/yyyy',
+            //   initialValue: '',
+            //   firstDate: DateTime(2000),
+            //   lastDate: DateTime(2100),
+            //   dateLabelText: 'Date',
+            //   onChanged: (val) =>
+            //       setState(() => _selectedDate = DateTime.parse(val)),
+            //   validator: (val) => val.isEmpty
+            //       ? AppLocalizations.of(context).translate('validname')
+            //       : null,
+            //   //onSaved: (val) => print(val),
+            // ),
             SizedBox(height: 10.0),
             RaisedButton(
                 color: MyColors.lightBlue,
@@ -76,8 +117,10 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
                 ),
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
-                    await DatabaseService(uid: userId)
-                        .createObjectiveData(_name ?? '', _value ?? 0);
+                    await DatabaseService(uid: userId).createObjectiveData(
+                        _name ?? '',
+                        _value ?? 0,
+                        _selectedDate ?? DateTime.now());
                     Navigator.pop(context);
                   }
                 }),
@@ -91,6 +134,8 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
             if (snapshot.hasData) {
               ObjectiveItem data = snapshot.data;
               _name = data.name;
+              _value = data.value;
+              _selectedDate = data.date;
               return Form(
                 key: _formkey,
                 child: Column(
@@ -117,17 +162,44 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
                         hintText:
                             AppLocalizations.of(context).translate('value'),
                       ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
+                      inputFormatters: [
+                        DecimalTextInputFormatter(decimalRange: 2)
                       ],
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                       initialValue: _value.toString(),
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validvalue')
                           : null,
                       onChanged: (val) =>
-                          setState(() => _valueUpdated = int.parse(val)),
+                          setState(() => _valueUpdated = double.parse(val)),
                     ),
+                    SizedBox(height: 20.0),
+                    RaisedButton(
+                        onPressed: () {
+                          showMonthPicker(
+                            context: context,
+                            firstDate: DateTime(DateTime.now().year - 1, 5),
+                            lastDate: DateTime(DateTime.now().year + 1, 9),
+                            initialDate: _selectedDate,
+                            locale: AppLocalizations.of(context).locale,
+                          ).then((date) {
+                            if (date != null) {
+                              setState(() {
+                                _selectedDateUpdated = date;
+                              });
+                            }
+                          });
+                        },
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(AppLocalizations.of(context)
+                                .translate('DateTarget')),
+                            SizedBox(width: 10.0),
+                            Icon(Icons.calendar_today),
+                          ],
+                        )),
                     SizedBox(height: 10.0),
                     RaisedButton(
                         color: MyColors.lightBlue,
@@ -138,8 +210,10 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateObjectiveData(_nameUpdated ?? _name,
-                                    _valueUpdated ?? _value);
+                                .updateObjectiveData(
+                                    _nameUpdated ?? _name,
+                                    _valueUpdated ?? _value,
+                                    _selectedDateUpdated ?? _selectedDate);
                             Navigator.pop(context);
                           }
                         }),

@@ -3,7 +3,9 @@ import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
+import 'package:dashapp/shared/decimalinput.dart';
 import 'package:dashapp/shared/loading.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -24,9 +26,11 @@ class _InvoicingFormState extends State<InvoicingForm> {
 
   // form values
   String _name = '';
-  int _value = 0;
+  double _value = 0;
   String _nameUpdated;
-  int _valueUpdated;
+  double _valueUpdated;
+  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDateUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +61,27 @@ class _InvoicingFormState extends State<InvoicingForm> {
               decoration: textInputDecoration.copyWith(
                 hintText: AppLocalizations.of(context).translate('value'),
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
+              inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               initialValue: _name,
               validator: (val) => val.isEmpty
                   ? AppLocalizations.of(context).translate('validvalue')
                   : null,
-              onChanged: (val) => setState(() => _value = int.parse(val)),
+              onChanged: (val) => setState(() => _value = double.parse(val)),
+            ),
+            SizedBox(height: 20.0),
+            DateTimePicker(
+              dateMask: 'dd/MM/yyyy',
+              initialValue: '',
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              dateLabelText: 'Date',
+              onChanged: (val) =>
+                  setState(() => _selectedDate = DateTime.parse(val)),
+              validator: (val) => val.isEmpty
+                  ? AppLocalizations.of(context).translate('validname')
+                  : null,
+              //onSaved: (val) => print(val),
             ),
             SizedBox(height: 10.0),
             RaisedButton(
@@ -76,8 +92,10 @@ class _InvoicingFormState extends State<InvoicingForm> {
                 ),
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
-                    await DatabaseService(uid: userId)
-                        .createInvoicingData(_name ?? '', _value ?? 0);
+                    await DatabaseService(uid: userId).createInvoicingData(
+                        _name ?? '',
+                        _value ?? 0,
+                        _selectedDate ?? DateTime.now());
                     Navigator.pop(context);
                   }
                 }),
@@ -91,6 +109,8 @@ class _InvoicingFormState extends State<InvoicingForm> {
             if (snapshot.hasData) {
               InvoicingItem data = snapshot.data;
               _name = data.name;
+              _value = data.value;
+              _selectedDate = data.date;
               return Form(
                 key: _formkey,
                 child: Column(
@@ -117,16 +137,31 @@ class _InvoicingFormState extends State<InvoicingForm> {
                         hintText:
                             AppLocalizations.of(context).translate('value'),
                       ),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
+                      inputFormatters: [
+                        DecimalTextInputFormatter(decimalRange: 2)
                       ],
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                       initialValue: _value.toString(),
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validvalue')
                           : null,
                       onChanged: (val) =>
-                          setState(() => _valueUpdated = int.parse(val)),
+                          setState(() => _valueUpdated = double.parse(val)),
+                    ),
+                    SizedBox(height: 20.0),
+                    DateTimePicker(
+                      dateMask: 'dd/MM/yyyy',
+                      initialValue: _selectedDate.toString(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      dateLabelText: 'Date',
+                      onChanged: (val) => setState(
+                          () => _selectedDateUpdated = DateTime.parse(val)),
+                      validator: (val) => val.isEmpty
+                          ? AppLocalizations.of(context).translate('validname')
+                          : null,
+                      //onSaved: (val) => print(val),
                     ),
                     SizedBox(height: 10.0),
                     RaisedButton(
@@ -138,8 +173,10 @@ class _InvoicingFormState extends State<InvoicingForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateInvoicingData(_nameUpdated ?? _name,
-                                    _valueUpdated ?? _value);
+                                .updateInvoicingData(
+                                    _nameUpdated ?? _name,
+                                    _valueUpdated ?? _value,
+                                    _selectedDateUpdated ?? _selectedDate);
                             Navigator.pop(context);
                           }
                         }),

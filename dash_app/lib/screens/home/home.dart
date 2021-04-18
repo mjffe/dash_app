@@ -33,8 +33,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
-    String _screenName =
-        AppLocalizations.of(context).translate('dashboard'); //'Home';
+    // String _screenName =
+    //     AppLocalizations.of(context).translate('dashboard'); //'Home';
 
     _onSelectItem(int index) {
       setState(() => _selectedIndex = index);

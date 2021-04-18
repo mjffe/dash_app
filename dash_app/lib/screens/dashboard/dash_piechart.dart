@@ -36,35 +36,6 @@ class _Dash_PieChartState extends State<Dash_PieChart> {
   }
 }
 
-// class PieChartStreamData extends StatefulWidget {
-//   PieChartStreamData({Key key}) : super(key: key);
-
-//   @override
-//   _PieChartStreamDataState createState() => _PieChartStreamDataState();
-// }
-
-// class _PieChartStreamDataState extends State<PieChartStreamData> {
-//   static Widget create(BuildContext context) {
-//     final user = Provider.of<FirebaseUser>(context);
-//     return Provider<PieChartViewModel>(
-//       create: (_) => PieChartViewModel(userId: user.uid),
-//       child: PieChartStreamData(),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final viewModel = Provider.of<PieChartViewModel>(context, listen: false);
-//     return StreamBuilder<PieChartItem>(
-//         stream: viewModel.moviesUserFavouritesStream(),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData) {
-//             PieChartSample2(snapshot.data.apsCount, snapshot.data.cmiCount,
-//                 snapshot.data.propostasCount, snapshot.data.cpvcCount);
-//           }
-//         });
-//   }
-// }
 class PieChartStreamData0 extends StatelessWidget {
   const PieChartStreamData0({Key key}) : super(key: key);
 

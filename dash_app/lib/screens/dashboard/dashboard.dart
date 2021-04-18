@@ -27,7 +27,7 @@ class _DashState extends State<Dash> {
           Dash_Counters(user.uid),
           Dash_PieChart(),
           Dash_ProspectingTime(),
-          //Dash_Invoice()
+          Dash_LineChart()
         ],
       )
     ]));

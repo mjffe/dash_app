@@ -374,21 +374,31 @@ class DatabaseService {
   }
 
 //create invoicing
-  Future<void> createInvoicingData(String name, int value) async {
-    return await userCollection
-        .doc(uid)
-        .collection('invoicing')
-        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
+  Future<void> createInvoicingData(
+    String name,
+    double value,
+    DateTime date,
+  ) async {
+    return await userCollection.doc(uid).collection('invoicing').add({
+      'name': name,
+      'value': value,
+      'date': date,
+      'createdon': new DateTime.now()
+    });
   }
 
 //update invoicing
-  Future<void> updateInvoicingData(String name, int value) async {
+  Future<void> updateInvoicingData(
+    String name,
+    double value,
+    DateTime date,
+  ) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('invoicing')
           .doc(docid)
-          .set({'name': name, 'value': value});
+          .set({'name': name, 'value': value, 'date': date});
     } catch (error) {
       print(error.toString());
       return null;
@@ -410,21 +420,31 @@ class DatabaseService {
   }
 
 //create invoicing
-  Future<void> createObjectiveData(String name, int value) async {
-    return await userCollection
-        .doc(uid)
-        .collection('objective')
-        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
+  Future<void> createObjectiveData(
+    String name,
+    double value,
+    DateTime date,
+  ) async {
+    return await userCollection.doc(uid).collection('objective').add({
+      'name': name,
+      'value': value,
+      'date': date,
+      'createdon': new DateTime.now()
+    });
   }
 
 //update invoicing
-  Future<void> updateObjectiveData(String name, int value) async {
+  Future<void> updateObjectiveData(
+    String name,
+    double value,
+    DateTime date,
+  ) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('objective')
           .doc(docid)
-          .set({'name': name, 'value': value});
+          .set({'name': name, 'value': value, 'date': date});
     } catch (error) {
       print(error.toString());
       return null;
