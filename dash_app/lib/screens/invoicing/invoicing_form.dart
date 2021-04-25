@@ -42,7 +42,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
         child: Column(
           children: <Widget>[
             Text(
-              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('raising')}',
+              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('invoicing')}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -75,11 +75,11 @@ class _InvoicingFormState extends State<InvoicingForm> {
               initialValue: '',
               firstDate: DateTime(2000),
               lastDate: DateTime(2100),
-              dateLabelText: 'Date',
+              dateLabelText: AppLocalizations.of(context).translate('date'),
               onChanged: (val) =>
                   setState(() => _selectedDate = DateTime.parse(val)),
               validator: (val) => val.isEmpty
-                  ? AppLocalizations.of(context).translate('validname')
+                  ? AppLocalizations.of(context).translate('validdate')
                   : null,
               //onSaved: (val) => print(val),
             ),
@@ -116,7 +116,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('raising')}',
+                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('invoicing')}',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: 20.0),
@@ -155,11 +155,12 @@ class _InvoicingFormState extends State<InvoicingForm> {
                       initialValue: _selectedDate.toString(),
                       firstDate: DateTime(2000),
                       lastDate: DateTime(2100),
-                      dateLabelText: 'Date',
+                      dateLabelText:
+                          AppLocalizations.of(context).translate('date'),
                       onChanged: (val) => setState(
                           () => _selectedDateUpdated = DateTime.parse(val)),
                       validator: (val) => val.isEmpty
-                          ? AppLocalizations.of(context).translate('validname')
+                          ? AppLocalizations.of(context).translate('validdate')
                           : null,
                       //onSaved: (val) => print(val),
                     ),

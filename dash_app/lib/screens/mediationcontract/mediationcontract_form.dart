@@ -36,7 +36,7 @@ class _MediationContractFormState extends State<MediationContractForm> {
         child: Column(
           children: <Widget>[
             Text(
-              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('raising')}',
+              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('mediation_contract')}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -80,7 +80,7 @@ class _MediationContractFormState extends State<MediationContractForm> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('raising')}',
+                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('mediation_contract')}',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: 20.0),

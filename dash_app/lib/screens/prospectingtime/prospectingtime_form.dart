@@ -43,7 +43,7 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
         child: Column(
           children: <Widget>[
             Text(
-              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('raising')}',
+              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('prospecting_time')}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -114,12 +114,14 @@ class _ProspectingTimeFormState extends State<ProspectingTimeForm> {
             if (snapshot.hasData) {
               ProspectingTimeItem data = snapshot.data;
               _name = data.name;
+              _selectedDate = data.date;
+              _duration = data.duration;
               return Form(
                 key: _formkey,
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('raising')}',
+                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('prospecting_time')}',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: 20.0),

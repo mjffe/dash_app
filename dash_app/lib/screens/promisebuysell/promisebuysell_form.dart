@@ -36,7 +36,7 @@ class _PromiseBuySellFormState extends State<PromiseBuySellForm> {
         child: Column(
           children: <Widget>[
             Text(
-              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('raising')}',
+              '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('promise_buy_sell')}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(height: 20.0),
@@ -79,7 +79,7 @@ class _PromiseBuySellFormState extends State<PromiseBuySellForm> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('raising')}',
+                      '${AppLocalizations.of(context).translate('update')} ${AppLocalizations.of(context).translate('promise_buy_sell')}',
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: 20.0),

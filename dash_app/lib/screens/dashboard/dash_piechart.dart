@@ -163,7 +163,7 @@ class PieChart2State extends State {
                 Indicator(
                   color: Color(0xffFFBC42), //0xfff8b250
                   text: AppLocalizations.of(context)
-                      .translate('mediation_contract'),
+                      .translate('mediation_contract_abrv'),
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 1 ? FontWeight.bold : FontWeight.normal,
@@ -184,7 +184,7 @@ class PieChart2State extends State {
                 Indicator(
                   color: Color(0xff218380), //0xff13d38e
                   text: AppLocalizations.of(context)
-                      .translate('promise_buy_sell'),
+                      .translate('promise_buy_sell_abrv'),
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 3 ? FontWeight.bold : FontWeight.normal,

@@ -11,8 +11,10 @@
   "scriptures":"Scriptures",
   "service_presentation":"Service Presentation",
   "mediation_contract":"Mediation Contract",
+  "mediation_contract_abrv":"Mediation Contract",
   "proposal":"Proposal",
-  "promise_buy_sell":"Promise to Buy and Sell",
+  "promise_buy_sell":"Promise to Buy and Sell",  
+  "promise_buy_sell_abrv":"Promise to Buy and Sell",
   "prospecting_time":"Prospecting Time",
   "invoicing":"Invoicing",
   "objectives":"Objectives",
@@ -60,7 +62,8 @@
   "ProspectingTimeTitle":"Prospecting Time",
   "ProspectingTimeName":"Time",
   "DateTarget" :"Target",
+  "date":"Date",
+  "validdate":"Please enter a Date",
 
-  
   "end":"end"
 }
