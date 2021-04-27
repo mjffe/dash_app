@@ -30,22 +30,26 @@ class DatabaseService {
   }
 
   //create leads
-  Future<void> createLeadData(String name, String email, String phone) async {
+  Future<void> createLeadData(
+      String name, String email, String phone, String leadtype) async {
     return await userCollection.doc(uid).collection('leads').add({
       'email': email,
       'name': name,
       'telefone': phone,
+      'leadtype': leadtype,
       'createdon': new DateTime.now()
     });
   }
 
   //update leads
-  Future<void> updateLeadData(String name, String email, String phone) async {
+  Future<void> updateLeadData(
+      String name, String email, String phone, String leadtype) async {
     try {
       return await userCollection.doc(uid).collection('leads').doc(docid).set({
         'email': email,
         'name': name,
         'telefone': phone,
+        'leadtype': leadtype
       });
     } catch (error) {
       print(error.toString());

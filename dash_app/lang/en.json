@@ -31,7 +31,10 @@
   "data_deleted":"record is deleted",
   "new_lead":"New Lead",
   "update_lead":"Update Lead",
-  
+  "lead_type":"Lead Type",
+  "validleadtype":"Please enter a Lead Type",
+  "prospecting":"Prospecting ",
+  "buyercustomers":"Buyer customers",
 
   "SalePage":"SalePage",
   "new_sale":"New Sale",

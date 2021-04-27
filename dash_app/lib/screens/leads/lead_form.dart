@@ -5,6 +5,7 @@ import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
 import 'package:dashapp/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LeadForm extends StatefulWidget {
   //LeadForm({Key key}) : super(key: key);
@@ -21,14 +22,37 @@ class _LeadFormState extends State<LeadForm> {
   final String userId;
   final String docId;
   final _formkey = GlobalKey<FormState>();
+  final List<String> leadtypes = [
+    '0',
+    '1',
+  ];
 
   // form values
   String _name = '';
   String _email = '';
   String _phone = '';
+  String _leadtype = '';
   String _nameUpdated;
   String _emailUpdated;
   String _phoneUpdated;
+  String _leadtypeUpdated;
+
+  String _getLeadTypeName(String index) {
+    switch (index) {
+      case '0':
+        {
+          return AppLocalizations.of(context).translate('prospecting');
+        }
+        break;
+      case '1':
+        {
+          return AppLocalizations.of(context).translate('buyercustomers');
+        }
+        break;
+      default:
+        return '';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,26 +95,42 @@ class _LeadFormState extends State<LeadForm> {
                 hintText:
                     AppLocalizations.of(context).translate('phone_number'),
               ),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ], // Only numbers can be entered
               initialValue: _phone,
               validator: (val) => val.isEmpty
                   ? AppLocalizations.of(context).translate('phone_number')
                   : null,
               onChanged: (val) => setState(() => _phone = val),
             ),
+            SizedBox(height: 20.0),
+            DropdownButtonFormField(
+              value: _leadtype,
+              decoration: textInputDecoration,
+              items: leadtypes.map((type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text('$_getLeadTypeName(type)'),
+                );
+              }).toList(),
+              onChanged: (val) => setState(() => _leadtype = val),
+            ),
             SizedBox(height: 10.0),
-            RaisedButton(
-                color: MyColors.lightBlue,
-                child: Text(
-                  AppLocalizations.of(context).translate('create'),
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  if (_formkey.currentState.validate()) {
-                    await DatabaseService(uid: userId).createLeadData(
-                        _name ?? '', _email ?? '', _phone ?? '');
-                    Navigator.pop(context);
-                  }
-                }),
+            // RaisedButton(
+            //     color: MyColors.lightBlue,
+            //     child: Text(
+            //       AppLocalizations.of(context).translate('create'),
+            //       style: TextStyle(color: Colors.white),
+            //     ),
+            //     onPressed: () async {
+            //       if (_formkey.currentState.validate()) {
+            //         await DatabaseService(uid: userId).createLeadData(
+            //             _name ?? '', _email ?? '', _phone ?? '');
+            //         Navigator.pop(context);
+            //       }
+            //     }),
           ],
         ),
       );
@@ -108,6 +148,7 @@ class _LeadFormState extends State<LeadForm> {
               _name = leadData.name;
               _email = leadData.email;
               _phone = leadData.phone;
+              _leadtype = leadData.leadtype;
               return Form(
                 key: _formkey,
                 child: Column(
@@ -147,28 +188,44 @@ class _LeadFormState extends State<LeadForm> {
                             .translate('phone_number'),
                       ),
                       initialValue: _phone,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly
+                      ], // Only numbers can be entered
                       validator: (val) => val.isEmpty
                           ? AppLocalizations.of(context).translate('validphone')
                           : null,
                       onChanged: (val) => setState(() => _phoneUpdated = val),
                     ),
+                    SizedBox(height: 20.0),
+                    DropdownButtonFormField(
+                      value: _leadtype,
+                      decoration: textInputDecoration,
+                      items: leadtypes.map((type) {
+                        return DropdownMenuItem(
+                          value: type,
+                          child: Text('$_getLeadTypeName(type)'),
+                        );
+                      }).toList(),
+                      onChanged: (val) => setState(() => _leadtype = val),
+                    ),
                     SizedBox(height: 10.0),
-                    RaisedButton(
-                        color: MyColors.lightBlue,
-                        child: Text(
-                          AppLocalizations.of(context).translate('update'),
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          if (_formkey.currentState.validate()) {
-                            await DatabaseService(uid: userId, docid: docId)
-                                .updateLeadData(
-                                    _nameUpdated ?? _name,
-                                    _emailUpdated ?? _email,
-                                    _phoneUpdated ?? _phone);
-                            Navigator.pop(context);
-                          }
-                        }),
+                    // RaisedButton(
+                    //     color: MyColors.lightBlue,
+                    //     child: Text(
+                    //       AppLocalizations.of(context).translate('update'),
+                    //       style: TextStyle(color: Colors.white),
+                    //     ),
+                    //     onPressed: () async {
+                    //       if (_formkey.currentState.validate()) {
+                    //         await DatabaseService(uid: userId, docid: docId)
+                    //             .updateLeadData(
+                    //                 _nameUpdated ?? _name,
+                    //                 _emailUpdated ?? _email,
+                    //                 _phoneUpdated ?? _phone);
+                    //         Navigator.pop(context);
+                    //       }
+                    //     }),
                   ],
                 ),
               );

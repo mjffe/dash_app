@@ -1,5 +1,6 @@
 import 'package:dashapp/screens/invoicing/invoicing_form.dart';
 import 'package:dashapp/screens/leads/lead_form.dart';
+import 'package:dashapp/screens/leads/lead_form_panel.dart';
 import 'package:dashapp/screens/mediationcontract/mediationcontract_form.dart';
 import 'package:dashapp/screens/objective/objective_form.dart';
 import 'package:dashapp/screens/promisebuysell/promisebuysell_form.dart';
@@ -23,14 +24,10 @@ class FoatingAction {
     switch (pos) {
       case 1:
         return FloatingActionButton(
-          onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: LeadForm(userid, ''), //SettingsForm(userid),
-                );
-              }),
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LeadFormPanel(userid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );

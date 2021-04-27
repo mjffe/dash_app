@@ -1,5 +1,7 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_buyer.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_prospecting.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_raising.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_sales.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_scriptures.dart';
@@ -29,6 +31,85 @@ class _Dash_CountersState extends State<Dash_Counters> {
 
   @override
   Widget build(BuildContext context) {
+    _showMyDialog() {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: //Text(AppLocalizations.of(context).translate('leads')),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                  Text(AppLocalizations.of(context).translate('leads')),
+                  LeadCount(userId),
+                ]),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor:
+                                const Color(0xff2A9D8F), //0xff26a69a
+                            child: Icon(
+                              Icons.people,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                .translate('prospecting'),
+                            style: TextStyle(
+                                color: Colors.black,
+                                letterSpacing: 1,
+                                fontSize: 14),
+                          ),
+                        ]),
+                        LeadProspectingCount(userId),
+                      ]),
+                  SizedBox(height: 10.0),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(children: <Widget>[
+                          CircleAvatar(
+                            backgroundColor:
+                                const Color(0xff2A9D8F), //0xff26a69a
+                            child: Icon(
+                              Icons.people,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                .translate('buyercustomers'),
+                            style: TextStyle(
+                                color: Colors.black,
+                                letterSpacing: 1,
+                                fontSize: 14),
+                          ),
+                        ]),
+                        LeadBuyerCustomersCount(userId),
+                      ]),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Container(
       child: Container(
         // height: 150.0,
@@ -87,34 +168,40 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   // )
                                 ]),
                           ),
-                          Container(
-                            height: 64,
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor:
-                                          const Color(0xff2A9D8F), //0xff26a69a
-                                      child: Icon(
-                                        Icons.people,
-                                        color: Colors.white,
+                          GestureDetector(
+                            onLongPress: () {
+                              _showMyDialog();
+                              print('onLongPress');
+                            },
+                            child: Container(
+                              height: 64,
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: const Color(
+                                            0xff2A9D8F), //0xff26a69a
+                                        child: Icon(
+                                          Icons.people,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate('leads'),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          letterSpacing: 1,
-                                          fontSize: 14),
-                                    ),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('leads'),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            letterSpacing: 1,
+                                            fontSize: 14),
+                                      ),
+                                    ]),
+                                    LeadCount(userId),
                                   ]),
-                                  LeadCount(userId),
-                                ]),
-                            //color: Colors.blue,
+                              //color: Colors.blue,
+                            ),
                           ),
                         ],
                       ),

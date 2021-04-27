@@ -124,16 +124,16 @@ class _HomeState extends State<Home> {
           return Raising();
         case 3:
           return Sale();
-        case 4:
-          return Scriptures();
+        // case 4:
+        //   return Scriptures();
         case 5:
           return ServicePresentation();
         case 6:
           return MediationContract();
         case 7:
           return Proposal();
-        case 8:
-          return PromiseBuySell();
+        // case 8:
+        //   return PromiseBuySell();
         case 9:
           return ProspectingTime();
         case 10:

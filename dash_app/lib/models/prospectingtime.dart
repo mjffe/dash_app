@@ -11,23 +11,27 @@ class ProspectingTimeItem {
 
   factory ProspectingTimeItem.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
-
-    return ProspectingTimeItem(
-      id: doc.id,
-      name: data['name'] ?? '',
-      date: data['date'] != null && data['date'] != ''
-          ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
-          : new DateTime.now(),
-      duration: data['duration'] ?? 0,
-      createdon: data['createdon'] != null && data['createdon'] != ''
-          ? DateTime.fromMillisecondsSinceEpoch(
-              (data['createdon']).seconds * 1000)
-          : new DateTime.now(),
-      datemonth: data['date'] != null && data['date'] != ''
-          ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
-              .month
-          : new DateTime.now().month,
-    );
+    try {
+      return ProspectingTimeItem(
+        id: doc.id,
+        name: data['name'] ?? '',
+        date: data['date'] != null && data['date'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
+            : new DateTime.now(),
+        duration: data['duration'] ?? 0,
+        createdon: data['createdon'] != null && data['createdon'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch(
+                (data['createdon']).seconds * 1000)
+            : new DateTime.now(),
+        datemonth: data['date'] != null && data['date'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
+                .month
+            : new DateTime.now().month,
+      );
+    } catch (e) {
+      print("ProspectingTime ${e}");
+      return ProspectingTimeItem();
+    }
   }
   final String id;
   final String name;
