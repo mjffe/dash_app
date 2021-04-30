@@ -1,9 +1,11 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/proposal.dart';
+import 'package:dashapp/screens/sales/sales_form_panel.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
 import 'package:dashapp/shared/loading.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -144,6 +146,49 @@ class _ProposalFormState extends State<ProposalForm> {
                             Navigator.pop(context);
                           }
                         }),
+                    Row(children: <Widget>[
+                      OutlinedButton(
+                          //color: MyColors.lightBlue,
+                          child: Text(
+                            AppLocalizations.of(context).translate('tolost'),
+                            style: TextStyle(color: MyColors.lightRed),
+                          ),
+                          onPressed: () async {
+                            if (_formkey.currentState.validate()) {
+                              await DatabaseService(uid: userId, docid: docId)
+                                  .updateProposalToLost(_nameUpdated ?? _name,
+                                      _valueUpdated ?? _value);
+                              Navigator.pop(context);
+                            }
+                          }),
+                      SizedBox(width: 20.0),
+                      OutlinedButton(
+                          //color: MyColors.lightBlue,
+                          child: Text(
+                            AppLocalizations.of(context).translate('towon'),
+                            style: TextStyle(color: MyColors.lightGreen),
+                          ),
+                          onPressed: () async {
+                            if (_formkey.currentState.validate()) {
+                              await DatabaseService(uid: userId, docid: docId)
+                                  .updateProposalToWon(_nameUpdated ?? _name,
+                                      _valueUpdated ?? _value);
+                              String docid = await DatabaseService(uid: userId)
+                                  .createSaleFromProposalData(
+                                      '',
+                                      _valueUpdated ?? _value,
+                                      _nameUpdated ?? _name,
+                                      data.id,
+                                      '0');
+
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SalesFormPanel(userId, docid)));
+                            }
+                          }),
+                    ]),
                   ],
                 ),
               );

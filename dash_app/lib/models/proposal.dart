@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProposalItem {
-  ProposalItem({this.id, this.name, this.createdon, this.value});
+  ProposalItem({this.id, this.name, this.value, this.state, this.createdon});
 
   factory ProposalItem.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
@@ -9,15 +9,17 @@ class ProposalItem {
     return ProposalItem(
       id: doc.id,
       name: data['name'] ?? '',
+      value: data['value'] ?? 0,
+      state: data['state'] ?? '0',
       createdon: data['createdon'] != null && data['createdon'] != ''
           ? DateTime.fromMillisecondsSinceEpoch(
               (data['createdon']).seconds * 1000)
           : new DateTime.now(),
-      value: data['value'] ?? 0,
     );
   }
   final String id;
   final String name;
-  final DateTime createdon;
   final int value;
+  final String state; //'0'-> draft '1'-> lost '2'-> won
+  final DateTime createdon;
 }

@@ -203,14 +203,14 @@ class _HomeState extends State<Home> {
                   onTap: () {
                     _onSelectItem(3);
                   }),
-              ListTile(
-                  leading: Icon(AppIcoons.escrituras),
-                  title: Text(
-                      AppLocalizations.of(context).translate('scriptures')),
-                  selected: 4 == _selectedIndex,
-                  onTap: () {
-                    _onSelectItem(4);
-                  }),
+              // ListTile(
+              //     leading: Icon(AppIcoons.escrituras),
+              //     title: Text(
+              //         AppLocalizations.of(context).translate('scriptures')),
+              //     selected: 4 == _selectedIndex,
+              //     onTap: () {
+              //       _onSelectItem(4);
+              //     }),
               ListTile(
                   leading: Icon(AppIcoons.apresentacaoservico),
                   title: Text(AppLocalizations.of(context)
@@ -235,14 +235,14 @@ class _HomeState extends State<Home> {
                   onTap: () {
                     _onSelectItem(7);
                   }),
-              ListTile(
-                  leading: Icon(AppIcoons.promecacompravenda),
-                  title: Text(AppLocalizations.of(context)
-                      .translate('promise_buy_sell')),
-                  selected: 8 == _selectedIndex,
-                  onTap: () {
-                    _onSelectItem(8);
-                  }),
+              // ListTile(
+              //     leading: Icon(AppIcoons.promecacompravenda),
+              //     title: Text(AppLocalizations.of(context)
+              //         .translate('promise_buy_sell')),
+              //     selected: 8 == _selectedIndex,
+              //     onTap: () {
+              //       _onSelectItem(8);
+              //     }),
               ListTile(
                   leading: Icon(AppIcoons.tempoprospecao),
                   title: Text(AppLocalizations.of(context)

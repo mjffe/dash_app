@@ -18,6 +18,8 @@ class ProposalList extends StatelessWidget {
     return ListView.builder(
         itemCount: proposal.length,
         itemBuilder: (context, index) {
+          Color circle = MyColors.appBarBackgroundColor;
+
           return //LeadTile(brew: brews[index]);
               Padding(
             padding: EdgeInsets.only(top: 2),
@@ -46,7 +48,11 @@ class ProposalList extends StatelessWidget {
                 child: ListTile(
                   leading: CircleAvatar(
                     radius: 25,
-                    backgroundColor: MyColors.appBarBackgroundColor,
+                    backgroundColor: proposal[index].state == '0'
+                        ? MyColors.appBarBackgroundColor
+                        : (proposal[index].state == '1'
+                            ? MyColors.lightRed
+                            : MyColors.lightGreen),
                     child: Icon(
                       AppIcoons.proposta,
                       size: 40,

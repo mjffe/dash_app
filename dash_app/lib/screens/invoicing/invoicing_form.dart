@@ -27,8 +27,10 @@ class _InvoicingFormState extends State<InvoicingForm> {
   // form values
   String _name = '';
   double _value = 0;
+  String _home = '';
   String _nameUpdated;
   double _valueUpdated;
+  String _homeUpdated;
   DateTime _selectedDate = DateTime.now();
   DateTime _selectedDateUpdated;
 
@@ -63,11 +65,22 @@ class _InvoicingFormState extends State<InvoicingForm> {
               ),
               inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              initialValue: _name,
+              initialValue: _value.toString(),
               validator: (val) => val.isEmpty
                   ? AppLocalizations.of(context).translate('validvalue')
                   : null,
               onChanged: (val) => setState(() => _value = double.parse(val)),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              decoration: textInputDecoration.copyWith(
+                hintText: AppLocalizations.of(context).translate('home'),
+              ),
+              initialValue: _home,
+              validator: (val) => val.isEmpty
+                  ? AppLocalizations.of(context).translate('validhome')
+                  : null,
+              onChanged: (val) => setState(() => _home = val),
             ),
             SizedBox(height: 20.0),
             DateTimePicker(
@@ -95,6 +108,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
                     await DatabaseService(uid: userId).createInvoicingData(
                         _name ?? '',
                         _value ?? 0,
+                        _home ?? '',
                         _selectedDate ?? DateTime.now());
                     Navigator.pop(context);
                   }
@@ -120,6 +134,14 @@ class _InvoicingFormState extends State<InvoicingForm> {
                       style: TextStyle(fontSize: 18.0),
                     ),
                     SizedBox(height: 20.0),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "${AppLocalizations.of(context).translate('name')}:",
+                          style: TextStyle(
+                            letterSpacing: 1.2,
+                          ),
+                        )),
                     TextFormField(
                       decoration: textInputDecoration.copyWith(
                         hintText:
@@ -132,6 +154,14 @@ class _InvoicingFormState extends State<InvoicingForm> {
                       onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
                     SizedBox(height: 20.0),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "${AppLocalizations.of(context).translate('value')}:",
+                          style: TextStyle(
+                            letterSpacing: 1.2,
+                          ),
+                        )),
                     TextFormField(
                       decoration: textInputDecoration.copyWith(
                         hintText:
@@ -150,6 +180,34 @@ class _InvoicingFormState extends State<InvoicingForm> {
                           setState(() => _valueUpdated = double.parse(val)),
                     ),
                     SizedBox(height: 20.0),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "${AppLocalizations.of(context).translate('home')}:",
+                          style: TextStyle(
+                            letterSpacing: 1.2,
+                          ),
+                        )),
+                    TextFormField(
+                      decoration: textInputDecoration.copyWith(
+                        hintText:
+                            AppLocalizations.of(context).translate('home'),
+                      ),
+                      initialValue: _home,
+                      validator: (val) => val.isEmpty
+                          ? AppLocalizations.of(context).translate('validhome')
+                          : null,
+                      onChanged: (val) => setState(() => _homeUpdated = val),
+                    ),
+                    SizedBox(height: 20.0),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "${AppLocalizations.of(context).translate('date')}:",
+                          style: TextStyle(
+                            letterSpacing: 1.2,
+                          ),
+                        )),
                     DateTimePicker(
                       dateMask: 'dd/MM/yyyy',
                       initialValue: _selectedDate.toString(),
@@ -177,6 +235,7 @@ class _InvoicingFormState extends State<InvoicingForm> {
                                 .updateInvoicingData(
                                     _nameUpdated ?? _name,
                                     _valueUpdated ?? _value,
+                                    _homeUpdated ?? _home,
                                     _selectedDateUpdated ?? _selectedDate);
                             Navigator.pop(context);
                           }

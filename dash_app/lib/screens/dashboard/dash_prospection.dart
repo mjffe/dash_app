@@ -84,10 +84,15 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
                       // Enable legend
                       legend: Legend(isVisible: false),
                       // Enable tooltip
-                      tooltipBehavior: TooltipBehavior(enable: true),
+                      tooltipBehavior: TooltipBehavior(enable: false),
                       //backgroundColor
                       backgroundColor: Colors.grey[100],
-
+                      onPointTapped: (PointTapArgs args) {
+                        // print(args.seriesIndex);
+                        // print(args.pointIndex);
+                        print(args.dataPoints[args.pointIndex].x);
+                      },
+                      selectionGesture: ActivationMode.doubleTap,
                       //onChartTouchInteractionDown: SelectionChangedHandler(),
                       //borderColor: Colors.red,// cor a volta do grafico
                       //series
@@ -100,8 +105,7 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
                               .translate('ProspectingTimeName'),
 
                           // Enable data label
-                          dataLabelSettings:
-                              DataLabelSettings(isVisible: false),
+                          dataLabelSettings: DataLabelSettings(isVisible: true),
                           color: Color(0xff4ea8de), //118ab2 // 5390d9 //4ea8de
                         )
                       ]),

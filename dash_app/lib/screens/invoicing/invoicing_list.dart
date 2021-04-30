@@ -1,7 +1,7 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/user.dart';
-import 'package:dashapp/screens/invoicing/invoicing_form.dart';
+import 'package:dashapp/screens/invoicing/invoicing_form_panel.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -55,16 +55,11 @@ class InvoicingList extends StatelessWidget {
                   title: Text(invoicing[index].name),
                   subtitle: Text(
                       '${AppLocalizations.of(context).translate('value')}:${invoicing[index].value} '),
-                  onTap: () => showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 60),
-                          child: InvoicingForm(user.uid,
-                              invoicing[index].id), //SettingsForm(userid),
-                        );
-                      }),
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => InvoicingFormPanel(
+                              user.uid, invoicing[index].id))),
                 ),
               ),
             ),

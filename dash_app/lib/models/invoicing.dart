@@ -4,6 +4,7 @@ class InvoicingItem {
   InvoicingItem(
       {this.id,
       this.name,
+      this.home,
       this.createdon,
       this.value,
       this.date,
@@ -15,6 +16,7 @@ class InvoicingItem {
     return InvoicingItem(
       id: doc.id,
       name: data['name'] ?? '',
+      home: data['home'] ?? '',
       createdon: data['createdon'] != null && data['createdon'] != ''
           ? DateTime.fromMillisecondsSinceEpoch(
               (data['createdon']).seconds * 1000)
@@ -31,6 +33,7 @@ class InvoicingItem {
   }
   final String id;
   final String name;
+  final String home;
   final DateTime createdon;
   final DateTime date;
   final double value;

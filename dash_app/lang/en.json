@@ -41,8 +41,16 @@
   "update_sale":"Update Sale",
   "value":"Value",
   "validvalue":"Please enter a Value",
+  "state": "State",
   "duration":"Duration",
   "validduration":"Please enter a Duration",
+  "towon":"Won Proposal",
+  "tolost":"Lost Proposal",
+  
+
+  "InvoicingPage":"InvoicingPage",
+  "home":"Home",
+  "validhome":"Please enter a Home",
 
   "SharedPage":"SharedPage",
   "create":"Create",
@@ -62,8 +70,8 @@
   "Nov":"Nov",
   "Dec":"Dec",
 
-  "ProspectingTimeTitle":"Prospecting Time",
-  "ProspectingTimeName":"Time",
+  "ProspectingTimeTitle":"Prospecting Time (h)",
+  "ProspectingTimeName":"Time (h)",
   "DateTarget" :"Target",
   "date":"Date",
   "validdate":"Please enter a Date",

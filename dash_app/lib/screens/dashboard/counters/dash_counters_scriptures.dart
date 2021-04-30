@@ -12,7 +12,11 @@ class ScripturesCount extends StatelessWidget {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
     return StreamBuilder<QuerySnapshot>(
-        stream: users.doc(userId).collection('scriptures').snapshots(),
+        stream: users
+            .doc(userId)
+            .collection('sales')
+            .where('state', isEqualTo: '1')
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Text("${snapshot.data.size}",

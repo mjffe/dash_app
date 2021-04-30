@@ -68,19 +68,19 @@ class _SaleFormState extends State<SaleForm> {
               onChanged: (val) => setState(() => _value = int.parse(val)),
             ),
             SizedBox(height: 10.0),
-            RaisedButton(
-                color: MyColors.lightBlue,
-                child: Text(
-                  AppLocalizations.of(context).translate('create'),
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  if (_formkey.currentState.validate()) {
-                    await DatabaseService(uid: userId)
-                        .createSaleData(_name ?? '', _value ?? 0);
-                    Navigator.pop(context);
-                  }
-                }),
+            // RaisedButton(
+            //     color: MyColors.lightBlue,
+            //     child: Text(
+            //       AppLocalizations.of(context).translate('create'),
+            //       style: TextStyle(color: Colors.white),
+            //     ),
+            //     onPressed: () async {
+            //       if (_formkey.currentState.validate()) {
+            //         await DatabaseService(uid: userId)
+            //             .createSaleData(_name ?? '', _value ?? 0);
+            //         Navigator.pop(context);
+            //       }
+            //     }),
           ],
         ),
       );
@@ -135,22 +135,22 @@ class _SaleFormState extends State<SaleForm> {
                           setState(() => _valueUpdated = int.parse(val)),
                     ),
                     SizedBox(height: 10.0),
-                    RaisedButton(
-                        color: MyColors.lightBlue,
-                        child: Text(
-                          AppLocalizations.of(context).translate('update'),
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          if (_formkey.currentState.validate()) {
-                            await DatabaseService(uid: userId, docid: docId)
-                                .updateSaleData(
-                              _nameUpdated ?? _name,
-                              _valueUpdated ?? _value,
-                            );
-                            Navigator.pop(context);
-                          }
-                        }),
+                    // RaisedButton(
+                    //     color: MyColors.lightBlue,
+                    //     child: Text(
+                    //       AppLocalizations.of(context).translate('update'),
+                    //       style: TextStyle(color: Colors.white),
+                    //     ),
+                    //     onPressed: () async {
+                    //       if (_formkey.currentState.validate()) {
+                    //         await DatabaseService(uid: userId, docid: docId)
+                    //             .updateSaleData(
+                    //           _nameUpdated ?? _name,
+                    //           _valueUpdated ?? _value,
+                    //         );
+                    //         Navigator.pop(context);
+                    //       }
+                    //     }),
                   ],
                 ),
               );

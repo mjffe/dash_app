@@ -14,7 +14,11 @@ class PieChartViewModel {
         users.doc(userId).collection('servicepresentation').snapshots(),
         users.doc(userId).collection('mediationcontract').snapshots(),
         users.doc(userId).collection('proposal').snapshots(),
-        users.doc(userId).collection('promisebuysell').snapshots(),
+        users
+            .doc(userId)
+            .collection('sales')
+            .where('state', isEqualTo: '0')
+            .snapshots(),
         (QuerySnapshot servicepresentation, QuerySnapshot mediationcontract,
             QuerySnapshot proposal, QuerySnapshot promisebuysell) {
       return PieChartItem(

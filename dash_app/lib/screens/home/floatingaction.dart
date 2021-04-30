@@ -1,5 +1,4 @@
-import 'package:dashapp/screens/invoicing/invoicing_form.dart';
-import 'package:dashapp/screens/leads/lead_form.dart';
+import 'package:dashapp/screens/invoicing/invoicing_form_panel.dart';
 import 'package:dashapp/screens/leads/lead_form_panel.dart';
 import 'package:dashapp/screens/mediationcontract/mediationcontract_form.dart';
 import 'package:dashapp/screens/objective/objective_form.dart';
@@ -7,7 +6,7 @@ import 'package:dashapp/screens/promisebuysell/promisebuysell_form.dart';
 import 'package:dashapp/screens/proposal/proposal_form.dart';
 import 'package:dashapp/screens/prospectingtime/prospectingtime_form.dart';
 import 'package:dashapp/screens/raisings/raising_form.dart';
-import 'package:dashapp/screens/sales/sales_form.dart';
+import 'package:dashapp/screens/sales/sales_form_panel.dart';
 import 'package:dashapp/screens/scriptures/scripture_form.dart';
 import 'package:dashapp/screens/service_presentation/servicepresentation_form.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -46,14 +45,10 @@ class FoatingAction {
         );
       case 3:
         return FloatingActionButton(
-          onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: SaleForm(userid, ''), //SettingsForm(userid),
-                );
-              }),
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => SalesFormPanel(userid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );
@@ -140,14 +135,10 @@ class FoatingAction {
         );
       case 10:
         return FloatingActionButton(
-          onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: InvoicingForm(userid, ''), //SettingsForm(userid),
-                );
-              }),
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => LeadFormPanel(userid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );

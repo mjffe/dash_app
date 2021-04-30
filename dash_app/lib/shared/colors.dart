@@ -10,6 +10,9 @@ class MyColors {
   static const normalBlue = Color(0xff3d5aff);
 
   static const lightBlue2 = Color(0xff42A5F5);
+
+  static const lightGreen = Colors.lightGreen;
+  static const lightRed = Color(0xffEF9A9A); //Colors.red[200];
 }
 // const appBarBackgroundColor = Color(0xff0031cb);
 // const buttonColor = Color(0xff0031cb);
