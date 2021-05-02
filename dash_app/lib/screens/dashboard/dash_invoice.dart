@@ -5,6 +5,8 @@ import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/dash_invoice_view_model.dart';
+import 'package:dashapp/screens/invoicing/invoicing.dart';
+import 'package:dashapp/screens/objective/objective.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -48,12 +50,14 @@ class LineChartStreamData0 extends StatelessWidget {
     final user = Provider.of<FirebaseUser>(context);
     return Provider<InvoiceChartViewModel>(
       create: (_) => InvoiceChartViewModel(userId: user.uid),
-      child: LineChartStreamData(),
+      child: LineChartStreamData(user.uid),
     );
   }
 }
 
 class LineChartStreamData extends StatelessWidget {
+  LineChartStreamData(this.userId);
+  final String userId;
   @override
   Widget build(BuildContext context) {
     final viewModel =
@@ -108,7 +112,7 @@ class LineChartStreamData extends StatelessWidget {
               objectivesDash
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
-            return Dash_Invoice(invoicesDash, objectivesDash);
+            return Dash_Invoice(invoicesDash, objectivesDash, userId);
           }
           return CircularProgressIndicator();
           //Text('Loading');
@@ -118,18 +122,20 @@ class LineChartStreamData extends StatelessWidget {
 }
 
 class Dash_Invoice extends StatefulWidget {
-  Dash_Invoice(this.invoicesDash, this.objectivesDash);
+  Dash_Invoice(this.invoicesDash, this.objectivesDash, this.userId);
   List<Dash> invoicesDash;
   List<Dash> objectivesDash;
+  final String userId;
   @override
   _Dash_InvoiceState createState() =>
-      _Dash_InvoiceState(invoicesDash, objectivesDash);
+      _Dash_InvoiceState(invoicesDash, objectivesDash, userId);
 }
 
 class _Dash_InvoiceState extends State<Dash_Invoice> {
-  _Dash_InvoiceState(this.invoicesDash, this.objectivesDash);
+  _Dash_InvoiceState(this.invoicesDash, this.objectivesDash, this.userId);
   List<Dash> invoicesDash;
   List<Dash> objectivesDash;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +157,9 @@ class _Dash_InvoiceState extends State<Dash_Invoice> {
 
                 primaryXAxis: CategoryAxis(),
                 // Chart title
-                title: ChartTitle(text: 'Faturação'),
+                title: ChartTitle(
+                    text: AppLocalizations.of(context)
+                        .translate('invoicing')), //invoicing
                 // Enable legend
                 legend:
                     Legend(isVisible: true, position: LegendPosition.bottom),
@@ -159,7 +167,27 @@ class _Dash_InvoiceState extends State<Dash_Invoice> {
                 tooltipBehavior: TooltipBehavior(enable: true),
                 //backgroundColor
                 backgroundColor: Colors.grey[100],
-
+                onPointTapped: (PointTapArgs args) {
+                  print(args.dataPoints[args.pointIndex].x);
+                  print(args.dataPoints[args.pointIndex].regionData[2]);
+                  int month = Dash.fromMonthToNumber(
+                      args.dataPoints[args.pointIndex].x);
+                  print(month);
+                  if (args.dataPoints[args.pointIndex].regionData[2] ==
+                      AppLocalizations.of(context).translate('objectives')) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ObjectiveFiltred(userId, month)));
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                InvoicingFiltred(userId, month)));
+                  }
+                },
                 //onChartTouchInteractionDown: SelectionChangedHandler(),
                 //borderColor: Colors.red,// cor a volta do grafico
                 //series
@@ -168,7 +196,8 @@ class _Dash_InvoiceState extends State<Dash_Invoice> {
                       dataSource: objectivesDash,
                       xValueMapper: (Dash sales, _) => sales.month,
                       yValueMapper: (Dash sales, _) => sales.value,
-                      name: "Objetivo",
+                      name: AppLocalizations.of(context)
+                          .translate('objectives'), //objectives
                       color: Color(0xffec8385),
                       markerSettings: MarkerSettings(
                           isVisible: true,
@@ -182,7 +211,8 @@ class _Dash_InvoiceState extends State<Dash_Invoice> {
                       xValueMapper: (Dash sales, _) => sales.month,
                       yValueMapper: (Dash sales, _) => sales.value,
                       color: Color(0xff006400),
-                      name: "Faturação",
+                      name: AppLocalizations.of(context)
+                          .translate('invoicing'), //invoicing
                       markerSettings: MarkerSettings(
                           isVisible: true,
                           width: 5,

@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProspectingTimeList extends StatelessWidget {
+  ProspectingTimeList(this.userId);
+  String userId;
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final raisings = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
 
     //return Text('sdfsdf');
@@ -29,7 +31,7 @@ class ProspectingTimeList extends StatelessWidget {
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${raisings[index].name} ');
-                    DatabaseService(uid: user.uid, docid: raisings[index].id)
+                    DatabaseService(uid: userId, docid: raisings[index].id)
                         .deleteProspectingTimeData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -59,7 +61,7 @@ class ProspectingTimeList extends StatelessWidget {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
-                          child: ProspectingTimeForm(user.uid,
+                          child: ProspectingTimeForm(userId,
                               raisings[index].id), //SettingsForm(userid),
                         );
                       }),

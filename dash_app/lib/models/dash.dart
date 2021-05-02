@@ -44,6 +44,57 @@ class Dash {
     this.value = value;
   }
 
+  static int fromMonthToNumber(String month) {
+    int monthNumber;
+    switch (month) {
+      case 'Jan':
+        monthNumber = 1;
+        break;
+      case 'Feb':
+        monthNumber = 2;
+        break;
+      case 'Mar':
+        monthNumber = 3;
+        break;
+      case 'Apr':
+        monthNumber = 4;
+        break;
+      case 'May':
+        monthNumber = 5;
+        break;
+      case 'Mai':
+        monthNumber = 5;
+        break;
+      case 'Jun':
+        monthNumber = 6;
+        break;
+      case 'Jul':
+        monthNumber = 7;
+        break;
+      case 'Aug':
+        monthNumber = 8;
+        break;
+      case 'Ago':
+        monthNumber = 8;
+        break;
+      case 'Set':
+        monthNumber = 9;
+        break;
+      case 'Oct':
+        monthNumber = 10;
+        break;
+      case 'Nov':
+        monthNumber = 11;
+        break;
+      case 'Dec':
+        monthNumber = 12;
+        break;
+      default:
+        monthNumber = 0;
+    }
+    return monthNumber;
+  }
+
   String month;
   int monthNumber;
   double value;

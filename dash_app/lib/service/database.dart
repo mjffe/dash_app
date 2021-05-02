@@ -12,6 +12,7 @@ import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/models/scriptures.dart';
 import 'package:dashapp/models/servicepresentation.dart';
 import 'package:dashapp/models/user.dart';
+import 'package:jiffy/jiffy.dart';
 
 class DatabaseService {
   //DatabaseService({this.uid});
@@ -605,6 +606,26 @@ class DatabaseService {
     return ref.snapshots();
   }
 
+  Stream<List<LeadItem>> getleadsBuyerCustomers(String userId) {
+    var ref = userCollection
+        .doc(userId)
+        .collection('leads')
+        .where('leadtype', isEqualTo: '1');
+
+    return ref.snapshots().map(
+        (list) => list.docs.map((doc) => LeadItem.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<LeadItem>> getleadsProspecting(String userId) {
+    var ref = userCollection
+        .doc(userId)
+        .collection('leads')
+        .where('leadtype', isEqualTo: '0');
+
+    return ref.snapshots().map(
+        (list) => list.docs.map((doc) => LeadItem.fromFirestore(doc)).toList());
+  }
+
   //Obten um lead especifica
   Stream<LeadItem> get getleadscount {
     return userCollection
@@ -626,8 +647,8 @@ class DatabaseService {
   }
 
 //Obten a lista de raisings de um utilizador
-  Stream<List<RaisingItem>> getraisings(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('raisings');
+  Stream<List<RaisingItem>> getraisings(String userId) {
+    var ref = userCollection.doc(userId).collection('raisings');
 
     return ref.snapshots().map((list) =>
         list.docs.map((doc) => RaisingItem.fromFirestore(doc)).toList());
@@ -644,8 +665,28 @@ class DatabaseService {
   }
 
   //Obten a lista de sales de um utilizador
-  Stream<List<SaleItem>> getsales(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('sales');
+  Stream<List<SaleItem>> getsales(String userId) {
+    var ref = userCollection.doc(userId).collection('sales');
+
+    return ref.snapshots().map(
+        (list) => list.docs.map((doc) => SaleItem.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<SaleItem>> getsalesScriptures(String userId) {
+    var ref = userCollection
+        .doc(userId)
+        .collection('sales')
+        .where('state', isEqualTo: '1');
+
+    return ref.snapshots().map(
+        (list) => list.docs.map((doc) => SaleItem.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<SaleItem>> getsalesPromiseBuySell(String userId) {
+    var ref = userCollection
+        .doc(userId)
+        .collection('sales')
+        .where('state', isEqualTo: '0');
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => SaleItem.fromFirestore(doc)).toList());
@@ -680,9 +721,8 @@ class DatabaseService {
   }
 
 //Obten a lista de servicepresentation de um utilizador
-  Stream<List<ServicePresentationItem>> getservicepresentations(
-      FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('servicepresentation');
+  Stream<List<ServicePresentationItem>> getservicepresentations(String userId) {
+    var ref = userCollection.doc(userId).collection('servicepresentation');
 
     return ref.snapshots().map((list) => list.docs
         .map((doc) => ServicePresentationItem.fromFirestore(doc))
@@ -700,8 +740,8 @@ class DatabaseService {
   }
 
 //Obten a lista de mediationcontract de um utilizador
-  Stream<List<MediationContractItem>> getmediationcontracts(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('mediationcontract');
+  Stream<List<MediationContractItem>> getmediationcontracts(String userId) {
+    var ref = userCollection.doc(userId).collection('mediationcontract');
 
     return ref.snapshots().map((list) => list.docs
         .map((doc) => MediationContractItem.fromFirestore(doc))
@@ -719,8 +759,8 @@ class DatabaseService {
   }
 
 //Obten a lista de proposal de um utilizador
-  Stream<List<ProposalItem>> getproposals(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('proposal');
+  Stream<List<ProposalItem>> getproposals(String userId) {
+    var ref = userCollection.doc(userId).collection('proposal');
 
     return ref.snapshots().map((list) =>
         list.docs.map((doc) => ProposalItem.fromFirestore(doc)).toList());
@@ -755,12 +795,28 @@ class DatabaseService {
   }
 
 //Obten a lista de prospectingtime de um utilizador
-  Stream<List<ProspectingTimeItem>> getprospectingtime(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('prospectingtime');
-
-    return ref.snapshots().map((list) => list.docs
-        .map((doc) => ProspectingTimeItem.fromFirestore(doc))
-        .toList());
+  Stream<List<ProspectingTimeItem>> getprospectingtime(
+      String userId, int month) {
+    //var date = DateTime.now();
+    if (month == 0) {
+      CollectionReference ref =
+          userCollection.doc(userId).collection('prospectingtime');
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => ProspectingTimeItem.fromFirestore(doc))
+          .toList());
+    } else {
+      DateTime startDate = new DateTime(DateTime.now().year, month, 1);
+      Jiffy end = Jiffy(DateTime(DateTime.now().year, month, 1)).add(months: 1);
+      DateTime endDate = new DateTime(DateTime.now().year, end.month, 1);
+      Query ref = userCollection
+          .doc(userId)
+          .collection('prospectingtime')
+          .where('date', isGreaterThanOrEqualTo: startDate)
+          .where('date', isLessThan: endDate);
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => ProspectingTimeItem.fromFirestore(doc))
+          .toList());
+    }
   }
 
   //Obten um prospectingtime especifica
@@ -774,11 +830,24 @@ class DatabaseService {
   }
 
 //Obten a lista de invoicing de um utilizador
-  Stream<List<InvoicingItem>> getinvoices(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('invoicing');
+  Stream<List<InvoicingItem>> getinvoices(String userId, int month) {
+    if (month == 0) {
+      var ref = userCollection.doc(userId).collection('invoicing');
 
-    return ref.snapshots().map((list) =>
-        list.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList());
+    } else {
+      DateTime startDate = new DateTime(DateTime.now().year, month, 1);
+      Jiffy end = Jiffy(DateTime(DateTime.now().year, month, 1)).add(months: 1);
+      DateTime endDate = new DateTime(DateTime.now().year, end.month, 1);
+      Query ref = userCollection
+          .doc(userId)
+          .collection('invoicing')
+          .where('date', isGreaterThanOrEqualTo: startDate)
+          .where('date', isLessThan: endDate);
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList());
+    }
   }
 
   //Obten um invoicing especifica
@@ -792,11 +861,24 @@ class DatabaseService {
   }
 
 //Obten a lista de invoicing de um utilizador
-  Stream<List<ObjectiveItem>> getobjectives(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('objective');
+  Stream<List<ObjectiveItem>> getobjectives(String userId, int month) {
+    if (month == 0) {
+      var ref = userCollection.doc(userId).collection('objective');
 
-    return ref.snapshots().map((list) =>
-        list.docs.map((doc) => ObjectiveItem.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => ObjectiveItem.fromFirestore(doc)).toList());
+    } else {
+      DateTime startDate = new DateTime(DateTime.now().year, month, 1);
+      Jiffy end = Jiffy(DateTime(DateTime.now().year, month, 1)).add(months: 1);
+      DateTime endDate = new DateTime(DateTime.now().year, end.month, 1);
+      Query ref = userCollection
+          .doc(userId)
+          .collection('objective')
+          .where('date', isGreaterThanOrEqualTo: startDate)
+          .where('date', isLessThan: endDate);
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => ObjectiveItem.fromFirestore(doc)).toList());
+    }
   }
 
   //Obten um invoicing especifica

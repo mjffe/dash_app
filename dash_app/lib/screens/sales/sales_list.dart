@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SaleList extends StatelessWidget {
+  SaleList(this.userId);
+  final String userId;
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final sales = Provider.of<List<SaleItem>>(context) ?? [];
     print('List of sales: ${sales.length}');
 
@@ -47,7 +49,7 @@ class SaleList extends StatelessWidget {
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction) async {
                     if (direction == DismissDirection.endToStart) {
-                      DatabaseService(uid: user.uid, docid: sales[index].id)
+                      DatabaseService(uid: userId, docid: sales[index].id)
                           .deleteSaleData();
 
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -77,7 +79,7 @@ class SaleList extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SalesFormPanel(user.uid, sales[index].id))),
+                                SalesFormPanel(userId, sales[index].id))),
                   )),
             ),
           );

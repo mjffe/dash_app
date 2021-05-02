@@ -2,6 +2,7 @@ import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/dash.dart';
 import 'package:dashapp/models/prospectingtime.dart';
 import 'package:dashapp/models/user.dart';
+import 'package:dashapp/screens/prospectingtime/prospectingtime.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -18,7 +19,7 @@ class Dash_ProspectingTime extends StatelessWidget {
 
     return StreamProvider<List<ProspectingTimeItem>>.value(
       initialData: null,
-      value: DatabaseService().getprospectingtime(user),
+      value: DatabaseService().getprospectingtime(user.uid, 0),
       child: Dash_Prospection(),
     );
   }
@@ -37,6 +38,8 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
   @override
   Widget build(BuildContext context) {
     final prospections = Provider.of<List<ProspectingTimeItem>>(context) ?? [];
+    final user = Provider.of<FirebaseUser>(context);
+    //Provider.of<FirebaseUser>(context, listen: false);
     //print('List of Prospection: ${prospections.length}');
     if (prospections != null) if (prospections.length > 0) {
       //print('List of Prospection: ${prospections[0]}');
@@ -91,6 +94,14 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
                         // print(args.seriesIndex);
                         // print(args.pointIndex);
                         print(args.dataPoints[args.pointIndex].x);
+                        int month = Dash.fromMonthToNumber(
+                            args.dataPoints[args.pointIndex].x);
+                        print(month);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProspectingTimeFiltred(user.uid, month)));
                       },
                       selectionGesture: ActivationMode.doubleTap,
                       //onChartTouchInteractionDown: SelectionChangedHandler(),

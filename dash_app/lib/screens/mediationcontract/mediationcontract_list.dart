@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MediationContractList extends StatelessWidget {
+  MediationContractList(this.userId);
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final raisings = Provider.of<List<MediationContractItem>>(context) ?? [];
 
     //return Text('sdfsdf');
@@ -29,7 +32,7 @@ class MediationContractList extends StatelessWidget {
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${raisings[index].name} ');
-                    DatabaseService(uid: user.uid, docid: raisings[index].id)
+                    DatabaseService(uid: userId, docid: raisings[index].id)
                         .deleteMediationContractData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -59,7 +62,7 @@ class MediationContractList extends StatelessWidget {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
-                          child: MediationContractForm(user.uid,
+                          child: MediationContractForm(userId,
                               raisings[index].id), //SettingsForm(userid),
                         );
                       }),

@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProposalList extends StatelessWidget {
+  ProposalList(this.userId);
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final proposal = Provider.of<List<ProposalItem>>(context) ?? [];
 
     //return Text('sdfsdf');
@@ -31,7 +34,7 @@ class ProposalList extends StatelessWidget {
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${proposal[index].name} ');
-                    DatabaseService(uid: user.uid, docid: proposal[index].id)
+                    DatabaseService(uid: userId, docid: proposal[index].id)
                         .deleteProposalData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -67,7 +70,7 @@ class ProposalList extends StatelessWidget {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
-                          child: ProposalForm(user.uid,
+                          child: ProposalForm(userId,
                               proposal[index].id), //SettingsForm(userid),
                         );
                       }),

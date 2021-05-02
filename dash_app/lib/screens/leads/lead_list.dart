@@ -10,11 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LeadList extends StatelessWidget {
-  const LeadList({Key key}) : super(key: key);
+  LeadList(this.userId);
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final leads = Provider.of<List<LeadItem>>(context) ?? [];
     //print('List of leads: ${leads}');
     //return Text('sdfsdf');
@@ -33,7 +34,7 @@ class LeadList extends StatelessWidget {
                     if (direction == DismissDirection.endToStart) {
                       print(
                           'Email:${leads[index].email} \nPhone: ${leads[index].phone}');
-                      DatabaseService(uid: user.uid, docid: leads[index].id)
+                      DatabaseService(uid: userId, docid: leads[index].id)
                           .deleteLeadData();
 
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -73,7 +74,7 @@ class LeadList extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                LeadFormPanel(user.uid, leads[index].id))),
+                                LeadFormPanel(userId, leads[index].id))),
                   )),
             ),
           );

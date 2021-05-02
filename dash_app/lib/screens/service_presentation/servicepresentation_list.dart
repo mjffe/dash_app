@@ -1,6 +1,5 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/servicepresentation.dart';
-import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/service_presentation/servicepresentation_form.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_icons.dart';
@@ -9,9 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ServicePresentationList extends StatelessWidget {
+  ServicePresentationList(this.userId);
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final servicePresentation =
         Provider.of<List<ServicePresentationItem>>(context) ?? [];
 
@@ -31,7 +33,7 @@ class ServicePresentationList extends StatelessWidget {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${servicePresentation[index].name} ');
                     DatabaseService(
-                            uid: user.uid, docid: servicePresentation[index].id)
+                            uid: userId, docid: servicePresentation[index].id)
                         .deleteServicePresentationData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -62,7 +64,7 @@ class ServicePresentationList extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
                           child: ServicePresentationForm(
-                              user.uid,
+                              userId,
                               servicePresentation[index]
                                   .id), //SettingsForm(userid),
                         );

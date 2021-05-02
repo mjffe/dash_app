@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ObjectiveList extends StatelessWidget {
+  ObjectiveList(this.userId);
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final objective = Provider.of<List<ObjectiveItem>>(context) ?? [];
 
     //return Text('sdfsdf');
@@ -29,7 +32,7 @@ class ObjectiveList extends StatelessWidget {
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${objective[index].name} ');
-                    DatabaseService(uid: user.uid, docid: objective[index].id)
+                    DatabaseService(uid: userId, docid: objective[index].id)
                         .deleteObjectiveData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -61,7 +64,7 @@ class ObjectiveList extends StatelessWidget {
                         return Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 20, horizontal: 60),
-                          child: ObjectiveForm(user.uid,
+                          child: ObjectiveForm(userId,
                               objective[index].id), //SettingsForm(userid),
                         );
                       }),

@@ -2,6 +2,10 @@ import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/piechart.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/dash_piechart_view_model.dart';
+import 'package:dashapp/screens/mediationcontract/mediationcontract.dart';
+import 'package:dashapp/screens/proposal/proposal.dart';
+import 'package:dashapp/screens/sales/sale.dart';
+import 'package:dashapp/screens/service_presentation/servicepresentation.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
@@ -44,12 +48,14 @@ class PieChartStreamData0 extends StatelessWidget {
     final user = Provider.of<FirebaseUser>(context);
     return Provider<PieChartViewModel>(
       create: (_) => PieChartViewModel(userId: user.uid),
-      child: PieChartStreamData(),
+      child: PieChartStreamData(user.uid),
     );
   }
 }
 
 class PieChartStreamData extends StatelessWidget {
+  PieChartStreamData(this.userId);
+  final String userId;
   //const PieChartStreamData({Key key}) : super(key: key);
 
   // static Widget create(BuildContext context) {
@@ -71,7 +77,8 @@ class PieChartStreamData extends StatelessWidget {
                 snapshot.data.apsCount,
                 snapshot.data.cmiCount,
                 snapshot.data.propostasCount,
-                snapshot.data.cpvcCount);
+                snapshot.data.cpvcCount,
+                userId);
           }
           return CircularProgressIndicator();
           //Text('Loading');
@@ -86,27 +93,32 @@ class PieChartSample2 extends StatefulWidget {
     this.cmi,
     this.pro,
     this.cpvc,
+    this.uid,
   );
   int aps;
   int cmi;
   int pro;
   int cpvc;
+  String uid;
   @override
-  State<StatefulWidget> createState() => PieChart2State(aps, cmi, pro, cpvc);
+  State<StatefulWidget> createState() =>
+      PieChart2State(aps, cmi, pro, cpvc, uid);
 }
 
 class PieChart2State extends State {
-  PieChart2State(int aps, int cmi, int pro, int cpvc) {
+  PieChart2State(int aps, int cmi, int pro, int cpvc, String uid) {
     apsCount = aps.toDouble();
     cmiCount = cmi.toDouble();
     propostasCount = pro.toDouble();
     cpvcCount = cpvc.toDouble();
+    userId = uid;
   }
   int touchedIndex = -1;
   double apsCount;
   double cmiCount;
   double propostasCount;
   double cpvcCount;
+  String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +168,8 @@ class PieChart2State extends State {
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 0 ? FontWeight.bold : FontWeight.normal,
+                  onTapFunction: 1,
+                  userId: userId,
                 ),
                 SizedBox(
                   height: 4,
@@ -167,6 +181,8 @@ class PieChart2State extends State {
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 1 ? FontWeight.bold : FontWeight.normal,
+                  onTapFunction: 2,
+                  userId: userId,
                 ),
                 SizedBox(
                   height: 4,
@@ -177,6 +193,8 @@ class PieChart2State extends State {
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 2 ? FontWeight.bold : FontWeight.normal,
+                  onTapFunction: 3,
+                  userId: userId,
                 ),
                 SizedBox(
                   height: 4,
@@ -188,6 +206,8 @@ class PieChart2State extends State {
                   isSquare: true,
                   fontWeight:
                       touchedIndex == 3 ? FontWeight.bold : FontWeight.normal,
+                  onTapFunction: 4,
+                  userId: userId,
                 ),
                 SizedBox(
                   height: 60,
@@ -267,6 +287,8 @@ class Indicator extends StatelessWidget {
   final double size;
   final Color textColor;
   final FontWeight fontWeight;
+  final int onTapFunction;
+  final String userId;
 
   const Indicator({
     Key key,
@@ -276,31 +298,65 @@ class Indicator extends StatelessWidget {
     this.size = 16,
     this.textColor = Colors.black, //const Color(0xff505050),
     this.fontWeight = FontWeight.normal,
+    this.onTapFunction,
+    this.userId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
-            color: color,
+    return GestureDetector(
+      onTap: () {
+        print(text);
+        switch (onTapFunction) {
+          case 1:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ServicePresentationFiltred(userId)));
+            break;
+          case 2:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MediationContractFiltred(userId)));
+            break;
+          case 3:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProposalFiltred(userId)));
+            break;
+          case 4:
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PromiseBuySellFiltred(userId)));
+            break;
+          default:
+        }
+      },
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              shape: isSquare ? BoxShape.rectangle : BoxShape.circle,
+              color: color,
+            ),
           ),
-        ),
-        const SizedBox(
-          width: 4,
-        ),
-        Text(
-          text,
-          style: TextStyle(
-              //fontSize: 14, fontWeight: FontWeight.bold,
-              fontWeight: fontWeight,
-              color: textColor),
-        )
-      ],
+          const SizedBox(
+            width: 4,
+          ),
+          Text(
+            text,
+            style: TextStyle(
+                //fontSize: 14, fontWeight: FontWeight.bold,
+                fontWeight: fontWeight,
+                color: textColor),
+          )
+        ],
+      ),
     );
   }
 }

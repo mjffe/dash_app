@@ -5,6 +5,9 @@ import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_prospectin
 import 'package:dashapp/screens/dashboard/counters/dash_counters_raising.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_sales.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_scriptures.dart';
+import 'package:dashapp/screens/leads/lead.dart';
+import 'package:dashapp/screens/raisings/raising.dart';
+import 'package:dashapp/screens/sales/sale.dart';
 import 'package:dashapp/shared/app_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -47,53 +50,71 @@ class _Dash_CountersState extends State<Dash_Counters> {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor:
-                                const Color(0xff2A9D8F), //0xff26a69a
-                            child: Icon(
-                              Icons.people,
-                              color: Colors.white,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LeadProspectingFiltred(userId)));
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor:
+                                  const Color(0xff2A9D8F), //0xff26a69a
+                              child: Icon(
+                                Icons.people,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('prospecting'),
-                            style: TextStyle(
-                                color: Colors.black,
-                                letterSpacing: 1,
-                                fontSize: 14),
-                          ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('prospecting'),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  letterSpacing: 1,
+                                  fontSize: 14),
+                            ),
+                          ]),
+                          LeadProspectingCount(userId),
                         ]),
-                        LeadProspectingCount(userId),
-                      ]),
+                  ),
                   SizedBox(height: 10.0),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor:
-                                const Color(0xff2A9D8F), //0xff26a69a
-                            child: Icon(
-                              Icons.people,
-                              color: Colors.white,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LeadBuyerCustomersFiltred(userId)));
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor:
+                                  const Color(0xff2A9D8F), //0xff26a69a
+                              child: Icon(
+                                Icons.people,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)
-                                .translate('buyercustomers'),
-                            style: TextStyle(
-                                color: Colors.black,
-                                letterSpacing: 1,
-                                fontSize: 14),
-                          ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('buyercustomers'),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  letterSpacing: 1,
+                                  fontSize: 14),
+                            ),
+                          ]),
+                          LeadBuyerCustomersCount(userId),
                         ]),
-                        LeadBuyerCustomersCount(userId),
-                      ]),
+                  ),
                 ],
               ),
             ),
@@ -132,46 +153,58 @@ class _Dash_CountersState extends State<Dash_Counters> {
                     children: <TableRow>[
                       TableRow(
                         children: <Widget>[
-                          Container(
-                            height: 64,
-                            padding: EdgeInsets.only(left: 10),
-                            //color: Colors.grey,
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor:
-                                          const Color(0xffE76F51), //0xffff7043
-                                      child: Icon(
-                                        Icons.home,
-                                        color: Colors.white,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RaisingFiltred(userId)));
+                            },
+                            child: Container(
+                              height: 64,
+                              padding: EdgeInsets.only(left: 10),
+                              //color: Colors.grey,
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor: const Color(
+                                            0xffE76F51), //0xffff7043
+                                        child: Icon(
+                                          Icons.home,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate('raising'),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          letterSpacing: 1,
-                                          fontSize: 14),
-                                    ),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('raising'),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            letterSpacing: 1,
+                                            fontSize: 14),
+                                      ),
+                                    ]),
+                                    RaisingsCount(userId),
+                                    // Text(
+                                    //   angariacaoCount.toString(),
+                                    //   style: TextStyle(
+                                    //       color: Colors.black,
+                                    //       fontSize: 24,
+                                    //       fontWeight: FontWeight.bold),
+                                    // )
                                   ]),
-                                  RaisingsCount(userId),
-                                  // Text(
-                                  //   angariacaoCount.toString(),
-                                  //   style: TextStyle(
-                                  //       color: Colors.black,
-                                  //       fontSize: 24,
-                                  //       fontWeight: FontWeight.bold),
-                                  // )
-                                ]),
+                            ),
                           ),
                           GestureDetector(
-                            onLongPress: () {
+                            // onLongPress: () {
+                            //   _showMyDialog();
+                            //   print('onLongPress');
+                            // },
+                            onTap: () {
                               _showMyDialog();
-                              print('onLongPress');
                             },
                             child: Container(
                               height: 64,
@@ -207,75 +240,95 @@ class _Dash_CountersState extends State<Dash_Counters> {
                       ),
                       TableRow(
                         children: <Widget>[
-                          Container(
-                            height: 64,
-                            padding: EdgeInsets.only(left: 10),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: const Color(0xff118AB2),
-                                      child: Icon(
-                                        AppIcoons.vendas,
-                                        color: Colors.white,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PromiseBuySellFiltred(userId)));
+                            },
+                            child: Container(
+                              height: 64,
+                              padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xff118AB2),
+                                        child: Icon(
+                                          AppIcoons.vendas,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate('sales'),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          letterSpacing: 1,
-                                          fontSize: 14),
-                                    ),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('sales'),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            letterSpacing: 1,
+                                            fontSize: 14),
+                                      ),
+                                    ]),
+                                    SalesCount(userId),
+                                    // Text(
+                                    //   vendasCount.toString(),
+                                    //   style: TextStyle(
+                                    //       color: Colors.black,
+                                    //       fontSize: 24,
+                                    //       fontWeight: FontWeight.bold),
+                                    // )
                                   ]),
-                                  SalesCount(userId),
-                                  // Text(
-                                  //   vendasCount.toString(),
-                                  //   style: TextStyle(
-                                  //       color: Colors.black,
-                                  //       fontSize: 24,
-                                  //       fontWeight: FontWeight.bold),
-                                  // )
-                                ]),
-                            //color: Colors.yellow,
+                              //color: Colors.yellow,
+                            ),
                           ),
-                          Container(
-                            height: 64,
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: const Color(0xffF4A261),
-                                      child: Icon(
-                                        AppIcoons.escrituras,
-                                        color: Colors.white,
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ScripturesFiltred(userId)));
+                            },
+                            child: Container(
+                              height: 64,
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(children: <Widget>[
+                                      CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xffF4A261),
+                                        child: Icon(
+                                          AppIcoons.escrituras,
+                                          color: Colors.white,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .translate('scriptures'),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          letterSpacing: 1,
-                                          fontSize: 14),
-                                    ),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                            .translate('scriptures'),
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            letterSpacing: 1,
+                                            fontSize: 14),
+                                      ),
+                                    ]),
+                                    ScripturesCount(userId),
+                                    // Text(
+                                    //   escriturasCount.toString(),
+                                    //   style: TextStyle(
+                                    //       color: Colors.black,
+                                    //       fontSize: 24,
+                                    //       fontWeight: FontWeight.bold),
+                                    // )
                                   ]),
-                                  ScripturesCount(userId),
-                                  // Text(
-                                  //   escriturasCount.toString(),
-                                  //   style: TextStyle(
-                                  //       color: Colors.black,
-                                  //       fontSize: 24,
-                                  //       fontWeight: FontWeight.bold),
-                                  // )
-                                ]),
-                            //color: Colors.red,
+                              //color: Colors.red,
+                            ),
                           ),
                         ],
                       ),

@@ -9,9 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class InvoicingList extends StatelessWidget {
+  InvoicingList(this.userId);
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     final invoicing = Provider.of<List<InvoicingItem>>(context) ?? [];
 
     //return Text('sdfsdf');
@@ -29,7 +32,7 @@ class InvoicingList extends StatelessWidget {
                 onDismissed: (direction) async {
                   if (direction == DismissDirection.endToStart) {
                     print('name:${invoicing[index].name} ');
-                    DatabaseService(uid: user.uid, docid: invoicing[index].id)
+                    DatabaseService(uid: userId, docid: invoicing[index].id)
                         .deleteInvoicingData();
 
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -58,8 +61,8 @@ class InvoicingList extends StatelessWidget {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => InvoicingFormPanel(
-                              user.uid, invoicing[index].id))),
+                          builder: (context) =>
+                              InvoicingFormPanel(userId, invoicing[index].id))),
                 ),
               ),
             ),
