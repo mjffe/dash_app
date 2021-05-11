@@ -38,8 +38,8 @@ class _DashState extends State<Dash> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Dash_Counters(''),
-              Dash_PieChart(),
+              // Dash_Counters(''),
+              // Dash_PieChart(),
               //PieChartSample1(),
               //Dash_Prospection2(),
               //Dash_Invoice()

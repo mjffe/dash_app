@@ -1,6 +1,8 @@
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/authenticate/authenticate.dart';
 import 'package:dashapp/screens/home/home.dart';
+import 'package:dashapp/service/database.dart';
+import 'package:dashapp/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +19,17 @@ class _WrapperState extends State<Wrapper> {
     final user = Provider.of<FirebaseUser>(context);
     if (user == null)
       return Authenticate();
-    else
-      return Home();
+    else {
+      return StreamBuilder<UserData>(
+          stream: DatabaseService().userInfo(user.uid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              UserData uData = snapshot.data;
+              return Home(uData);
+            } else {
+              return Loading();
+            }
+          });
+    }
   }
 }

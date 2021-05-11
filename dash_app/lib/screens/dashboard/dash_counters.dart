@@ -1,4 +1,5 @@
 import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_buyer.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_prospecting.dart';
@@ -12,20 +13,20 @@ import 'package:dashapp/shared/app_icons.dart';
 import 'package:flutter/material.dart';
 
 class Dash_Counters extends StatefulWidget {
-  Dash_Counters(this.userId);
-  final String userId;
+  Dash_Counters(this.uData);
+  final UserData uData;
 
   @override
-  _Dash_CountersState createState() => _Dash_CountersState(userId);
+  _Dash_CountersState createState() => _Dash_CountersState(uData);
 }
 
 class _Dash_CountersState extends State<Dash_Counters> {
-  _Dash_CountersState(this.userId) {
+  _Dash_CountersState(this.uData) {
     // Stream<QuerySnapshot> fleadsCount =
     //     DatabaseService().getleadscount2(userId);
     // fleadsCount.hashCode ?? setState(() => leadsCount = 50);
   }
-  final String userId;
+  final UserData uData;
 
   int leadsCount = 0;
   int angariacaoCount = 0;
@@ -45,7 +46,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                   Text(AppLocalizations.of(context).translate('leads')),
-                  LeadCount(userId),
+                  LeadCount(uData),
                 ]),
             content: SingleChildScrollView(
               child: ListBody(
@@ -56,7 +57,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  LeadProspectingFiltred(userId)));
+                                  LeadProspectingFiltred(uData)));
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,7 +80,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   fontSize: 14),
                             ),
                           ]),
-                          LeadProspectingCount(userId),
+                          LeadProspectingCount(uData),
                         ]),
                   ),
                   SizedBox(height: 10.0),
@@ -89,7 +90,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  LeadBuyerCustomersFiltred(userId)));
+                                  LeadBuyerCustomersFiltred(uData)));
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,7 +113,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   fontSize: 14),
                             ),
                           ]),
-                          LeadBuyerCustomersCount(userId),
+                          LeadBuyerCustomersCount(uData),
                         ]),
                   ),
                 ],
@@ -159,7 +160,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          RaisingFiltred(userId)));
+                                          RaisingFiltred(uData)));
                             },
                             child: Container(
                               height: 64,
@@ -187,7 +188,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                             fontSize: 14),
                                       ),
                                     ]),
-                                    RaisingsCount(userId),
+                                    RaisingsCount(uData),
                                     // Text(
                                     //   angariacaoCount.toString(),
                                     //   style: TextStyle(
@@ -231,7 +232,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                             fontSize: 14),
                                       ),
                                     ]),
-                                    LeadCount(userId),
+                                    LeadCount(uData),
                                   ]),
                               //color: Colors.blue,
                             ),
@@ -246,7 +247,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          PromiseBuySellFiltred(userId)));
+                                          SaleFiltred(uData)));
                             },
                             child: Container(
                               height: 64,
@@ -273,7 +274,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                             fontSize: 14),
                                       ),
                                     ]),
-                                    SalesCount(userId),
+                                    SalesCount(uData),
                                     // Text(
                                     //   vendasCount.toString(),
                                     //   style: TextStyle(
@@ -291,7 +292,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ScripturesFiltred(userId)));
+                                          ScripturesFiltred(uData)));
                             },
                             child: Container(
                               height: 64,
@@ -318,7 +319,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                             fontSize: 14),
                                       ),
                                     ]),
-                                    ScripturesCount(userId),
+                                    ScripturesCount(uData),
                                     // Text(
                                     //   escriturasCount.toString(),
                                     //   style: TextStyle(

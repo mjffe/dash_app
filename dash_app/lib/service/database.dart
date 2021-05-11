@@ -22,12 +22,20 @@ class DatabaseService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future<void> updateUserData(String sugars, String name, int strength) async {
+  Future<void> updateUserData(String name, String role) async {
     return await userCollection.doc(uid).set({
-      'sugars': sugars,
+      //'sugars': sugars,
       'name': name,
-      'strength': strength,
+      'role': role
+      //'strength': strength,
     });
+  }
+
+  Future<void> updateUserInfo(
+      String role, String name, List<dynamic> consultants) async {
+    return await userCollection
+        .doc(uid)
+        .set({'role': role, 'name': name, 'consultants': consultants});
   }
 
   //create leads
@@ -530,12 +538,12 @@ class DatabaseService {
   }
 
   // user data from snapshots
-  UserData _userDataFromSnapshots(DocumentSnapshot snapshots) {
+  UserData _userDataFromSnapshots(DocumentSnapshot snapshot) {
+    //print(doc.data);
     return UserData(
-      uid: uid,
-      name: snapshots.data()['name'] ?? '',
-      strength: snapshots.data()['strength'] ?? 0,
-      sugars: snapshots.data()['sugars'] ?? '0',
+      name: snapshot.data()['name'] ?? '',
+      // strength: snapshot.data()['strength'] ?? 0,
+      // sugars: snapshot.data()['sugars'] ?? '0',
     );
   }
 
@@ -571,6 +579,14 @@ class DatabaseService {
     return userCollection.doc(uid).snapshots().map(_userDataFromSnapshots);
   }
 
+  Stream<UserData> userInfo(String userid) {
+    //return userCollection.doc(uid).snapshots().map(_userDataFromSnapshots);
+    return userCollection
+        .doc(userid)
+        .snapshots()
+        .map((doc) => UserData.fromFirestore(doc));
+  }
+
   //get Leads doc stream
   Stream<List<LeadItem>> get leads {
     return userCollection.snapshots().map(_leadListFromSnapshot);
@@ -594,7 +610,10 @@ class DatabaseService {
 
   //Obten a lista de leads de um utilizador
   Stream<List<LeadItem>> getleads() {
-    var ref = userCollection.doc(uid).collection('leads');
+    var ref = userCollection
+        .doc(uid)
+        .collection('leads')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => LeadItem.fromFirestore(doc)).toList());
@@ -610,7 +629,8 @@ class DatabaseService {
     var ref = userCollection
         .doc(userId)
         .collection('leads')
-        .where('leadtype', isEqualTo: '1');
+        .where('leadtype', isEqualTo: '1')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => LeadItem.fromFirestore(doc)).toList());
@@ -620,7 +640,8 @@ class DatabaseService {
     var ref = userCollection
         .doc(userId)
         .collection('leads')
-        .where('leadtype', isEqualTo: '0');
+        .where('leadtype', isEqualTo: '0')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => LeadItem.fromFirestore(doc)).toList());
@@ -648,7 +669,10 @@ class DatabaseService {
 
 //Obten a lista de raisings de um utilizador
   Stream<List<RaisingItem>> getraisings(String userId) {
-    var ref = userCollection.doc(userId).collection('raisings');
+    var ref = userCollection
+        .doc(userId)
+        .collection('raisings')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map((list) =>
         list.docs.map((doc) => RaisingItem.fromFirestore(doc)).toList());
@@ -666,7 +690,10 @@ class DatabaseService {
 
   //Obten a lista de sales de um utilizador
   Stream<List<SaleItem>> getsales(String userId) {
-    var ref = userCollection.doc(userId).collection('sales');
+    var ref = userCollection
+        .doc(userId)
+        .collection('sales')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => SaleItem.fromFirestore(doc)).toList());
@@ -686,7 +713,8 @@ class DatabaseService {
     var ref = userCollection
         .doc(userId)
         .collection('sales')
-        .where('state', isEqualTo: '0');
+        .where('state', isEqualTo: '0')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map(
         (list) => list.docs.map((doc) => SaleItem.fromFirestore(doc)).toList());
@@ -722,7 +750,10 @@ class DatabaseService {
 
 //Obten a lista de servicepresentation de um utilizador
   Stream<List<ServicePresentationItem>> getservicepresentations(String userId) {
-    var ref = userCollection.doc(userId).collection('servicepresentation');
+    var ref = userCollection
+        .doc(userId)
+        .collection('servicepresentation')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map((list) => list.docs
         .map((doc) => ServicePresentationItem.fromFirestore(doc))
@@ -741,7 +772,10 @@ class DatabaseService {
 
 //Obten a lista de mediationcontract de um utilizador
   Stream<List<MediationContractItem>> getmediationcontracts(String userId) {
-    var ref = userCollection.doc(userId).collection('mediationcontract');
+    var ref = userCollection
+        .doc(userId)
+        .collection('mediationcontract')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map((list) => list.docs
         .map((doc) => MediationContractItem.fromFirestore(doc))
@@ -760,7 +794,10 @@ class DatabaseService {
 
 //Obten a lista de proposal de um utilizador
   Stream<List<ProposalItem>> getproposals(String userId) {
-    var ref = userCollection.doc(userId).collection('proposal');
+    var ref = userCollection
+        .doc(userId)
+        .collection('proposal')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map((list) =>
         list.docs.map((doc) => ProposalItem.fromFirestore(doc)).toList());
@@ -778,7 +815,10 @@ class DatabaseService {
 
 //Obten a lista de promisebuysell de um utilizador
   Stream<List<PromiseBuySellItem>> getpromisesbuysell(FirebaseUser user) {
-    var ref = userCollection.doc(user.uid).collection('promisebuysell');
+    var ref = userCollection
+        .doc(user.uid)
+        .collection('promisebuysell')
+        .orderBy("createdon", descending: true);
 
     return ref.snapshots().map((list) =>
         list.docs.map((doc) => PromiseBuySellItem.fromFirestore(doc)).toList());
@@ -799,8 +839,10 @@ class DatabaseService {
       String userId, int month) {
     //var date = DateTime.now();
     if (month == 0) {
-      CollectionReference ref =
-          userCollection.doc(userId).collection('prospectingtime');
+      Query ref = userCollection
+          .doc(userId)
+          .collection('prospectingtime')
+          .orderBy("createdon", descending: true);
       return ref.snapshots().map((list) => list.docs
           .map((doc) => ProspectingTimeItem.fromFirestore(doc))
           .toList());
@@ -812,7 +854,8 @@ class DatabaseService {
           .doc(userId)
           .collection('prospectingtime')
           .where('date', isGreaterThanOrEqualTo: startDate)
-          .where('date', isLessThan: endDate);
+          .where('date', isLessThan: endDate)
+          .orderBy("createdon", descending: true);
       return ref.snapshots().map((list) => list.docs
           .map((doc) => ProspectingTimeItem.fromFirestore(doc))
           .toList());
@@ -832,7 +875,10 @@ class DatabaseService {
 //Obten a lista de invoicing de um utilizador
   Stream<List<InvoicingItem>> getinvoices(String userId, int month) {
     if (month == 0) {
-      var ref = userCollection.doc(userId).collection('invoicing');
+      var ref = userCollection
+          .doc(userId)
+          .collection('invoicing')
+          .orderBy("createdon", descending: true);
 
       return ref.snapshots().map((list) =>
           list.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList());
@@ -844,7 +890,8 @@ class DatabaseService {
           .doc(userId)
           .collection('invoicing')
           .where('date', isGreaterThanOrEqualTo: startDate)
-          .where('date', isLessThan: endDate);
+          .where('date', isLessThan: endDate)
+          .orderBy("createdon", descending: true);
       return ref.snapshots().map((list) =>
           list.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList());
     }
@@ -863,7 +910,10 @@ class DatabaseService {
 //Obten a lista de invoicing de um utilizador
   Stream<List<ObjectiveItem>> getobjectives(String userId, int month) {
     if (month == 0) {
-      var ref = userCollection.doc(userId).collection('objective');
+      var ref = userCollection
+          .doc(userId)
+          .collection('objective')
+          .orderBy("createdon", descending: true);
 
       return ref.snapshots().map((list) =>
           list.docs.map((doc) => ObjectiveItem.fromFirestore(doc)).toList());
@@ -876,6 +926,7 @@ class DatabaseService {
           .collection('objective')
           .where('date', isGreaterThanOrEqualTo: startDate)
           .where('date', isLessThan: endDate);
+      // .orderBy("createdon", descending: true);
       return ref.snapshots().map((list) =>
           list.docs.map((doc) => ObjectiveItem.fromFirestore(doc)).toList());
     }

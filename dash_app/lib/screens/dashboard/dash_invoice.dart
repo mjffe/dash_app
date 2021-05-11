@@ -14,12 +14,17 @@ import "package:collection/collection.dart";
 
 class Dash_LineChart extends StatefulWidget {
   // Dash_PieChart({Key key}) : super(key: key);
+  Dash_LineChart(this.uData);
+  final UserData uData;
 
   @override
-  _Dash_LineChartState createState() => _Dash_LineChartState();
+  _Dash_LineChartState createState() => _Dash_LineChartState(uData);
 }
 
 class _Dash_LineChartState extends State<Dash_LineChart> {
+  _Dash_LineChartState(this.uData);
+  final UserData uData;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +39,7 @@ class _Dash_LineChartState extends State<Dash_LineChart> {
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           child: new Padding(
               padding: EdgeInsets.all(3),
-              child: new Center(child: LineChartStreamData0()
+              child: new Center(child: LineChartStreamData0(uData)
                   //PieChartSample2(2, 3, 4, 1)
                   //PieChartSample2()
                   ))),
@@ -43,21 +48,22 @@ class _Dash_LineChartState extends State<Dash_LineChart> {
 }
 
 class LineChartStreamData0 extends StatelessWidget {
-  const LineChartStreamData0({Key key}) : super(key: key);
+  LineChartStreamData0(this.uData);
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     return Provider<InvoiceChartViewModel>(
-      create: (_) => InvoiceChartViewModel(userId: user.uid),
-      child: LineChartStreamData(user.uid),
+      create: (_) => InvoiceChartViewModel(uData: uData),
+      child: LineChartStreamData(uData),
     );
   }
 }
 
 class LineChartStreamData extends StatelessWidget {
-  LineChartStreamData(this.userId);
-  final String userId;
+  LineChartStreamData(this.uData);
+  final UserData uData;
   @override
   Widget build(BuildContext context) {
     final viewModel =
@@ -112,7 +118,7 @@ class LineChartStreamData extends StatelessWidget {
               objectivesDash
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
-            return Dash_Invoice(invoicesDash, objectivesDash, userId);
+            return Dash_Invoice(invoicesDash, objectivesDash, uData);
           }
           return CircularProgressIndicator();
           //Text('Loading');
@@ -122,20 +128,20 @@ class LineChartStreamData extends StatelessWidget {
 }
 
 class Dash_Invoice extends StatefulWidget {
-  Dash_Invoice(this.invoicesDash, this.objectivesDash, this.userId);
+  Dash_Invoice(this.invoicesDash, this.objectivesDash, this.uData);
   List<Dash> invoicesDash;
   List<Dash> objectivesDash;
-  final String userId;
+  final UserData uData;
   @override
   _Dash_InvoiceState createState() =>
-      _Dash_InvoiceState(invoicesDash, objectivesDash, userId);
+      _Dash_InvoiceState(invoicesDash, objectivesDash, uData);
 }
 
 class _Dash_InvoiceState extends State<Dash_Invoice> {
-  _Dash_InvoiceState(this.invoicesDash, this.objectivesDash, this.userId);
+  _Dash_InvoiceState(this.invoicesDash, this.objectivesDash, this.uData);
   List<Dash> invoicesDash;
   List<Dash> objectivesDash;
-  final String userId;
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
@@ -179,13 +185,13 @@ class _Dash_InvoiceState extends State<Dash_Invoice> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ObjectiveFiltred(userId, month)));
+                                ObjectiveFiltred(uData.uid, month)));
                   } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                InvoicingFiltred(userId, month)));
+                                InvoicingFiltred(uData, month)));
                   }
                 },
                 //onChartTouchInteractionDown: SelectionChangedHandler(),

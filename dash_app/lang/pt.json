@@ -31,15 +31,25 @@
   "data_deleted":"registo eliminado",
   "new_lead":"Nova Lead",
   "update_lead":"Atualização Lead",
-  
+  "lead_type":"Lead Type",
+  "validleadtype":"Please enter a Lead Type",
+  "prospecting":"Prospecting ",
+  "buyercustomers":"Buyer customers",
 
   "SalePage":"SalePage",
   "new_sale":"Nova Venda",
   "update_sale":"Atualização de Venda",
   "value":"Valor",
   "validvalue":"Por favor introduza um valor valido",
+  "state": "State",		   
   "duration":"Duração",
   "validduration":"Por favor introduza uma duração valida",
+  "towon":"Won Proposal",
+  "tolost":"Lost Proposal",
+  
+  "InvoicingPage":"InvoicingPage",
+  "home":"Home",
+  "validhome":"Please enter a Home",
 
   "SharedPage":"SharedPage",
   "create":"Criação",
@@ -64,6 +74,11 @@
   "DateTarget" :"Objetivo",
   "date":"Data",
   "validdate":"Por favor introduza uma data valida",
+
+  "direction":"Direction",
+  "commercialdirection":"Commercial Direction",
+  "consultant":"Consultant",
+   
 
   "end":"end"
 }

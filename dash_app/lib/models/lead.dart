@@ -7,7 +7,8 @@ class LeadItem {
       this.name,
       this.phone,
       this.leadtype,
-      this.createdon});
+      this.createdon,
+      this.createdby});
 
   // LeadItem.leadMap(Map<String, dynamic> data) {
   //   email = data['Email'] ?? '';
@@ -16,18 +17,19 @@ class LeadItem {
   // }
   factory LeadItem.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
+    String user = doc.reference.parent.path.split('/')[1];
     try {
       return LeadItem(
-        id: doc.id,
-        email: data['email'] ?? '',
-        name: data['name'] ?? '',
-        phone: data['telefone'] ?? 0,
-        leadtype: data['leadtype'] ?? '0',
-        createdon: data['createdon'] != null && data['createdon'] != ''
-            ? DateTime.fromMillisecondsSinceEpoch(
-                (data['createdon']).seconds * 1000)
-            : new DateTime.now(),
-      );
+          id: doc.id,
+          email: data['email'] ?? '',
+          name: data['name'] ?? '',
+          phone: data['telefone'] ?? 0,
+          leadtype: data['leadtype'] ?? '0',
+          createdon: data['createdon'] != null && data['createdon'] != ''
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  (data['createdon']).seconds * 1000)
+              : new DateTime.now(),
+          createdby: user ?? '');
     } catch (e) {
       print("Lead ${e}");
       return LeadItem();
@@ -39,4 +41,5 @@ class LeadItem {
   final String phone;
   final String leadtype;
   final DateTime createdon;
+  final String createdby;
 }

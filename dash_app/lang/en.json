@@ -76,5 +76,9 @@
   "date":"Date",
   "validdate":"Please enter a Date",
 
+  "direction":"Direction",
+  "commercialdirection":"Commercial Direction",
+  "consultant":"Consultant",
+
   "end":"end"
 }

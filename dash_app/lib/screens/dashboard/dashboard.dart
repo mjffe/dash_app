@@ -4,19 +4,43 @@ import 'package:dashapp/screens/dashboard/dash_invoice.dart';
 import 'package:dashapp/screens/dashboard/dash_piechart.dart';
 import 'package:dashapp/screens/dashboard/dash_prospection.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Dash extends StatefulWidget {
-  Dash({Key key}) : super(key: key);
+  Dash({this.uData});
+  final UserData uData;
 
   @override
-  _DashState createState() => _DashState();
+  _DashState createState() => _DashState(uData);
 }
 
 class _DashState extends State<Dash> {
+  _DashState(this.uData);
+  final UserData uData;
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
+    // return StreamBuilder<UserData>(
+    //     stream: DatabaseService().userInfo(user.uid),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.hasData) {
+    //         UserData uData = snapshot.data;
+    //         return SingleChildScrollView(
+    //             child: Stack(children: <Widget>[
+    //           //Stack(children: <Widget>[
+    //           Column(
+    //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //             children: <Widget>[
+    //               Dash_Counters(uData),
+    //               Dash_PieChart(uData),
+    //               Dash_ProspectingTime(uData),
+    //               Dash_LineChart(uData)
+    //             ],
+    //           )
+    //         ]));
+    //       } else {
+    //         return Loading();
+    //       }
+    //     });
 
     return SingleChildScrollView(
         child: Stack(children: <Widget>[
@@ -24,10 +48,10 @@ class _DashState extends State<Dash> {
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Dash_Counters(user.uid),
-          Dash_PieChart(),
-          Dash_ProspectingTime(),
-          Dash_LineChart()
+          Dash_Counters(uData),
+          Dash_PieChart(uData),
+          Dash_ProspectingTime(uData),
+          Dash_LineChart(uData)
         ],
       )
     ]));

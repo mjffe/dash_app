@@ -12,12 +12,15 @@ import 'package:provider/provider.dart';
 
 class Dash_PieChart extends StatefulWidget {
   // Dash_PieChart({Key key}) : super(key: key);
-
+  Dash_PieChart(this.uData);
+  final UserData uData;
   @override
-  _Dash_PieChartState createState() => _Dash_PieChartState();
+  _Dash_PieChartState createState() => _Dash_PieChartState(uData);
 }
 
 class _Dash_PieChartState extends State<Dash_PieChart> {
+  _Dash_PieChartState(this.uData);
+  final UserData uData;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +35,7 @@ class _Dash_PieChartState extends State<Dash_PieChart> {
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           child: new Padding(
               padding: EdgeInsets.all(3),
-              child: new Center(child: PieChartStreamData0()
+              child: new Center(child: PieChartStreamData0(uData)
                   //PieChartSample2(2, 3, 4, 1)
                   //PieChartSample2()
                   ))),
@@ -41,30 +44,22 @@ class _Dash_PieChartState extends State<Dash_PieChart> {
 }
 
 class PieChartStreamData0 extends StatelessWidget {
-  const PieChartStreamData0({Key key}) : super(key: key);
+  PieChartStreamData0(this.uData);
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
+    //final user = Provider.of<FirebaseUser>(context);
     return Provider<PieChartViewModel>(
-      create: (_) => PieChartViewModel(userId: user.uid),
-      child: PieChartStreamData(user.uid),
+      create: (_) => PieChartViewModel(uData: uData),
+      child: PieChartStreamData(uData),
     );
   }
 }
 
 class PieChartStreamData extends StatelessWidget {
-  PieChartStreamData(this.userId);
-  final String userId;
-  //const PieChartStreamData({Key key}) : super(key: key);
-
-  // static Widget create(BuildContext context) {
-  //   final user = Provider.of<FirebaseUser>(context);
-  //   return Provider<PieChartViewModel>(
-  //     create: (_) => PieChartViewModel(userId: user.uid),
-  //     child: PieChartStreamData(),
-  //   );
-  // }
+  PieChartStreamData(this.uData);
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +73,7 @@ class PieChartStreamData extends StatelessWidget {
                 snapshot.data.cmiCount,
                 snapshot.data.propostasCount,
                 snapshot.data.cpvcCount,
-                userId);
+                uData);
           }
           return CircularProgressIndicator();
           //Text('Loading');
@@ -93,32 +88,32 @@ class PieChartSample2 extends StatefulWidget {
     this.cmi,
     this.pro,
     this.cpvc,
-    this.uid,
+    this.uData,
   );
   int aps;
   int cmi;
   int pro;
   int cpvc;
-  String uid;
+  UserData uData;
   @override
   State<StatefulWidget> createState() =>
-      PieChart2State(aps, cmi, pro, cpvc, uid);
+      PieChart2State(aps, cmi, pro, cpvc, uData);
 }
 
 class PieChart2State extends State {
-  PieChart2State(int aps, int cmi, int pro, int cpvc, String uid) {
+  PieChart2State(int aps, int cmi, int pro, int cpvc, UserData uData) {
     apsCount = aps.toDouble();
     cmiCount = cmi.toDouble();
     propostasCount = pro.toDouble();
     cpvcCount = cpvc.toDouble();
-    userId = uid;
+    this.uData = uData;
   }
   int touchedIndex = -1;
   double apsCount;
   double cmiCount;
   double propostasCount;
   double cpvcCount;
-  String userId;
+  UserData uData;
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +164,7 @@ class PieChart2State extends State {
                   fontWeight:
                       touchedIndex == 0 ? FontWeight.bold : FontWeight.normal,
                   onTapFunction: 1,
-                  userId: userId,
+                  uData: uData,
                 ),
                 SizedBox(
                   height: 4,
@@ -182,7 +177,7 @@ class PieChart2State extends State {
                   fontWeight:
                       touchedIndex == 1 ? FontWeight.bold : FontWeight.normal,
                   onTapFunction: 2,
-                  userId: userId,
+                  uData: uData,
                 ),
                 SizedBox(
                   height: 4,
@@ -194,7 +189,7 @@ class PieChart2State extends State {
                   fontWeight:
                       touchedIndex == 2 ? FontWeight.bold : FontWeight.normal,
                   onTapFunction: 3,
-                  userId: userId,
+                  uData: uData,
                 ),
                 SizedBox(
                   height: 4,
@@ -207,7 +202,7 @@ class PieChart2State extends State {
                   fontWeight:
                       touchedIndex == 3 ? FontWeight.bold : FontWeight.normal,
                   onTapFunction: 4,
-                  userId: userId,
+                  uData: uData,
                 ),
                 SizedBox(
                   height: 60,
@@ -288,7 +283,7 @@ class Indicator extends StatelessWidget {
   final Color textColor;
   final FontWeight fontWeight;
   final int onTapFunction;
-  final String userId;
+  final UserData uData;
 
   const Indicator({
     Key key,
@@ -299,7 +294,7 @@ class Indicator extends StatelessWidget {
     this.textColor = Colors.black, //const Color(0xff505050),
     this.fontWeight = FontWeight.normal,
     this.onTapFunction,
-    this.userId,
+    this.uData,
   }) : super(key: key);
 
   @override
@@ -312,25 +307,27 @@ class Indicator extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ServicePresentationFiltred(userId)));
+                    builder: (context) =>
+                        ServicePresentationFiltred(uData: uData)));
             break;
           case 2:
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MediationContractFiltred(userId)));
+                    builder: (context) =>
+                        MediationContractFiltred(uData: uData)));
             break;
           case 3:
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ProposalFiltred(userId)));
+                    builder: (context) => ProposalFiltred(uData: uData)));
             break;
           case 4:
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PromiseBuySellFiltred(userId)));
+                    builder: (context) => PromiseBuySellFiltred(uData: uData)));
             break;
           default:
         }

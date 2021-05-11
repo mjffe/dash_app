@@ -1,31 +1,76 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dashapp/models/piechart.dart';
+import 'package:dashapp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PieChartViewModel {
-  PieChartViewModel({@required this.userId});
-  final String userId;
+  PieChartViewModel({@required this.uData});
+  final UserData uData;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  /// returns the entire movies list with user-favourite information
   Stream<PieChartItem> moviesUserFavouritesStream() {
-    return Rx.combineLatest4(
-        users.doc(userId).collection('servicepresentation').snapshots(),
-        users.doc(userId).collection('mediationcontract').snapshots(),
-        users.doc(userId).collection('proposal').snapshots(),
-        users
-            .doc(userId)
+    Stream<QuerySnapshot> s1 =
+        users.doc(uData.uid).collection('servicepresentation').snapshots();
+    Stream<QuerySnapshot> s2 =
+        users.doc(uData.uid).collection('mediationcontract').snapshots();
+    Stream<QuerySnapshot> s3 =
+        users.doc(uData.uid).collection('proposal').snapshots();
+    Stream<QuerySnapshot> s4 = users
+        .doc(uData.uid)
+        .collection('sales')
+        .where('state', isEqualTo: '0')
+        .snapshots();
+
+    var send = [s1, s2, s3, s4];
+    if (uData.role == '0' || uData.role == '1') {
+      for (var item in uData.consultants) {
+        send.add(users.doc(item).collection('servicepresentation').snapshots());
+        send.add(users.doc(item).collection('mediationcontract').snapshots());
+        send.add(users.doc(item).collection('proposal').snapshots());
+        send.add(users
+            .doc(item)
             .collection('sales')
             .where('state', isEqualTo: '0')
-            .snapshots(),
-        (QuerySnapshot servicepresentation, QuerySnapshot mediationcontract,
-            QuerySnapshot proposal, QuerySnapshot promisebuysell) {
+            .snapshots());
+      }
+    }
+
+    return Rx.combineLatest(send.toList(), (List<QuerySnapshot> values) {
+      int apsCount = 0;
+      int cmiCount = 0;
+      int cpvcCount = 0;
+      int propostasCount = 0;
+
+      //print('${values[0].docs[0].reference.path}');
+      for (var i = 0; i < values.length; i++) {
+        if (values[i].docs != null && values[i].docs.length > 0) {
+          String origin = values[i].docs[0].reference.path.split('/')[2];
+          //print('${origin}');
+          switch (origin) {
+            case 'servicepresentation':
+              apsCount = apsCount + values[i].size;
+              break;
+            case 'mediationcontract':
+              cmiCount = cmiCount + values[i].size;
+              break;
+            case 'proposal':
+              propostasCount = propostasCount + values[i].size;
+              break;
+            case 'sales':
+              cpvcCount = cpvcCount + values[i].size;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+
       return PieChartItem(
-          apsCount: servicepresentation.size,
-          cmiCount: mediationcontract.size,
-          cpvcCount: promisebuysell.size,
-          propostasCount: proposal.size);
+          apsCount: apsCount,
+          cmiCount: cmiCount,
+          cpvcCount: cpvcCount,
+          propostasCount: propostasCount);
     });
   }
 }

@@ -21,13 +21,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  Home({Key key}) : super(key: key);
+  // Home({Key key}) : super(key: key);
+  Home(this.uData);
+  final UserData uData;
 
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(uData);
 }
 
 class _HomeState extends State<Home> {
+  _HomeState(this.uData);
+  final UserData uData;
   int _selectedIndex = 0;
 
   @override
@@ -117,33 +121,33 @@ class _HomeState extends State<Home> {
     _getDrawerItem(int pos) {
       switch (pos) {
         case 0:
-          return Dash();
+          return Dash(uData: uData);
         case 1:
-          return Lead();
+          return Lead(uData: uData);
         case 2:
-          return Raising();
+          return Raising(uData: uData);
         case 3:
-          return Sale();
+          return Sale(uData: uData);
         // case 4:
         //   return Scriptures();
         case 5:
-          return ServicePresentation();
+          return ServicePresentation(uData: uData);
         case 6:
-          return MediationContract();
+          return MediationContract(uData: uData);
         case 7:
-          return Proposal();
+          return Proposal(uData: uData);
         // case 8:
         //   return PromiseBuySell();
         case 9:
-          return ProspectingTime();
+          return ProspectingTime(uData: uData);
         case 10:
-          return Invoicing();
+          return Invoicing(uData: uData);
         // case 11:
         //   return Text("Tela 2");
         case 20:
           return Objective();
         case 21:
-          return SignOut();
+          return Setings();
       }
     }
 
@@ -181,37 +185,6 @@ class _HomeState extends State<Home> {
                     _onSelectItem(0);
                   }),
               ListTile(
-                  leading: Icon(Icons.people),
-                  title: Text(AppLocalizations.of(context).translate('leads')),
-                  selected: 1 == _selectedIndex,
-                  //onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => XDLead())),
-                  onTap: () {
-                    _onSelectItem(1);
-                  }),
-              ListTile(
-                  leading: Icon(Icons.home),
-                  title:
-                      Text(AppLocalizations.of(context).translate('raising')),
-                  selected: 2 == _selectedIndex,
-                  onTap: () {
-                    _onSelectItem(2);
-                  }),
-              ListTile(
-                  leading: Icon(AppIcoons.vendas),
-                  title: Text(AppLocalizations.of(context).translate('sales')),
-                  selected: 3 == _selectedIndex,
-                  onTap: () {
-                    _onSelectItem(3);
-                  }),
-              // ListTile(
-              //     leading: Icon(AppIcoons.escrituras),
-              //     title: Text(
-              //         AppLocalizations.of(context).translate('scriptures')),
-              //     selected: 4 == _selectedIndex,
-              //     onTap: () {
-              //       _onSelectItem(4);
-              //     }),
-              ListTile(
                   leading: Icon(AppIcoons.apresentacaoservico),
                   title: Text(AppLocalizations.of(context)
                       .translate('service_presentation')),
@@ -228,21 +201,21 @@ class _HomeState extends State<Home> {
                     _onSelectItem(6);
                   }),
               ListTile(
-                  leading: Icon(AppIcoons.proposta),
+                  leading: Icon(Icons.home),
                   title:
-                      Text(AppLocalizations.of(context).translate('proposal')),
-                  selected: 7 == _selectedIndex,
+                      Text(AppLocalizations.of(context).translate('raising')),
+                  selected: 2 == _selectedIndex,
                   onTap: () {
-                    _onSelectItem(7);
+                    _onSelectItem(2);
                   }),
-              // ListTile(
-              //     leading: Icon(AppIcoons.promecacompravenda),
-              //     title: Text(AppLocalizations.of(context)
-              //         .translate('promise_buy_sell')),
-              //     selected: 8 == _selectedIndex,
-              //     onTap: () {
-              //       _onSelectItem(8);
-              //     }),
+              ListTile(
+                  leading: Icon(Icons.people),
+                  title: Text(AppLocalizations.of(context).translate('leads')),
+                  selected: 1 == _selectedIndex,
+                  //onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => XDLead())),
+                  onTap: () {
+                    _onSelectItem(1);
+                  }),
               ListTile(
                   leading: Icon(AppIcoons.tempoprospecao),
                   title: Text(AppLocalizations.of(context)
@@ -251,6 +224,39 @@ class _HomeState extends State<Home> {
                   onTap: () {
                     _onSelectItem(9);
                   }),
+              ListTile(
+                  leading: Icon(AppIcoons.proposta),
+                  title:
+                      Text(AppLocalizations.of(context).translate('proposal')),
+                  selected: 7 == _selectedIndex,
+                  onTap: () {
+                    _onSelectItem(7);
+                  }),
+              ListTile(
+                  leading: Icon(AppIcoons.vendas),
+                  title: Text(AppLocalizations.of(context).translate('sales')),
+                  selected: 3 == _selectedIndex,
+                  onTap: () {
+                    _onSelectItem(3);
+                  }),
+              // ListTile(
+              //     leading: Icon(AppIcoons.escrituras),
+              //     title: Text(
+              //         AppLocalizations.of(context).translate('scriptures')),
+              //     selected: 4 == _selectedIndex,
+              //     onTap: () {
+              //       _onSelectItem(4);
+              //     }),
+
+              // ListTile(
+              //     leading: Icon(AppIcoons.promecacompravenda),
+              //     title: Text(AppLocalizations.of(context)
+              //         .translate('promise_buy_sell')),
+              //     selected: 8 == _selectedIndex,
+              //     onTap: () {
+              //       _onSelectItem(8);
+              //     }),
+
               ListTile(
                   leading: Icon(AppIcoons.faturacao),
                   title:

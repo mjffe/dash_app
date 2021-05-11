@@ -1,89 +1,65 @@
 import 'package:dashapp/app_localizations.dart';
-import 'package:dashapp/models/lead.dart';
 import 'package:dashapp/models/user.dart';
+import 'package:dashapp/screens/leads/buyercustomers/lead_buyercustomers_list.dart';
+import 'package:dashapp/screens/leads/buyercustomers/lead_buyercustomers_view_model.dart';
 import 'package:dashapp/screens/leads/lead_list.dart';
-import 'package:dashapp/service/auth.dart';
-import 'package:dashapp/service/database.dart';
+import 'package:dashapp/screens/leads/prospecting/lead_prospecting_list.dart';
+import 'package:dashapp/screens/leads/lead_view_model.dart';
+import 'package:dashapp/screens/leads/prospecting/lead_prospecting_view_model.dart';
 import 'package:dashapp/shared/app_bar.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Lead extends StatelessWidget {
-  final AuthService _auth = AuthService();
+  Lead({this.uData});
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser>(context);
-
-    return StreamProvider<List<LeadItem>>.value(
-      initialData: null,
-      value: DatabaseService(uid: user.uid).getleads(),
+    //final user = Provider.of<FirebaseUser>(context);
+    return Provider<LeadViewModel>(
+      create: (_) => LeadViewModel(uData: uData),
       child: Scaffold(
-        backgroundColor: MyColors.appBarBackgroundColor,
-        body: LeadList(user.uid),
-      ),
+          backgroundColor: MyColors.appBarBackgroundColor, body: LeadList()),
+      //LeadData(uData),
     );
   }
 }
 
 class LeadProspectingFiltred extends StatelessWidget {
-  LeadProspectingFiltred(this.userId);
-  final String userId;
+  LeadProspectingFiltred(this.uData);
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<LeadItem>>.value(
-      initialData: null,
-      value: DatabaseService().getleadsProspecting(userId),
+    return Provider<LeadProspectingViewModel>(
+      create: (_) => LeadProspectingViewModel(uData: uData),
       child: Scaffold(
-        backgroundColor: MyColors.appBarBackgroundColor,
-        appBar:
-            customAppBar(AppLocalizations.of(context).translate('prospecting'))
-                .bar(),
-        body: LeadList(userId),
-      ),
+          backgroundColor: MyColors.appBarBackgroundColor,
+          appBar: customAppBar(
+                  AppLocalizations.of(context).translate('prospecting'))
+              .bar(),
+          body: LeadProspectingList()),
+      //LeadData(uData),
     );
   }
 }
 
 class LeadBuyerCustomersFiltred extends StatelessWidget {
-  LeadBuyerCustomersFiltred(this.userId);
-  final String userId;
+  LeadBuyerCustomersFiltred(this.uData);
+  final UserData uData;
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<LeadItem>>.value(
-      initialData: null,
-      value: DatabaseService().getleadsBuyerCustomers(userId),
+    return Provider<LeadBuyerCustomersViewModel>(
+      create: (_) => LeadBuyerCustomersViewModel(uData: uData),
       child: Scaffold(
-        backgroundColor: MyColors.appBarBackgroundColor,
-        appBar: customAppBar(
-                AppLocalizations.of(context).translate('buyercustomers'))
-            .bar(),
-        body: LeadList(userId),
-      ),
+          backgroundColor: MyColors.appBarBackgroundColor,
+          appBar: customAppBar(
+                  AppLocalizations.of(context).translate('buyercustomers'))
+              .bar(),
+          body: LeadBuyerCustomersList()),
     );
   }
 }
-
-// class Lead extends StatefulWidget {
-//   Lead({Key key}) : super(key: key);
-
-//   @override
-//   _LeadState createState() => _LeadState();
-// }
-
-// class _LeadState extends State<Lead> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return StreamProvider<List<Brew>>.value(
-//       initialData: null,
-//       value: DatabaseService().brews,
-//       child: Scaffold(
-//         backgroundColor: Colors.grey[300],
-//         body: LeadList(),
-//       ),
-//     );
-//   }
-// }
