@@ -14,7 +14,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+  //final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -66,26 +66,53 @@ class MyApp extends StatelessWidget {
           // from the list (English, in this case).
           return supportedLocales.first;
         },
-        home: FutureBuilder(
-          future: _fbApp,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              print('you have an error! ${snapshot.error.toString()}');
-              return Text('Something went wrong!');
-            } else if (snapshot.hasData) {
-              return StreamProvider<FirebaseUser>.value(
-                  initialData: null,
-                  value: AuthService().user,
-                  child: Wrapper()); //Dash();
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        )
+        home: MainApp()
+        // FutureBuilder(
+        //   future: _fbApp,
+        //   builder: (context, snapshot) {
+        //     if (snapshot.hasError) {
+        //       print('you have an error! ${snapshot.error.toString()}');
+        //       return Text('Something went wrong!');
+        //     } else if (snapshot.hasData) {
+        //       return StreamProvider<FirebaseUser>.value(
+        //           initialData: null,
+        //           value: AuthService().user,
+        //           child: Wrapper()); //Dash();
+        //     } else {
+        //       return Center(
+        //         child: CircularProgressIndicator(),
+        //       );
+        //     }
+        //   },
+        // )
 
         // Dash(), //MyHomePage(title: 'Flutter Demo Home Page'),
         );
+  }
+}
+
+class MainApp extends StatelessWidget {
+  //const MainApp({Key key}) : super(key: key);
+  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _fbApp,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print('you have an error! ${snapshot.error.toString()}');
+          return Text('Something went wrong!');
+        } else if (snapshot.hasData) {
+          return StreamProvider<FirebaseUser>.value(
+              initialData: null,
+              value: AuthService().user,
+              child: Wrapper()); //Dash();
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }

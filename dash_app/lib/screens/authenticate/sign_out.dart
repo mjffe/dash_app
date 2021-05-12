@@ -1,5 +1,8 @@
 import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/main.dart';
 import 'package:dashapp/models/user.dart';
+import 'package:dashapp/screens/home/home.dart';
+import 'package:dashapp/screens/wrapper.dart';
 import 'package:dashapp/service/auth.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -116,7 +119,11 @@ class _SetingsState extends State<Setings> {
                               data.name,
                               data.consultants,
                             );
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainApp()));
                           }
                         }),
                     SizedBox(
