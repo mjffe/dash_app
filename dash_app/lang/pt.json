@@ -7,7 +7,7 @@
   "dashboard":"Dashboard",
   "leads":"Leads",
   "raising":"Angariações",
-  "sales":"Vendas",
+  "sales":"Comissão recebida",
   "scriptures":"Escrituras",
   "service_presentation":"Apresentações de Serviço",
   "mediation_contract":"Contratos de Mediação Imobiliária",
@@ -79,6 +79,11 @@
   "commercialdirection":"Commercial Direction",
   "consultant":"Consultant",
    
+  "filter":"filter",
+  "thisYear":"This Year",
+  "lastyear":"Last Year",
+  "timeRange":"Data Range",
 
+  
   "end":"end"
 }

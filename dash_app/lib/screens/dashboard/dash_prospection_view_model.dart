@@ -10,13 +10,23 @@ class DashProspectionViewModel {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Stream<List<ProspectingTimeItem>> prospectingTimeStream() {
-    Stream<QuerySnapshot> s1 =
-        users.doc(uData.uid).collection('prospectingtime').snapshots();
+    Stream<QuerySnapshot> s1 = users
+        .doc(uData.uid)
+        .collection('prospectingtime')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
 
     var send = [s1];
     if (uData.role == '0' || uData.role == '1') {
       for (var item in uData.consultants) {
-        send.add(users.doc(item).collection('prospectingtime').snapshots());
+        send.add(users
+            .doc(item)
+            .collection('prospectingtime')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
       }
     }
 

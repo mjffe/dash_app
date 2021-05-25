@@ -23,7 +23,7 @@ class MediationContractViewModel {
       List<MediationContractItem> item;
       List<MediationContractItem> finalitem = [];
 
-      print('${values[0]}');
+      //print('${values[0]}');
       for (var i = 0; i < values.length; i++) {
         if (values[i].docs != null && values[i].docs.length > 0) {
           item = values[i]

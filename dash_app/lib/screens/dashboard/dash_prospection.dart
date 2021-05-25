@@ -133,11 +133,30 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
                                   dataLabelSettings:
                                       DataLabelSettings(isVisible: true),
                                   color: Color(
-                                      0xff4ea8de), //118ab2 // 5390d9 //4ea8de
+                                      0xff5fa8d3), //4ea8de //118ab2 // 5390d9 //4ea8de
                                 )
                               ]),
                         ))),
               ));
+            } else {
+              return Container(
+                child: Container(
+                  // height: 150.0,
+                  // width: 300.0,
+                  padding:
+                      new EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
+                  color: Colors.transparent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    child: new Padding(
+                      padding: EdgeInsets.all(2),
+                      child: Text(""),
+                    ),
+                  ),
+                ),
+              );
             }
           }
           // por defeito mostra um loading até o stream encontrar dados

@@ -79,6 +79,11 @@
   "direction":"Direction",
   "commercialdirection":"Commercial Direction",
   "consultant":"Consultant",
+  
+  "filter":"filter",
+  "thisYear":"This Year",
+  "lastyear":"Last Year",
+  "timeRange":"Data Range",
 
   "end":"end"
 }

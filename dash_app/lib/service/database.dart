@@ -26,16 +26,26 @@ class DatabaseService {
     return await userCollection.doc(uid).set({
       //'sugars': sugars,
       'name': name,
-      'role': role
+      'role': role,
+      'filterDateRangeStart': new DateTime(DateTime.now().year, 1, 1),
+      'filterDateRangeEnd': new DateTime(DateTime.now().year, 12, 31)
       //'strength': strength,
     });
   }
 
   Future<void> updateUserInfo(
-      String role, String name, List<dynamic> consultants) async {
-    return await userCollection
-        .doc(uid)
-        .set({'role': role, 'name': name, 'consultants': consultants});
+      String role,
+      String name,
+      List<dynamic> consultants,
+      DateTime filterDateRangeStart,
+      DateTime filterDateRangeEnd) async {
+    return await userCollection.doc(uid).set({
+      'role': role,
+      'name': name,
+      'consultants': consultants,
+      'filterDateRangeStart': filterDateRangeStart,
+      'filterDateRangeEnd': filterDateRangeEnd
+    });
   }
 
   //create leads
@@ -288,46 +298,66 @@ class DatabaseService {
 
 //create proposal
   Future<void> createProposalData(String name, int value) async {
-    return await userCollection
-        .doc(uid)
-        .collection('proposal')
-        .add({'name': name, 'value': value, 'createdon': new DateTime.now()});
+    return await userCollection.doc(uid).collection('proposal').add({
+      'name': name,
+      'value': value,
+      'state': '0',
+      'createdon': new DateTime.now()
+    });
   }
 
 //update proposal
-  Future<void> updateProposalData(String name, int value) async {
+  Future<void> updateProposalData(
+      String name, int value, String state, DateTime createdon) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
-          .set({'name': name, 'value': value});
+          .set({
+        'name': name,
+        'value': value,
+        'state': state,
+        'createdon': createdon
+      });
     } catch (error) {
       print(error.toString());
       return null;
     }
   }
 
-  Future<void> updateProposalToLost(String name, int value) async {
+  Future<void> updateProposalToLost(
+      String name, int value, DateTime createdon) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
-          .set({'name': name, 'value': value, 'state': '1'});
+          .set({
+        'name': name,
+        'value': value,
+        'state': '1',
+        'createdon': createdon
+      });
     } catch (error) {
       print(error.toString());
       return null;
     }
   }
 
-  Future<void> updateProposalToWon(String name, int value) async {
+  Future<void> updateProposalToWon(
+      String name, int value, DateTime createdon) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
-          .set({'name': name, 'value': value, 'state': '2'});
+          .set({
+        'name': name,
+        'value': value,
+        'state': '2',
+        'createdon': createdon
+      });
     } catch (error) {
       print(error.toString());
       return null;

@@ -181,6 +181,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_echarts:
+    dependency: "direct main"
+    description:
+      name: flutter_echarts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -368,14 +375,14 @@ packages:
       name: syncfusion_flutter_charts
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "18.4.48"
+    version: "19.1.63"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "18.4.48"
+    version: "19.1.63"
   term_glyph:
     dependency: transitive
     description:
@@ -404,6 +411,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  webview_flutter:
+    dependency: transitive
+    description:
+      name: webview_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.7"
   xml:
     dependency: transitive
     description:

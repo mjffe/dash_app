@@ -26,13 +26,23 @@ class RaisingsViewModel {
 
   /// returns the entire movies list with user-favourite information
   Stream<int> moviesUserFavouritesStream() {
-    Stream<QuerySnapshot> s1 =
-        users.doc(uData.uid).collection('raisings').snapshots();
+    Stream<QuerySnapshot> s1 = users
+        .doc(uData.uid)
+        .collection('raisings')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
 
     var send = [s1];
     if (uData.role == '0' || uData.role == '1') {
       for (var item in uData.consultants) {
-        send.add(users.doc(item).collection('raisings').snapshots());
+        send.add(users
+            .doc(item)
+            .collection('raisings')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
       }
     }
     return Rx.combineLatest(send.toList(), (values) {

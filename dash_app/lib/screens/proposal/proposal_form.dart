@@ -5,7 +5,6 @@ import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
 import 'package:dashapp/shared/loading.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -141,8 +140,11 @@ class _ProposalFormState extends State<ProposalForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateProposalData(_nameUpdated ?? _name,
-                                    _valueUpdated ?? _value);
+                                .updateProposalData(
+                                    _nameUpdated ?? _name,
+                                    _valueUpdated ?? _value,
+                                    data.state,
+                                    data.createdon);
                             Navigator.pop(context);
                           }
                         }),
@@ -157,7 +159,7 @@ class _ProposalFormState extends State<ProposalForm> {
                             if (_formkey.currentState.validate()) {
                               await DatabaseService(uid: userId, docid: docId)
                                   .updateProposalToLost(_nameUpdated ?? _name,
-                                      _valueUpdated ?? _value);
+                                      _valueUpdated ?? _value, data.createdon);
                               Navigator.pop(context);
                             }
                           }),
@@ -172,7 +174,7 @@ class _ProposalFormState extends State<ProposalForm> {
                             if (_formkey.currentState.validate()) {
                               await DatabaseService(uid: userId, docid: docId)
                                   .updateProposalToWon(_nameUpdated ?? _name,
-                                      _valueUpdated ?? _value);
+                                      _valueUpdated ?? _value, data.createdon);
                               String docid = await DatabaseService(uid: userId)
                                   .createSaleFromProposalData(
                                       '',

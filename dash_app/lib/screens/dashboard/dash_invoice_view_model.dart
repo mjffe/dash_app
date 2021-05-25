@@ -12,14 +12,27 @@ class InvoiceChartViewModel {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   Stream<InvoiceChartItem> moviesUserFavouritesStream() {
-    Stream<QuerySnapshot> s1 =
-        users.doc(uData.uid).collection('objective').snapshots();
-    Stream<QuerySnapshot> s2 =
-        users.doc(uData.uid).collection('invoicing').snapshots();
+    Stream<QuerySnapshot> s1 = users
+        .doc(uData.uid)
+        .collection('objective')
+        .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
+    Stream<QuerySnapshot> s2 = users
+        .doc(uData.uid)
+        .collection('invoicing')
+        .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
     var send = [s1, s2];
     if (uData.role == '0' || uData.role == '1') {
       for (var item in uData.consultants) {
-        send.add(users.doc(item).collection('invoicing').snapshots());
+        send.add(users
+            .doc(item)
+            .collection('invoicing')
+            .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
       }
     }
 

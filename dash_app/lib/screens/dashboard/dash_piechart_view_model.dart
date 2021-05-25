@@ -1,37 +1,78 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dashapp/models/piechart.dart';
+import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
-class PieChartViewModel {
-  PieChartViewModel({@required this.uData});
+class PieCharCountViewModel {
+  PieCharCountViewModel({@required this.uData});
   final UserData uData;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Stream<PieChartItem> moviesUserFavouritesStream() {
-    Stream<QuerySnapshot> s1 =
-        users.doc(uData.uid).collection('servicepresentation').snapshots();
-    Stream<QuerySnapshot> s2 =
-        users.doc(uData.uid).collection('mediationcontract').snapshots();
-    Stream<QuerySnapshot> s3 =
-        users.doc(uData.uid).collection('proposal').snapshots();
-    Stream<QuerySnapshot> s4 = users
+  Stream<PieChartItem> pieCharCountStream() {
+    Stream<QuerySnapshot> s1 = users
+        .doc(uData.uid)
+        .collection('servicepresentation')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
+    Stream<QuerySnapshot> s2 = users
+        .doc(uData.uid)
+        .collection('mediationcontract')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
+    Stream<QuerySnapshot> s3 = users
+        .doc(uData.uid)
+        .collection('proposal')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
+    // Stream<QuerySnapshot> s4 = users
+    //     .doc(uData.uid)
+    //     .collection('sales')
+    //     .where('state', isEqualTo: '0')
+    //     .snapshots();
+    Stream<QuerySnapshot> s5 = users
         .doc(uData.uid)
         .collection('sales')
-        .where('state', isEqualTo: '0')
+        //.where('state', isEqualTo: '0')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
         .snapshots();
 
-    var send = [s1, s2, s3, s4];
+    var send = [s1, s2, s3, s5];
     if (uData.role == '0' || uData.role == '1') {
       for (var item in uData.consultants) {
-        send.add(users.doc(item).collection('servicepresentation').snapshots());
-        send.add(users.doc(item).collection('mediationcontract').snapshots());
-        send.add(users.doc(item).collection('proposal').snapshots());
+        send.add(users
+            .doc(item)
+            .collection('servicepresentation')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
+        send.add(users
+            .doc(item)
+            .collection('mediationcontract')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
+        send.add(users
+            .doc(item)
+            .collection('proposal')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
         send.add(users
             .doc(item)
             .collection('sales')
             .where('state', isEqualTo: '0')
+            // .where('createdon',
+            //     isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            // .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
             .snapshots());
       }
     }
@@ -58,7 +99,16 @@ class PieChartViewModel {
               propostasCount = propostasCount + values[i].size;
               break;
             case 'sales':
-              cpvcCount = cpvcCount + values[i].size;
+              //cpvcCount = cpvcCount + values[i].size;
+              List<SaleItem> item;
+
+              item = values[i]
+                  .docs
+                  .map((doc) => SaleItem.fromFirestore(doc))
+                  .toList();
+
+              item.removeWhere((item) => item.state != '0');
+              cpvcCount = cpvcCount + item.length;
               break;
             default:
               break;

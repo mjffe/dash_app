@@ -1,7 +1,9 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/user.dart';
+import 'package:dashapp/screens/sales/promisebuysell/promisebuysell_list.dart';
 import 'package:dashapp/screens/sales/sales_list.dart';
 import 'package:dashapp/screens/sales/sales_view_model.dart';
+import 'package:dashapp/screens/sales/scriptures/scriptures_list.dart';
 import 'package:dashapp/screens/sales/scriptures/scriptures_view_model.dart';
 import 'package:dashapp/screens/sales/promisebuysell/promisebuysell_view_model.dart';
 import 'package:dashapp/shared/app_bar.dart';
@@ -64,7 +66,7 @@ class ScripturesFiltred extends StatelessWidget {
         appBar:
             customAppBar(AppLocalizations.of(context).translate('scriptures'))
                 .bar(),
-        body: SaleList(),
+        body: ScripturesList(),
       ),
     );
   }
@@ -85,7 +87,7 @@ class PromiseBuySellFiltred extends StatelessWidget {
         appBar: customAppBar(
                 AppLocalizations.of(context).translate('promise_buy_sell'))
             .bar(),
-        body: SaleList(),
+        body: PromiseBuySellList(),
       ),
     );
   }

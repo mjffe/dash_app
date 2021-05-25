@@ -118,6 +118,8 @@ class _SetingsState extends State<Setings> {
                               _role ?? '',
                               data.name,
                               data.consultants,
+                              data.filterDateRangeStart,
+                              data.filterDateRangeEnd,
                             );
                             // Navigator.pop(context);
                             Navigator.push(

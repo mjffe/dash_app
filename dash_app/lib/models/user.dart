@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:jiffy/jiffy.dart';
 
 class FirebaseUser {
   FirebaseUser(this.uid);
@@ -13,8 +14,16 @@ class UserData {
   // final int strength;
   final List<dynamic> consultants;
   final String role;
+  final DateTime filterDateRangeStart;
+  final DateTime filterDateRangeEnd;
 
-  UserData({this.uid, this.name, this.role, this.consultants});
+  UserData(
+      {this.uid,
+      this.name,
+      this.role,
+      this.consultants,
+      this.filterDateRangeStart,
+      this.filterDateRangeEnd});
 
   factory UserData.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
@@ -23,8 +32,18 @@ class UserData {
       return UserData(
         uid: doc.id,
         name: doc.data()['name'] ?? '',
-        consultants: doc.data()['consultants'] ?? '',
+        consultants: doc.data()['consultants'] ?? [],
         role: doc.data()['role'] ?? '',
+        filterDateRangeStart: data['filterDateRangeStart'] != null &&
+                data['filterDateRangeStart'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch(
+                (data['filterDateRangeStart']).seconds * 1000)
+            : new DateTime(DateTime.now().year, 1, 1),
+        filterDateRangeEnd: data['filterDateRangeEnd'] != null &&
+                data['filterDateRangeEnd'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch(
+                (data['filterDateRangeEnd']).seconds * 1000)
+            : new DateTime(DateTime.now().year, 12, 31),
         // strength: doc.data()['strength'] ?? 0,
         // sugars: doc.data()['sugars'] ?? '0',
       );

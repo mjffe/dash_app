@@ -1,3 +1,4 @@
+import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/invoicing/invoicing_form_panel.dart';
 import 'package:dashapp/screens/leads/lead_form_panel.dart';
 import 'package:dashapp/screens/mediationcontract/mediationcontract_form.dart';
@@ -19,14 +20,35 @@ class FoatingAction {
     size: 50,
   );
 
-  static setActionButton_Home(int pos, String userid, BuildContext context) {
+  static setActionButton_Home(int pos, UserData uData, BuildContext context) {
     switch (pos) {
+      // case 0:
+      //   //dashboard
+      //   return FloatingActionButton(
+      //     // onPressed: () => showModalBottomSheet(
+      //     //     context: context,
+      //     //     builder: (context) {
+      //     //       return Container(
+      //     //         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+      //     //         child: DashFormPanel(uData: uData), //SettingsForm(userid),
+      //     //       );
+      //     //     }),
+      //     onPressed: () => Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => DashFormPanel(uData: uData))),
+      //     backgroundColor: bgcolor,
+      //     child: Icon(
+      //       Icons.filter_list,
+      //       size: 50,
+      //     ),
+      //   );
       case 1:
         return FloatingActionButton(
           onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => LeadFormPanel(userid, ''))),
+                  builder: (context) => LeadFormPanel(uData.uid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );
@@ -37,7 +59,7 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: RaisingForm(userid, ''), //SettingsForm(userid),
+                  child: RaisingForm(uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -48,7 +70,7 @@ class FoatingAction {
           onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => SalesFormPanel(userid, ''))),
+                  builder: (context) => SalesFormPanel(uData.uid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );
@@ -59,7 +81,7 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: ScripturesForm(userid, ''), //SettingsForm(userid),
+                  child: ScripturesForm(uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -73,7 +95,7 @@ class FoatingAction {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
                   child: ServicePresentationForm(
-                      userid, ''), //SettingsForm(userid),
+                      uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -86,8 +108,8 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child:
-                      MediationContractForm(userid, ''), //SettingsForm(userid),
+                  child: MediationContractForm(
+                      uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -100,7 +122,7 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: ProposalForm(userid, ''), //SettingsForm(userid),
+                  child: ProposalForm(uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -113,7 +135,8 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: PromiseBuySellForm(userid, ''), //SettingsForm(userid),
+                  child:
+                      PromiseBuySellForm(uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -126,8 +149,8 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child:
-                      ProspectingTimeForm(userid, ''), //SettingsForm(userid),
+                  child: ProspectingTimeForm(
+                      uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,
@@ -138,7 +161,7 @@ class FoatingAction {
           onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => InvoicingFormPanel(userid, ''))),
+                  builder: (context) => InvoicingFormPanel(uData.uid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );
@@ -150,7 +173,7 @@ class FoatingAction {
               builder: (context) {
                 return Container(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: ObjectiveForm(userid, ''), //SettingsForm(userid),
+                  child: ObjectiveForm(uData.uid, ''), //SettingsForm(userid),
                 );
               }),
           backgroundColor: bgcolor,

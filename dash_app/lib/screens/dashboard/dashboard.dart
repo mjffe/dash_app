@@ -1,6 +1,7 @@
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/dash_counters.dart';
 import 'package:dashapp/screens/dashboard/dash_invoice.dart';
+import 'package:dashapp/screens/dashboard/dash_invoice2.dart';
 import 'package:dashapp/screens/dashboard/dash_piechart.dart';
 import 'package:dashapp/screens/dashboard/dash_prospection.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,8 @@ class _DashState extends State<Dash> {
           Dash_Counters(uData),
           Dash_PieChart(uData),
           Dash_ProspectingTime(uData),
-          Dash_LineChart(uData)
+          Dash_LineChart(uData),
+          Dash_LineChart2(uData)
         ],
       )
     ]));

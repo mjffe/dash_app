@@ -1,4 +1,5 @@
 import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/main.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/authenticate/sign_out.dart';
 import 'package:dashapp/screens/dashboard/dashboard.dart';
@@ -6,17 +7,17 @@ import 'package:dashapp/screens/invoicing/invoicing.dart';
 import 'package:dashapp/screens/leads/lead.dart';
 import 'package:dashapp/screens/mediationcontract/mediationcontract.dart';
 import 'package:dashapp/screens/objective/objective.dart';
-import 'package:dashapp/screens/promisebuysell/promisebuysell.dart';
 import 'package:dashapp/screens/proposal/proposal.dart';
 import 'package:dashapp/screens/prospectingtime/prospectingtime.dart';
 import 'package:dashapp/screens/raisings/raising.dart';
 import 'package:dashapp/screens/sales/sale.dart';
-import 'package:dashapp/screens/scriptures/scripture.dart';
 import 'package:dashapp/screens/service_presentation/servicepresentation.dart';
+import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_bar.dart';
 import 'package:dashapp/shared/app_icons.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/screens/home/floatingaction.dart';
+import 'package:dashapp/shared/test.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,16 +34,81 @@ class _HomeState extends State<Home> {
   _HomeState(this.uData);
   final UserData uData;
   int _selectedIndex = 0;
+  DateTimeRange dateRange;
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
-    // String _screenName =
-    //     AppLocalizations.of(context).translate('dashboard'); //'Home';
+    String menuItemsthisYear =
+        AppLocalizations.of(context).translate('thisYear'); //'Settings';
+    const String thisYear = 'thisYear';
+    String menuItemslastyear =
+        AppLocalizations.of(context).translate('lastyear'); //'Share';
+    const String lastyear = 'lastyear';
+    String menuItemstimeRange =
+        AppLocalizations.of(context).translate('timeRange'); //'Logout';
+    const String timeRange = 'timeRange';
+    List<MenuItem> menuItemsText;
+
+    setMenuItem() {
+      bool tyear = false;
+      bool lyear = false;
+      bool orther = false;
+      if (uData.filterDateRangeStart ==
+              new DateTime(DateTime.now().year, 1, 1) &&
+          uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 12, 31))
+        tyear = true;
+      else if (uData.filterDateRangeStart ==
+              new DateTime(DateTime.now().year - 1, 1, 1) &&
+          uData.filterDateRangeEnd ==
+              new DateTime(DateTime.now().year - 1, 12, 31))
+        lyear = true;
+      else
+        orther = true;
+
+      return <MenuItem>[
+        MenuItem('thisYear', menuItemsthisYear, tyear),
+        MenuItem('lastyear', menuItemslastyear, lyear),
+        MenuItem('timeRange', menuItemstimeRange, orther),
+      ];
+    }
+
+    menuItemsText = setMenuItem();
 
     _onSelectItem(int index) {
       setState(() => _selectedIndex = index);
       Navigator.of(context).pop();
+    }
+
+    Future pickDateRange(BuildContext context) async {
+      //origin from
+      //https://www.youtube.com/watch?v=a_fGsywyL90
+      dateRange = new DateTimeRange(
+          start: uData.filterDateRangeStart, end: uData.filterDateRangeEnd);
+
+      final initialDateRange = DateTimeRange(
+        start: DateTime.now(),
+        end: DateTime.now().add(Duration(hours: 24 * 3)),
+      );
+      final newDateRange = await showDateRangePicker(
+        context: context,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5),
+        initialDateRange: dateRange ?? initialDateRange,
+      );
+
+      if (newDateRange == null) return;
+
+      //print(newDateRange);
+      await DatabaseService(uid: uData.uid).updateUserInfo(
+        uData.role,
+        uData.name,
+        uData.consultants,
+        newDateRange.start,
+        newDateRange.end,
+      );
+
+      setState(() => dateRange = newDateRange);
     }
 
     String _getScreenName(int index) {
@@ -151,10 +217,79 @@ class _HomeState extends State<Home> {
       }
     }
 
+    _getAppbarActions(int pos) {
+      if (pos == 0) {
+        return [
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              switch (value) {
+                case thisYear:
+                  await DatabaseService(uid: uData.uid).updateUserInfo(
+                    uData.role,
+                    uData.name,
+                    uData.consultants,
+                    new DateTime(DateTime.now().year, 1, 1),
+                    new DateTime(DateTime.now().year, 12, 31),
+                  );
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainApp()));
+                  break;
+                case lastyear:
+                  await DatabaseService(uid: uData.uid).updateUserInfo(
+                    uData.role,
+                    uData.name,
+                    uData.consultants,
+                    new DateTime(DateTime.now().year - 1, 1, 1),
+                    new DateTime(DateTime.now().year - 1, 12, 31),
+                  );
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainApp()));
+                  break;
+                case timeRange:
+                  await pickDateRange(context);
+                  //Utils.showSnackbar(context, 'Selected: Logout');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MainApp()));
+                  break;
+              }
+            },
+            itemBuilder: (context) => menuItemsText
+                .map((item) => PopupMenuItem<String>(
+                      value: item.key,
+                      child: Text(item.value),
+                      textStyle: TextStyle(
+                        color:
+                            item.checked ? MyColors.normalBlue : Colors.black,
+                      ),
+                    ))
+                .toList(),
+            icon: Icon(
+              Icons.filter_list,
+              size: 40,
+            ),
+          ),
+        ];
+      }
+      return null;
+    }
+
     return Container(
       child: Scaffold(
         backgroundColor: MyColors.appBarBackgroundColor,
-        appBar: customAppBar(_getScreenName(_selectedIndex)).bar(),
+        appBar: AppBar(
+          title: Text(
+            _getScreenName(_selectedIndex),
+            style: TextStyle(
+              fontSize: 35,
+              color: Colors.white,
+              letterSpacing: 1,
+            ),
+          ),
+          actions: _getAppbarActions(_selectedIndex),
+          centerTitle: true,
+          backgroundColor: const Color(0xff4169e1),
+        ),
+        //customAppBar(_getScreenName(_selectedIndex)).bar(),
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -296,9 +431,16 @@ class _HomeState extends State<Home> {
           ),
         ),
         body: _getDrawerItem(_selectedIndex),
-        floatingActionButton: FoatingAction.setActionButton_Home(
-            _selectedIndex, user.uid, context),
+        floatingActionButton:
+            FoatingAction.setActionButton_Home(_selectedIndex, uData, context),
       ),
     );
   }
+}
+
+class MenuItem {
+  MenuItem(this.key, this.value, this.checked);
+  String key;
+  String value;
+  bool checked;
 }

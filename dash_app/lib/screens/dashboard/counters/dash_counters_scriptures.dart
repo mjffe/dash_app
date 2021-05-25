@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,24 +13,25 @@ class ScripturesCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final user = Provider.of<FirebaseUser>(context);
-    return Provider<ScripturesViewModel>(
-      create: (_) => ScripturesViewModel(uData: uData),
+    return Provider<ScripturesCountViewModel>(
+      create: (_) => ScripturesCountViewModel(uData: uData),
       child: ScripturesData(),
     );
   }
 }
 
-class ScripturesViewModel {
-  ScripturesViewModel({@required this.uData});
+class ScripturesCountViewModel {
+  ScripturesCountViewModel({this.uData});
   final UserData uData;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  /// returns the entire movies list with user-favourite information
-  Stream<int> moviesUserFavouritesStream() {
+  Stream<List<SaleItem>> scripturesCountStream() {
     Stream<QuerySnapshot> s1 = users
         .doc(uData.uid)
         .collection('sales')
-        .where('state', isEqualTo: '1')
+        //.where('state', isEqualTo: '1')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
         .snapshots();
 
     var send = [s1];
@@ -38,16 +40,31 @@ class ScripturesViewModel {
         send.add(users
             .doc(item)
             .collection('sales')
-            .where('state', isEqualTo: '1')
+            //.where('state', isEqualTo: '1')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
             .snapshots());
       }
     }
-    return Rx.combineLatest(send.toList(), (values) {
-      int s = 0;
-      for (var d in values) {
-        s = s + d.size;
+
+    return Rx.combineLatest(send.toList(), (List<QuerySnapshot> values) {
+      List<SaleItem> item;
+      List<SaleItem> finalitem = [];
+
+      //print('${values[0]}');
+      for (var i = 0; i < values.length; i++) {
+        if (values[i].docs != null && values[i].docs.length > 0) {
+          item =
+              values[i].docs.map((doc) => SaleItem.fromFirestore(doc)).toList();
+          if (item.length > 0) {
+            item.forEach((element) => finalitem.add(element));
+          }
+        }
       }
-      return s;
+
+      finalitem.removeWhere((item) => item.state != '1');
+      return finalitem;
     });
   }
 }
@@ -57,12 +74,14 @@ class ScripturesData extends StatelessWidget {
   //final String userId;
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<ScripturesViewModel>(context, listen: false);
-    return StreamBuilder<int>(
-        stream: viewModel.moviesUserFavouritesStream(),
+    final viewModel =
+        Provider.of<ScripturesCountViewModel>(context, listen: false);
+    return StreamBuilder<List<SaleItem>>(
+        stream: viewModel.scripturesCountStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.toString(),
+            List<SaleItem> sales = snapshot.data;
+            return Text(sales.length.toString(),
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
