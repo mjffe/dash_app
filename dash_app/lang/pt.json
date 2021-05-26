@@ -69,15 +69,15 @@
   "Nov":"Nov",
   "Dec":"Dec",
 
-  "ProspectingTimeTitle":"Tempo de Prospecção",
-  "ProspectingTimeName":"Tempo",
+  "ProspectingTimeTitle":"Tempo de Prospecção (h)",
+  "ProspectingTimeName":"Tempo (h)",
   "DateTarget" :"Objetivo",
   "date":"Data",
   "validdate":"Por favor introduza uma data valida",
 
-  "direction":"Direction",
-  "commercialdirection":"Commercial Direction",
-  "consultant":"Consultant",
+  "direction":"Direção",
+  "commercialdirection":"Direção Comercial",
+  "consultant":"Consultor",
    
   "filter":"filter",
   "thisYear":"This Year",

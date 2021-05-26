@@ -69,7 +69,10 @@
   "Oct":"Oct",
   "Nov":"Nov",
   "Dec":"Dec",
-
+  
+  "saleType":"Type",
+  "saleTypeShareshared":"Shared",
+  "saleTypeSharefull":"Full",
   "ProspectingTimeTitle":"Prospecting Time (h)",
   "ProspectingTimeName":"Time (h)",
   "DateTarget" :"Target",

@@ -4,6 +4,8 @@ import 'package:dashapp/screens/dashboard/counters/dash_counters_lead.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_buyer.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_prospecting.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_raising.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_sale_full.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_sale_shared.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_sales.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_scriptures.dart';
 import 'package:dashapp/screens/leads/lead.dart';
@@ -35,7 +37,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
 
   @override
   Widget build(BuildContext context) {
-    _showMyDialog() {
+    _showLeadsDialog() {
       return showDialog<void>(
         context: context,
         barrierDismissible: true, // user must tap button!
@@ -132,6 +134,103 @@ class _Dash_CountersState extends State<Dash_Counters> {
       );
     }
 
+    _showSalesDialog() {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: true, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: //Text(AppLocalizations.of(context).translate('leads')),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                  Text(AppLocalizations.of(context).translate('sales')),
+                  SalesCount(uData),
+                ]),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LeadProspectingFiltred(uData)));
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor:
+                                  const Color(0xff2A9D8F), //0xff26a69a
+                              child: Icon(
+                                AppIcoons.vendas,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('saleTypeShareshared'),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  letterSpacing: 1,
+                                  fontSize: 14),
+                            ),
+                          ]),
+                          SaleSharedCount(uData),
+                        ]),
+                  ),
+                  SizedBox(height: 10.0),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LeadBuyerCustomersFiltred(uData)));
+                    },
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor:
+                                  const Color(0xff2A9D8F), //0xff26a69a
+                              child: Icon(
+                                AppIcoons.vendas,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('saleTypeSharefull'),
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  letterSpacing: 1,
+                                  fontSize: 14),
+                            ),
+                          ]),
+                          SaleFullCount(uData),
+                        ]),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Container(
       child: Container(
         // height: 150.0,
@@ -205,7 +304,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                             //   print('onLongPress');
                             // },
                             onTap: () {
-                              _showMyDialog();
+                              _showLeadsDialog();
                             },
                             child: Container(
                               height: 64,
@@ -243,11 +342,12 @@ class _Dash_CountersState extends State<Dash_Counters> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SaleFiltred(uData)));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             SaleFiltred(uData)));
+                              _showSalesDialog();
                             },
                             child: Container(
                               height: 64,

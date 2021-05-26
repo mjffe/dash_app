@@ -5,6 +5,7 @@ class SaleItem {
       {this.id,
       this.name,
       this.value,
+      this.type,
       this.state,
       this.proposalid,
       this.proposal,
@@ -19,6 +20,7 @@ class SaleItem {
         id: doc.id,
         name: data['name'] ?? '',
         value: data['value'] ?? 0,
+        type: data['type'] ?? '0',
         state: data['state'] ?? '0',
         proposal: data['proposal'] ?? '',
         proposalid: data['proposalid'] ?? '',
@@ -31,6 +33,7 @@ class SaleItem {
   final String id;
   final String name;
   final int value;
+  final String type;
   final String state;
   final String proposalid;
   final String proposal;

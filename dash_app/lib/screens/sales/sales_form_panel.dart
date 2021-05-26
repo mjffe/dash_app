@@ -26,16 +26,39 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
     '0',
     '1',
   ];
+  final List<String> types = [
+    '0',
+    '1',
+  ];
 
   // form values
   String _name = '';
   String _nameUpdated;
   int _value = 0;
   int _valueUpdated;
+  String _type = '0';
+  String _typeUpdated;
   String _state = '0';
   String _stateUpdated;
   String _proposal = '';
   String _proposalUpdated;
+
+  String _getTypeName(String index) {
+    switch (index) {
+      case '0':
+        {
+          return AppLocalizations.of(context).translate('saleTypeShareshared');
+        }
+        break;
+      case '1':
+        {
+          return AppLocalizations.of(context).translate('saleTypeSharefull');
+        }
+        break;
+      default:
+        return '';
+    }
+  }
 
   String _getStateName(String index) {
     switch (index) {
@@ -106,13 +129,26 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
               ),
               SizedBox(height: 20.0),
               DropdownButtonFormField(
-                value: _state,
+                value: _type,
                 decoration: textInputDecoration,
                 items: states.map((type) {
                   return DropdownMenuItem(
                     value: type,
                     child: //Text('sdfsdf'),
-                        Text(_getStateName(type)),
+                        Text(_getTypeName(type)),
+                  );
+                }).toList(),
+                onChanged: (val) => setState(() => _type = val),
+              ),
+              SizedBox(height: 20.0),
+              DropdownButtonFormField(
+                value: _state,
+                decoration: textInputDecoration,
+                items: states.map((state) {
+                  return DropdownMenuItem(
+                    value: state,
+                    child: //Text('sdfsdf'),
+                        Text(_getStateName(state)),
                   );
                 }).toList(),
                 onChanged: (val) => setState(() => _state = val),
@@ -130,6 +166,7 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                           _name ?? '',
                           _value ?? 0,
                           _proposal ?? '',
+                          _type ?? '0',
                           _state ?? '0');
                       Navigator.pop(context);
                     }
@@ -150,6 +187,8 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                 _name = saleData.name;
                 _value = saleData.value;
                 _proposal = saleData.proposal;
+                _type = saleData.type;
+                _state = saleData.state;
                 return Form(
                   key: _formkey,
                   child: Column(
@@ -232,6 +271,28 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                       Align(
                           alignment: Alignment.topLeft,
                           child: Text(
+                            "${AppLocalizations.of(context).translate('saleType')}:",
+                            style: TextStyle(
+                              //fontSize: 10,
+                              letterSpacing: 1.2,
+                            ),
+                          )),
+                      DropdownButtonFormField(
+                        value: _type,
+                        decoration: textInputDecoration,
+                        items: types.map((type) {
+                          return DropdownMenuItem(
+                            value: type,
+                            child: //Text('sdfsdf'),
+                                Text(_getTypeName(type)),
+                          );
+                        }).toList(),
+                        onChanged: (val) => setState(() => _typeUpdated = val),
+                      ),
+                      SizedBox(height: 20.0),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
                             "${AppLocalizations.of(context).translate('state')}:",
                             style: TextStyle(
                               //fontSize: 10,
@@ -264,7 +325,9 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                       _nameUpdated ?? _name,
                                       _valueUpdated ?? _value,
                                       _proposalUpdated ?? _proposal,
-                                      _stateUpdated ?? _state);
+                                      _typeUpdated ?? _type,
+                                      _stateUpdated ?? _state,
+                                      saleData.createdby ?? new DateTime.now());
                               Navigator.pop(context);
                             }
                           }),

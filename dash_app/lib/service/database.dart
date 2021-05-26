@@ -129,11 +129,12 @@ class DatabaseService {
   }
 
   //create sales
-  Future<void> createSaleData(
-      String name, int value, String proposal, String state) async {
+  Future<void> createSaleData(String name, int value, String proposal,
+      String type, String state) async {
     return await userCollection.doc(uid).collection('sales').add({
       'name': name,
       'value': value,
+      'type': type,
       'state': state,
       'proposal': proposal,
       'createdon': new DateTime.now()
@@ -156,11 +157,17 @@ class DatabaseService {
   }
 
 //update raisings
-  Future<void> updateSaleData(
-      String name, int value, String proposal, String state) async {
+  Future<void> updateSaleData(String name, int value, String proposal,
+      String type, String state, DateTime createdon) async {
     try {
-      return await userCollection.doc(uid).collection('sales').doc(docid).set(
-          {'name': name, 'value': value, 'state': state, 'proposal': proposal});
+      return await userCollection.doc(uid).collection('sales').doc(docid).set({
+        'name': name,
+        'value': value,
+        'type': type,
+        'state': state,
+        'proposal': proposal,
+        'createdon': createdon
+      });
     } catch (error) {
       print(error.toString());
       return null;
