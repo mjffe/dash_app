@@ -117,11 +117,12 @@ class LineChartStreamData2 extends StatelessWidget {
               objectivesDash
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
-            return Dash_Invoice2(invoicesDash, objectivesDash, uData);
+            if (invoicesDash != null || objectivesDash != null)
+              return Dash_Invoice2(invoicesDash, objectivesDash, uData);
+            else
+              return CircularProgressIndicator();
           }
           return CircularProgressIndicator();
-          //Text('Loading');
-          //return PieChartSample2(2, 2, 2, 2);
         });
   }
 }

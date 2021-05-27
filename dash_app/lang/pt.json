@@ -83,7 +83,11 @@
   "thisYear":"This Year",
   "lastyear":"Last Year",
   "timeRange":"Data Range",
-
+  "quarter":"Trimestre",
+  "1quarter":"1º Trimestre",
+  "2quarter":"2º Trimestre",
+  "3quarter":"3º Trimestre",
+  "4quarter":"4º Trimestre",
   
   "end":"end"
 }

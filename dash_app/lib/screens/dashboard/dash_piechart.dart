@@ -70,8 +70,14 @@ class PieChartStreamData extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             PieChartItem item = snapshot.data;
-            return PieChartSample2(item.apsCount, item.cmiCount,
-                item.propostasCount, item.cpvcCount, uData);
+            if (item.apsCount == 0 &&
+                item.cmiCount == 0 &&
+                item.cpvcCount == 0 &&
+                item.propostasCount == 0)
+              return CircularProgressIndicator();
+            else
+              return PieChartSample2(item.apsCount, item.cmiCount,
+                  item.propostasCount, item.cpvcCount, uData);
           }
           return CircularProgressIndicator();
           //Text('Loading');

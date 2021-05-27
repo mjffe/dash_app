@@ -48,12 +48,14 @@ class _HomeState extends State<Home> {
     String menuItemstimeRange =
         AppLocalizations.of(context).translate('timeRange'); //'Logout';
     const String timeRange = 'timeRange';
+    String menuItemsQuarter = AppLocalizations.of(context).translate('quarter');
     List<MenuItem> menuItemsText;
 
     setMenuItem() {
       bool tyear = false;
       bool lyear = false;
       bool orther = false;
+      bool quarter = false;
       if (uData.filterDateRangeStart ==
               new DateTime(DateTime.now().year, 1, 1) &&
           uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 12, 31))
@@ -63,12 +65,29 @@ class _HomeState extends State<Home> {
           uData.filterDateRangeEnd ==
               new DateTime(DateTime.now().year - 1, 12, 31))
         lyear = true;
+      else if (uData.filterDateRangeStart ==
+              new DateTime(DateTime.now().year, 1, 1) &&
+          uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 3, 31))
+        quarter = true;
+      else if (uData.filterDateRangeStart ==
+              new DateTime(DateTime.now().year, 4, 1) &&
+          uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 6, 30))
+        quarter = true;
+      else if (uData.filterDateRangeStart ==
+              new DateTime(DateTime.now().year, 7, 1) &&
+          uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 9, 30))
+        quarter = true;
+      else if (uData.filterDateRangeStart ==
+              new DateTime(DateTime.now().year, 10, 1) &&
+          uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 12, 31))
+        quarter = true;
       else
         orther = true;
 
       return <MenuItem>[
-        MenuItem('thisYear', menuItemsthisYear, tyear),
         MenuItem('lastyear', menuItemslastyear, lyear),
+        MenuItem('thisYear', menuItemsthisYear, tyear),
+        MenuItem('quarter', menuItemsQuarter, quarter),
         MenuItem('timeRange', menuItemstimeRange, orther),
       ];
     }
@@ -251,12 +270,16 @@ class _HomeState extends State<Home> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => MainApp()));
                   break;
+                // case 'quarter':
+                //   break;
               }
             },
             itemBuilder: (context) => menuItemsText
                 .map((item) => PopupMenuItem<String>(
                       value: item.key,
-                      child: Text(item.value),
+                      child: item.key == 'quarter'
+                          ? SubMenu(uData, item.value)
+                          : Text(item.value),
                       textStyle: TextStyle(
                         color:
                             item.checked ? MyColors.normalBlue : Colors.black,
@@ -443,4 +466,140 @@ class MenuItem {
   String key;
   String value;
   bool checked;
+}
+
+enum Quarter { quarter1, quarter2, quarter3, quarter4 }
+
+class SubMenu extends StatefulWidget {
+  final String title;
+  final UserData uData;
+  const SubMenu(this.uData, this.title);
+
+  @override
+  _SubMenuState createState() => _SubMenuState(uData);
+}
+
+class _SubMenuState extends State<SubMenu> {
+  //https://stackoverflow.com/questions/60795584/flutter-web-need-menu-with-sub-menu
+  _SubMenuState(this.uData);
+  final UserData uData;
+  Quarter _selection = Quarter.quarter1;
+
+  @override
+  Widget build(BuildContext context) {
+//     print(rendBox.size.bottomRight);
+
+    bool q1 = (uData.filterDateRangeStart ==
+            new DateTime(DateTime.now().year, 1, 1) &&
+        uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 3, 31));
+
+    bool q2 = (uData.filterDateRangeStart ==
+            new DateTime(DateTime.now().year, 4, 1) &&
+        uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 6, 30));
+
+    bool q3 = (uData.filterDateRangeStart ==
+            new DateTime(DateTime.now().year, 7, 1) &&
+        uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 9, 30));
+
+    bool q4 = (uData.filterDateRangeStart ==
+            new DateTime(DateTime.now().year, 10, 1) &&
+        uData.filterDateRangeEnd == new DateTime(DateTime.now().year, 12, 31));
+
+    return PopupMenuButton<Quarter>(
+      child: Row(
+        children: <Widget>[
+          Text(widget.title),
+          //Spacer(),
+          Icon(Icons.arrow_drop_down, size: 20.0, color: MyColors.lightBlue),
+        ],
+      ),
+      onCanceled: () {
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      },
+      onSelected: (Quarter result) async {
+        switch (result) {
+          case Quarter.quarter1:
+            await DatabaseService(uid: uData.uid).updateUserInfo(
+              uData.role,
+              uData.name,
+              uData.consultants,
+              new DateTime(DateTime.now().year, 1, 1),
+              new DateTime(DateTime.now().year, 3, 31),
+            );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainApp()));
+            break;
+          case Quarter.quarter2:
+            await DatabaseService(uid: uData.uid).updateUserInfo(
+              uData.role,
+              uData.name,
+              uData.consultants,
+              new DateTime(DateTime.now().year, 4, 1),
+              new DateTime(DateTime.now().year, 6, 30),
+            );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainApp()));
+            break;
+          case Quarter.quarter3:
+            await DatabaseService(uid: uData.uid).updateUserInfo(
+              uData.role,
+              uData.name,
+              uData.consultants,
+              new DateTime(DateTime.now().year, 7, 1),
+              new DateTime(DateTime.now().year, 9, 30),
+            );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainApp()));
+            break;
+          case Quarter.quarter4:
+            await DatabaseService(uid: uData.uid).updateUserInfo(
+              uData.role,
+              uData.name,
+              uData.consultants,
+              new DateTime(DateTime.now().year, 10, 1),
+              new DateTime(DateTime.now().year, 12, 31),
+            );
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainApp()));
+            break;
+        }
+      },
+      // how much the submenu should offset from parent. This seems to have an upper limit.
+      offset: Offset(300, 0),
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<Quarter>>[
+        PopupMenuItem<Quarter>(
+          value: Quarter.quarter1,
+          child: Text(AppLocalizations.of(context).translate('1quarter')
+              //'1º Quarter'
+              ),
+          textStyle: TextStyle(
+            color: q1 ? MyColors.normalBlue : Colors.black,
+          ),
+        ),
+        PopupMenuItem<Quarter>(
+          value: Quarter.quarter2,
+          child: Text(AppLocalizations.of(context).translate('2quarter')),
+          textStyle: TextStyle(
+            color: q2 ? MyColors.normalBlue : Colors.black,
+          ),
+        ),
+        PopupMenuItem<Quarter>(
+          value: Quarter.quarter3,
+          child: Text(AppLocalizations.of(context).translate('3quarter')),
+          textStyle: TextStyle(
+            color: q3 ? MyColors.normalBlue : Colors.black,
+          ),
+        ),
+        PopupMenuItem<Quarter>(
+          value: Quarter.quarter4,
+          child: Text(AppLocalizations.of(context).translate('4quarter')),
+          textStyle: TextStyle(
+            color: q4 ? MyColors.normalBlue : Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
 }

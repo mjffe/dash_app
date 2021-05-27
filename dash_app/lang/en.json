@@ -87,6 +87,11 @@
   "thisYear":"This Year",
   "lastyear":"Last Year",
   "timeRange":"Data Range",
+  "quarter":"Quarter",
+  "1quarter":"1º Quarter",
+  "2quarter":"2º Quarter",
+  "3quarter":"3º Quarter",
+  "4quarter":"4º Quarter",
 
   "end":"end"
 }
