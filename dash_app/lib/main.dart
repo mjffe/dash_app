@@ -2,7 +2,6 @@ import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/wrapper.dart';
 import 'package:dashapp/service/auth.dart';
-import 'package:dashapp/shared/test.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

@@ -13,8 +13,8 @@ class DashProspectionViewModel {
     Stream<QuerySnapshot> s1 = users
         .doc(uData.uid)
         .collection('prospectingtime')
-        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
-        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
         .snapshots();
 
     var send = [s1];
@@ -23,9 +23,8 @@ class DashProspectionViewModel {
         send.add(users
             .doc(item)
             .collection('prospectingtime')
-            .where('createdon',
-                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
-            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
             .snapshots());
       }
     }

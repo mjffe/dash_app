@@ -278,6 +278,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                           color: Colors.white,
                                         ),
                                       ),
+                                      SizedBox(width: 5.0),
                                       Text(
                                         AppLocalizations.of(context)
                                             .translate('raising'),
@@ -322,6 +323,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                           color: Colors.white,
                                         ),
                                       ),
+                                      SizedBox(width: 5.0),
                                       Text(
                                         AppLocalizations.of(context)
                                             .translate('leads'),
@@ -365,13 +367,20 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      Text(
-                                        AppLocalizations.of(context)
-                                            .translate('sales'),
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            letterSpacing: 1,
-                                            fontSize: 14),
+                                      SizedBox(width: 5.0),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.20,
+                                        child: Text(
+                                          AppLocalizations.of(context)
+                                              .translate('sales'),
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              letterSpacing: 1,
+                                              fontSize: 14),
+                                        ),
                                       ),
                                     ]),
                                     SalesCount(uData),
@@ -410,6 +419,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                           color: Colors.white,
                                         ),
                                       ),
+                                      SizedBox(width: 5.0),
                                       Text(
                                         AppLocalizations.of(context)
                                             .translate('scriptures'),

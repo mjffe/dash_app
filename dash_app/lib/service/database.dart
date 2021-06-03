@@ -158,7 +158,7 @@ class DatabaseService {
 
 //update raisings
   Future<void> updateSaleData(String name, int value, String proposal,
-      String type, String state, DateTime createdon) async {
+      String proposalid, String type, String state, DateTime createdon) async {
     try {
       return await userCollection.doc(uid).collection('sales').doc(docid).set({
         'name': name,
@@ -166,6 +166,7 @@ class DatabaseService {
         'type': type,
         'state': state,
         'proposal': proposal,
+        'proposalid': proposalid,
         'createdon': createdon
       });
     } catch (error) {

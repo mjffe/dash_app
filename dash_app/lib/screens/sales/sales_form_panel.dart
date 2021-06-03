@@ -325,9 +325,10 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                       _nameUpdated ?? _name,
                                       _valueUpdated ?? _value,
                                       _proposalUpdated ?? _proposal,
+                                      saleData.proposalid ?? '',
                                       _typeUpdated ?? _type,
                                       _stateUpdated ?? _state,
-                                      saleData.createdby ?? new DateTime.now());
+                                      saleData.createdon ?? new DateTime.now());
                               Navigator.pop(context);
                             }
                           }),
