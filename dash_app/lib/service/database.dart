@@ -71,7 +71,7 @@ class DatabaseService {
         'leadtype': leadtype
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateLeadData: ${error.toString()}');
       return null;
     }
   }
@@ -85,31 +85,31 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteLeadData: ${error.toString()}');
       return null;
     }
   }
 
   //create raisings
-  Future<void> createRaisingData(String name) async {
-    return await userCollection
-        .doc(uid)
-        .collection('raisings')
-        .add({'name': name, 'createdon': new DateTime.now()});
+  Future<void> createRaisingData(RaisingItem item) async {
+    return await userCollection.doc(uid).collection('raisings').add(
+        {'name': item.name, 'createdon': new DateTime.now(), 'createdby': uid});
   }
 
 //update raisings
-  Future<void> updateRaisingData(String name) async {
+  Future<void> updateRaisingData(RaisingItem item) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('raisings')
           .doc(docid)
           .set({
-        'name': name,
+        'name': item.name ?? '',
+        'createdon': item.createdon ?? DateTime.now(),
+        'createdby': item.createdby ?? uid
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateRaisingData: ${error.toString()}');
       return null;
     }
   }
@@ -123,54 +123,62 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteRaisingsData: ${error.toString()}');
       return null;
     }
   }
 
   //create sales
-  Future<void> createSaleData(String name, int value, String proposal,
-      String type, String state) async {
+  Future<void> createSaleData(SaleItem item) async {
     return await userCollection.doc(uid).collection('sales').add({
-      'name': name,
-      'value': value,
-      'type': type,
-      'state': state,
-      'proposal': proposal,
-      'createdon': new DateTime.now()
+      'name': item.name ?? '',
+      'value': item.value ?? 0,
+      'type': item.type ?? '0',
+      'state': item.state ?? '',
+      'proposal': item.proposal ?? '',
+      'proposalid': item.proposalid ?? '',
+      'house': item.house ?? '',
+      'houseid': item.houseid ?? '',
+      'createdon': new DateTime.now(),
+      'createdby': uid
     });
   }
 
   //create sales
-  Future<String> createSaleFromProposalData(String name, int value,
-      String proposal, String proposalid, String state) async {
+  Future<String> createSaleFromProposalData(SaleItem item) async {
     DocumentReference doc =
         await userCollection.doc(uid).collection('sales').add({
-      'name': name,
-      'value': value,
-      'state': state,
-      'proposal': proposal,
-      'proposalid': proposalid,
-      'createdon': new DateTime.now()
+      'name': item.name ?? '',
+      'value': item.value ?? 0,
+      'type': item.type ?? '0',
+      'state': item.state ?? '',
+      'proposal': item.proposal ?? '',
+      'proposalid': item.proposalid ?? '',
+      'house': item.house ?? '',
+      'houseid': item.houseid ?? '',
+      'createdon': new DateTime.now(),
+      'createdby': uid
     });
     return doc.id;
   }
 
 //update raisings
-  Future<void> updateSaleData(String name, int value, String proposal,
-      String proposalid, String type, String state, DateTime createdon) async {
+  Future<void> updateSaleData(SaleItem item) async {
     try {
       return await userCollection.doc(uid).collection('sales').doc(docid).set({
-        'name': name,
-        'value': value,
-        'type': type,
-        'state': state,
-        'proposal': proposal,
-        'proposalid': proposalid,
-        'createdon': createdon
+        'name': item.name ?? '',
+        'value': item.value ?? 0,
+        'type': item.type ?? '0',
+        'state': item.state ?? '',
+        'proposal': item.proposal ?? '',
+        'proposalid': item.proposalid ?? '',
+        'house': item.house ?? '',
+        'houseid': item.houseid ?? '',
+        'createdon': new DateTime.now(),
+        'createdby': uid
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateSaleData: ${error.toString()}');
       return null;
     }
   }
@@ -209,7 +217,7 @@ class DatabaseService {
         'date': date,
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateScriptureData: ${error.toString()}');
       return null;
     }
   }
@@ -223,7 +231,7 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteScriptureData: ${error.toString()}');
       return null;
     }
   }
@@ -247,7 +255,7 @@ class DatabaseService {
         'name': name,
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateServicePresentationData: ${error.toString()}');
       return null;
     }
   }
@@ -261,7 +269,7 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteServicePresentationData: ${error.toString()}');
       return null;
     }
   }
@@ -285,7 +293,7 @@ class DatabaseService {
         'name': name,
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateMediationContractData: ${error.toString()}');
       return null;
     }
   }
@@ -299,75 +307,84 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteMediationContractData: ${error.toString()}');
       return null;
     }
   }
 
 //create proposal
-  Future<void> createProposalData(String name, int value) async {
+  Future<void> createProposalData(ProposalItem item) async {
     return await userCollection.doc(uid).collection('proposal').add({
-      'name': name,
-      'value': value,
-      'state': '0',
-      'createdon': new DateTime.now()
+      'name': item.name ?? '',
+      'value': item.value ?? 0,
+      'state': item.state ?? '0',
+      'house': item.house ?? '',
+      'houseid': item.houseid ?? '',
+      'createdon': new DateTime.now(),
+      'createdby': uid
     });
   }
 
 //update proposal
-  Future<void> updateProposalData(
-      String name, int value, String state, DateTime createdon) async {
+  Future<void> updateProposalData(ProposalItem item) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
           .set({
-        'name': name,
-        'value': value,
-        'state': state,
-        'createdon': createdon
+        'name': item.name ?? '',
+        'value': item.value ?? 0,
+        'state': item.state ?? '0',
+        'house': item.house ?? '',
+        'houseid': item.houseid ?? '',
+        'createdon': item.createdon ?? new DateTime.now(),
+        'createdby': item.createdby ?? uid
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateProposalData: ${error.toString()}');
       return null;
     }
   }
 
-  Future<void> updateProposalToLost(
-      String name, int value, DateTime createdon) async {
+  Future<void> updateProposalToLost(ProposalItem item) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
           .set({
-        'name': name,
-        'value': value,
-        'state': '1',
-        'createdon': createdon
+        'name': item.name ?? '',
+        'value': item.value ?? 0,
+        'state': item.state ?? '1',
+        'house': item.house ?? '',
+        'houseid': item.houseid ?? '',
+        'createdon': item.createdon ?? new DateTime.now(),
+        'createdby': item.createdby ?? uid
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateProposalToLost: ${error.toString()}');
       return null;
     }
   }
 
-  Future<void> updateProposalToWon(
-      String name, int value, DateTime createdon) async {
+  Future<void> updateProposalToWon(ProposalItem item) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('proposal')
           .doc(docid)
           .set({
-        'name': name,
-        'value': value,
-        'state': '2',
-        'createdon': createdon
+        'name': item.name ?? '',
+        'value': item.value ?? 0,
+        'state': item.state ?? '2',
+        'house': item.house ?? '',
+        'houseid': item.houseid ?? '',
+        'createdon': item.createdon ?? new DateTime.now(),
+        'createdby': item.createdby ?? uid
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateProposalToWon: ${error.toString()}');
       return null;
     }
   }
@@ -381,7 +398,7 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteProposalData: ${error.toString()}');
       return null;
     }
   }
@@ -405,7 +422,7 @@ class DatabaseService {
         'name': name,
       });
     } catch (error) {
-      print(error.toString());
+      print('error updatePromiseBuySellData: ${error.toString()}');
       return null;
     }
   }
@@ -419,7 +436,7 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deletePromiseBuySellData: ${error.toString()}');
       return null;
     }
   }
@@ -449,7 +466,7 @@ class DatabaseService {
         'duration': duration,
       });
     } catch (error) {
-      print(error.toString());
+      print('error updateProspectingTimeData: ${error.toString()}');
       return null;
     }
   }
@@ -463,42 +480,46 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteProspectingTimeData: ${error.toString()}');
       return null;
     }
   }
 
 //create invoicing
-  Future<void> createInvoicingData(
-    String name,
-    double value,
-    String home,
-    DateTime date,
-  ) async {
+  Future<void> createInvoicingData(InvoicingItem item) async {
     return await userCollection.doc(uid).collection('invoicing').add({
-      'name': name,
-      'value': value,
-      'home': home,
-      'date': date,
-      'createdon': new DateTime.now()
+      'name': item.name,
+      'value': item.value,
+      'date': item.date,
+      'sale': item.sale ?? '',
+      'saleid': item.saleid ?? '',
+      'house': item.house ?? '',
+      'houseid': item.houseid ?? '',
+      'createdon': new DateTime.now(),
+      'createdby': uid
     });
   }
 
 //update invoicing
-  Future<void> updateInvoicingData(
-    String name,
-    double value,
-    String home,
-    DateTime date,
-  ) async {
+  Future<void> updateInvoicingData(InvoicingItem item) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('invoicing')
           .doc(docid)
-          .set({'name': name, 'value': value, 'home': home, 'date': date});
+          .set({
+        'name': item.name,
+        'value': item.value,
+        'date': item.date,
+        'sale': item.sale ?? '',
+        'saleid': item.saleid ?? '',
+        'house': item.house ?? '',
+        'houseid': item.houseid ?? '',
+        'createdon': item.createdon ?? new DateTime.now(),
+        'createdby': item.createdby ?? uid
+      });
     } catch (error) {
-      print(error.toString());
+      print('error updateInvoicingData: ${error.toString()}');
       return null;
     }
   }
@@ -512,7 +533,7 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteInvoicingData: ${error.toString()}');
       return null;
     }
   }
@@ -544,7 +565,7 @@ class DatabaseService {
           .doc(docid)
           .set({'name': name, 'value': value, 'date': date});
     } catch (error) {
-      print(error.toString());
+      print('error updateObjectiveData: ${error.toString()}');
       return null;
     }
   }
@@ -558,7 +579,7 @@ class DatabaseService {
           .doc(docid)
           .delete();
     } catch (error) {
-      print(error.toString());
+      print('error deleteObjectiveData: ${error.toString()}');
       return null;
     }
   }

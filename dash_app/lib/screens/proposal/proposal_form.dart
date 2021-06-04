@@ -1,5 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/proposal.dart';
+import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/screens/sales/sales_form_panel.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -78,7 +79,13 @@ class _ProposalFormState extends State<ProposalForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createProposalData(_name ?? '', _value ?? 0);
+                        .createProposalData(new ProposalItem(
+                      name: _name ?? '',
+                      value: _value ?? 0,
+                      state: '0',
+                      house: '',
+                      houseid: '',
+                    ));
                     Navigator.pop(context);
                   }
                 }),
@@ -140,11 +147,14 @@ class _ProposalFormState extends State<ProposalForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateProposalData(
-                                    _nameUpdated ?? _name,
-                                    _valueUpdated ?? _value,
-                                    data.state,
-                                    data.createdon);
+                                .updateProposalData(new ProposalItem(
+                                    name: _nameUpdated ?? _name,
+                                    value: _valueUpdated ?? _value,
+                                    state: data.state,
+                                    house: data.house,
+                                    houseid: data.houseid,
+                                    createdby: data.createdby,
+                                    createdon: data.createdon));
                             Navigator.pop(context);
                           }
                         }),
@@ -158,8 +168,14 @@ class _ProposalFormState extends State<ProposalForm> {
                           onPressed: () async {
                             if (_formkey.currentState.validate()) {
                               await DatabaseService(uid: userId, docid: docId)
-                                  .updateProposalToLost(_nameUpdated ?? _name,
-                                      _valueUpdated ?? _value, data.createdon);
+                                  .updateProposalToLost(new ProposalItem(
+                                      name: _nameUpdated ?? _name,
+                                      value: _valueUpdated ?? _value,
+                                      state: '1',
+                                      house: data.house,
+                                      houseid: data.houseid,
+                                      createdby: data.createdby,
+                                      createdon: data.createdon));
                               Navigator.pop(context);
                             }
                           }),
@@ -173,15 +189,24 @@ class _ProposalFormState extends State<ProposalForm> {
                           onPressed: () async {
                             if (_formkey.currentState.validate()) {
                               await DatabaseService(uid: userId, docid: docId)
-                                  .updateProposalToWon(_nameUpdated ?? _name,
-                                      _valueUpdated ?? _value, data.createdon);
+                                  .updateProposalToWon(new ProposalItem(
+                                      name: _nameUpdated ?? _name,
+                                      value: _valueUpdated ?? _value,
+                                      state: '2',
+                                      house: data.house,
+                                      houseid: data.houseid,
+                                      createdby: data.createdby,
+                                      createdon: data.createdon));
                               String docid = await DatabaseService(uid: userId)
-                                  .createSaleFromProposalData(
-                                      '',
-                                      _valueUpdated ?? _value,
-                                      _nameUpdated ?? _name,
-                                      data.id,
-                                      '0');
+                                  .createSaleFromProposalData(new SaleItem(
+                                      name: '',
+                                      value: _valueUpdated ?? _value,
+                                      type: '0',
+                                      state: '0',
+                                      proposal: _nameUpdated ?? _name,
+                                      proposalid: data.id,
+                                      house: data.house ?? '',
+                                      houseid: data.houseid ?? ''));
 
                               Navigator.push(
                                   context,

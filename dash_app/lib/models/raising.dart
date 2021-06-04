@@ -14,7 +14,9 @@ class RaisingItem {
             ? DateTime.fromMillisecondsSinceEpoch(
                 (data['createdon']).seconds * 1000)
             : new DateTime.now(),
-        createdby: user ?? '');
+        createdby: data['createdby'] != null && data['createdby'] != ''
+            ? data['createdby']
+            : user);
   }
   final String id;
   final String name;

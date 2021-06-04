@@ -163,11 +163,15 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                   onPressed: () async {
                     if (_formkey.currentState.validate()) {
                       await DatabaseService(uid: userId).createSaleData(
-                          _name ?? '',
-                          _value ?? 0,
-                          _proposal ?? '',
-                          _type ?? '0',
-                          _state ?? '0');
+                          new SaleItem(
+                              name: _name ?? '',
+                              value: _value ?? 0,
+                              type: _type ?? '0',
+                              state: _state ?? '0',
+                              proposal: _proposal ?? '',
+                              proposalid: '',
+                              house: '',
+                              houseid: ''));
                       Navigator.pop(context);
                     }
                   }),
@@ -321,14 +325,18 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                           onPressed: () async {
                             if (_formkey.currentState.validate()) {
                               await DatabaseService(uid: userId, docid: docId)
-                                  .updateSaleData(
-                                      _nameUpdated ?? _name,
-                                      _valueUpdated ?? _value,
-                                      _proposalUpdated ?? _proposal,
-                                      saleData.proposalid ?? '',
-                                      _typeUpdated ?? _type,
-                                      _stateUpdated ?? _state,
-                                      saleData.createdon ?? new DateTime.now());
+                                  .updateSaleData(new SaleItem(
+                                      name: _nameUpdated ?? _name,
+                                      value: _valueUpdated ?? _value,
+                                      type: _typeUpdated ?? _type,
+                                      state: _stateUpdated ?? _state,
+                                      proposal: _proposal ?? '',
+                                      proposalid: saleData.proposalid,
+                                      house: saleData.house,
+                                      houseid: saleData.houseid,
+                                      createdby: saleData.createdby,
+                                      createdon: saleData.createdon ??
+                                          new DateTime.now()));
                               Navigator.pop(context);
                             }
                           }),

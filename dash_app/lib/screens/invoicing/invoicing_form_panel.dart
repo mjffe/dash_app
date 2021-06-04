@@ -108,10 +108,11 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                   onPressed: () async {
                     if (_formkey.currentState.validate()) {
                       await DatabaseService(uid: userId).createInvoicingData(
-                          _name ?? '',
-                          _value ?? 0,
-                          _home ?? '',
-                          _selectedDate ?? DateTime.now());
+                          new InvoicingItem(
+                              name: _name ?? '',
+                              value: _value ?? 0,
+                              house: _home ?? '',
+                              date: _selectedDate ?? DateTime.now()));
                       Navigator.pop(context);
                     }
                   }),
@@ -242,11 +243,18 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                           onPressed: () async {
                             if (_formkey.currentState.validate()) {
                               await DatabaseService(uid: userId, docid: docId)
-                                  .updateInvoicingData(
-                                      _nameUpdated ?? _name,
-                                      _valueUpdated ?? _value,
-                                      _homeUpdated ?? _home,
-                                      _selectedDateUpdated ?? _selectedDate);
+                                  .updateInvoicingData(new InvoicingItem(
+                                      name: _nameUpdated ?? _name,
+                                      value: _valueUpdated ?? _value,
+                                      date:
+                                          _selectedDateUpdated ?? _selectedDate,
+                                      datemonth: data.datemonth,
+                                      sale: data.sale,
+                                      saleid: data.saleid,
+                                      house: data.house,
+                                      houseid: data.houseid,
+                                      createdon: data.createdon,
+                                      createdby: data.createdby));
                               Navigator.pop(context);
                             }
                           }),

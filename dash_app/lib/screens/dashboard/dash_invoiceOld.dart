@@ -6,22 +6,23 @@ import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/dash_invoice_view_model.dart';
 import 'package:dashapp/screens/invoicing/invoicing.dart';
+import 'package:dashapp/screens/objective/objective.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import "package:collection/collection.dart";
 
-class Dash_LineChart2 extends StatefulWidget {
+class Dash_LineChart extends StatefulWidget {
   // Dash_PieChart({Key key}) : super(key: key);
-  Dash_LineChart2(this.uData);
+  Dash_LineChart(this.uData);
   final UserData uData;
 
   @override
-  _Dash_LineChart2State2 createState() => _Dash_LineChart2State2(uData);
+  _Dash_LineChartState createState() => _Dash_LineChartState(uData);
 }
 
-class _Dash_LineChart2State2 extends State<Dash_LineChart2> {
-  _Dash_LineChart2State2(this.uData);
+class _Dash_LineChartState extends State<Dash_LineChart> {
+  _Dash_LineChartState(this.uData);
   final UserData uData;
 
   @override
@@ -38,7 +39,7 @@ class _Dash_LineChart2State2 extends State<Dash_LineChart2> {
               borderRadius: BorderRadius.all(Radius.circular(10.0))),
           child: new Padding(
               padding: EdgeInsets.all(3),
-              child: new Center(child: LineChartStreamData02(uData)
+              child: new Center(child: LineChartStreamData0(uData)
                   //PieChartSample2(2, 3, 4, 1)
                   //PieChartSample2()
                   ))),
@@ -46,8 +47,8 @@ class _Dash_LineChart2State2 extends State<Dash_LineChart2> {
   }
 }
 
-class LineChartStreamData02 extends StatelessWidget {
-  LineChartStreamData02(this.uData);
+class LineChartStreamData0 extends StatelessWidget {
+  LineChartStreamData0(this.uData);
   final UserData uData;
 
   @override
@@ -55,13 +56,13 @@ class LineChartStreamData02 extends StatelessWidget {
     //final user = Provider.of<FirebaseUser>(context);
     return Provider<InvoiceChartViewModel>(
       create: (_) => InvoiceChartViewModel(uData: uData),
-      child: LineChartStreamData2(uData),
+      child: LineChartStreamData(uData),
     );
   }
 }
 
-class LineChartStreamData2 extends StatelessWidget {
-  LineChartStreamData2(this.uData);
+class LineChartStreamData extends StatelessWidget {
+  LineChartStreamData(this.uData);
   final UserData uData;
   @override
   Widget build(BuildContext context) {
@@ -117,28 +118,31 @@ class LineChartStreamData2 extends StatelessWidget {
               objectivesDash
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
+
             if (invoicesDash != null || objectivesDash != null)
-              return Dash_Invoice2(invoicesDash, objectivesDash, uData);
+              return Dash_Invoice(invoicesDash, objectivesDash, uData);
             else
               return CircularProgressIndicator();
           }
           return CircularProgressIndicator();
+          //Text('Loading');
+          //return PieChartSample2(2, 2, 2, 2);
         });
   }
 }
 
-class Dash_Invoice2 extends StatefulWidget {
-  Dash_Invoice2(this.invoicesDash, this.objectivesDash, this.uData);
+class Dash_Invoice extends StatefulWidget {
+  Dash_Invoice(this.invoicesDash, this.objectivesDash, this.uData);
   List<Dash> invoicesDash;
   List<Dash> objectivesDash;
   final UserData uData;
   @override
-  _Dash_InvoiceState2 createState() =>
-      _Dash_InvoiceState2(invoicesDash, objectivesDash, uData);
+  _Dash_InvoiceState createState() =>
+      _Dash_InvoiceState(invoicesDash, objectivesDash, uData);
 }
 
-class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
-  _Dash_InvoiceState2(this.invoicesDash, this.objectivesDash, this.uData);
+class _Dash_InvoiceState extends State<Dash_Invoice> {
+  _Dash_InvoiceState(this.invoicesDash, this.objectivesDash, this.uData);
   List<Dash> invoicesDash;
   List<Dash> objectivesDash;
   final UserData uData;
@@ -164,9 +168,8 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                 primaryXAxis: CategoryAxis(),
                 // Chart title
                 title: ChartTitle(
-                  text: AppLocalizations.of(context).translate('invoicing'),
-                  // 'invoicingtest',
-                ),
+                    text: AppLocalizations.of(context)
+                        .translate('invoicing')), //invoicing
                 // Enable legend
                 legend:
                     Legend(isVisible: true, position: LegendPosition.bottom),
@@ -199,8 +202,8 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                 //onChartTouchInteractionDown: SelectionChangedHandler(),
                 //borderColor: Colors.red,// cor a volta do grafico
                 //series
-                series: <ChartSeries<Dash, String>>[
-                  ColumnSeries(
+                series: <LineSeries<Dash, String>>[
+                  LineSeries(
                       dataSource: objectivesDash,
                       xValueMapper: (Dash sales, _) => sales.month,
                       yValueMapper: (Dash sales, _) => sales.value,
@@ -208,7 +211,6 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                           .translate('objectives'), //objectives
                       //color: Color(0xffec8385),
                       color: Color(0xffda344d),
-                      //dataLabelSettings: DataLabelSettings(isVisible: true),
                       markerSettings: MarkerSettings(
                           isVisible: true,
                           width: 5,
@@ -216,14 +218,13 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                           shape: DataMarkerType.circle,
                           borderWidth: 2,
                           borderColor: Color(0xffec8385))),
-                  ColumnSeries(
+                  LineSeries(
                       dataSource: invoicesDash,
                       xValueMapper: (Dash sales, _) => sales.month,
                       yValueMapper: (Dash sales, _) => sales.value,
                       color: Color(0xff006400),
                       name: AppLocalizations.of(context)
                           .translate('invoicing'), //invoicing
-                      //dataLabelSettings: DataLabelSettings(isVisible: true),
                       markerSettings: MarkerSettings(
                           isVisible: true,
                           width: 5,

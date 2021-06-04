@@ -4,11 +4,14 @@ class InvoicingItem {
   InvoicingItem(
       {this.id,
       this.name,
-      this.home,
       this.createdon,
       this.value,
       this.date,
       this.datemonth,
+      this.sale,
+      this.saleid,
+      this.house,
+      this.houseid,
       this.createdby});
 
   factory InvoicingItem.fromFirestore(DocumentSnapshot doc) {
@@ -18,7 +21,6 @@ class InvoicingItem {
     return InvoicingItem(
         id: doc.id,
         name: data['name'] ?? '',
-        home: data['home'] ?? '',
         createdon: data['createdon'] != null && data['createdon'] != ''
             ? DateTime.fromMillisecondsSinceEpoch(
                 (data['createdon']).seconds * 1000)
@@ -31,14 +33,23 @@ class InvoicingItem {
             ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
                 .month
             : new DateTime.now().month,
-        createdby: user ?? '');
+        sale: data['sale'] ?? '',
+        saleid: data['saleid'] ?? '',
+        house: data['house'] ?? '',
+        houseid: data['houseid'] ?? '',
+        createdby: data['createdby'] != null && data['createdby'] != ''
+            ? data['createdby']
+            : user);
   }
   final String id;
   final String name;
-  final String home;
-  final DateTime createdon;
   final DateTime date;
   final double value;
   final int datemonth;
+  final String saleid;
+  final String sale;
+  final String houseid;
+  final String house;
+  final DateTime createdon;
   final String createdby;
 }

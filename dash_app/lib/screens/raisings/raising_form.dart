@@ -59,7 +59,7 @@ class _RaisingFormState extends State<RaisingForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createRaisingData(_name ?? '');
+                        .createRaisingData(new RaisingItem(name: _name ?? ''));
                     Navigator.pop(context);
                   }
                 }),
@@ -71,13 +71,13 @@ class _RaisingFormState extends State<RaisingForm> {
           stream: DatabaseService(uid: userId, docid: docId).raisingData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              RaisingItem leadData = snapshot.data;
+              RaisingItem data = snapshot.data;
               // setState(() {
               //   _name = leadData.name;
               //   _email = leadData.email;
               //   _phone = leadData.phone;
               // });
-              _name = leadData.name;
+              _name = data.name;
               return Form(
                 key: _formkey,
                 child: Column(
@@ -108,9 +108,10 @@ class _RaisingFormState extends State<RaisingForm> {
                         onPressed: () async {
                           if (_formkey.currentState.validate()) {
                             await DatabaseService(uid: userId, docid: docId)
-                                .updateRaisingData(
-                              _nameUpdated ?? _name,
-                            );
+                                .updateRaisingData(new RaisingItem(
+                                    name: _nameUpdated ?? _name,
+                                    createdon: data.createdon,
+                                    createdby: data.createdby));
                             Navigator.pop(context);
                           }
                         }),
