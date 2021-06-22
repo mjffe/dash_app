@@ -25,7 +25,8 @@ class InvoicingItem {
             ? DateTime.fromMillisecondsSinceEpoch(
                 (data['createdon']).seconds * 1000)
             : new DateTime.now(),
-        value: data['value'] ?? 0,
+        // value: data['value'] ?? 0,
+        value: data['value'] != null ? data['value'].toDouble() : 0.0,
         date: data['date'] != null && data['date'] != ''
             ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
             : new DateTime.now(),

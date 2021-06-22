@@ -1,5 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/lead.dart';
+import 'package:dashapp/models/user.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_bar.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -38,15 +39,31 @@ class _LeadFormPanelState extends State<LeadFormPanel> {
   String _leadtypeUpdated;
 
   String _getLeadTypeName(String index) {
+    //print(index);
     switch (index) {
-      case '0':
+      case 'prospecting':
         {
           return AppLocalizations.of(context).translate('prospecting');
         }
         break;
-      case '1':
+      case 'buyercustomers':
         {
           return AppLocalizations.of(context).translate('buyercustomers');
+        }
+        break;
+      case 'site':
+        {
+          return AppLocalizations.of(context).translate('site');
+        }
+        break;
+      case 'socialnetwork':
+        {
+          return AppLocalizations.of(context).translate('socialnetwork');
+        }
+        break;
+      case 'reference':
+        {
+          return AppLocalizations.of(context).translate('reference');
         }
         break;
       default:
@@ -107,23 +124,61 @@ class _LeadFormPanelState extends State<LeadFormPanel> {
                 onChanged: (val) => setState(() => _phone = val),
               ),
               SizedBox(height: 20.0),
-              DropdownButtonFormField(
-                //value: _leadtype,
-                //decoration: textInputDecoration,
-                decoration: textInputDecoration.copyWith(
-                  hintText: AppLocalizations.of(context).translate('lead_type'),
-                ),
-                items: leadtypes.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(_getLeadTypeName(type)),
-                  );
-                }).toList(),
-                validator: (val) => val == null
-                    ? AppLocalizations.of(context).translate('validleadtype')
-                    : null,
-                onChanged: (val) => setState(() => _leadtype = val),
-              ),
+              // DropdownButtonFormField(
+              //   //value: _leadtype,
+              //   //decoration: textInputDecoration,
+              //   decoration: textInputDecoration.copyWith(
+              //     hintText: AppLocalizations.of(context).translate('lead_type'),
+              //   ),
+              //   items: leadtypes.map((type) {
+              //     return DropdownMenuItem(
+              //       value: type,
+              //       child: Text(_getLeadTypeName(type)),
+              //     );
+              //   }).toList(),
+              //   validator: (val) => val == null
+              //       ? AppLocalizations.of(context).translate('validleadtype')
+              //       : null,
+              //   onChanged: (val) => setState(() => _leadtype = val),
+              // ),
+              StreamBuilder<UserData>(
+                  //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                  stream: DatabaseService(uid: userId).userInfo(userId),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData)
+                      return Text("Loading.....");
+                    else {
+                      UserData d = snapshot.data;
+                      List<DropdownMenuItem> types = [];
+                      types.add(
+                        DropdownMenuItem(
+                          child: Text(''),
+                          value: '',
+                        ),
+                      );
+                      for (var i = 0; i < d.leadtypes.length; i++) {
+                        //RaisingItem raising = d[i];
+                        types.add(
+                          DropdownMenuItem(
+                            child: Text(
+                              _getLeadTypeName(d.leadtypes[i]),
+                            ),
+                            value: "${d.leadtypes[i]}",
+                          ),
+                        );
+                      }
+
+                      return DropdownButtonFormField(
+                        decoration: textInputDecoration.copyWith(
+                          hintText: AppLocalizations.of(context)
+                              .translate('Selected an house'),
+                        ),
+                        items: types,
+                        //value: leadData.houseid,
+                        onChanged: (val) => setState(() => _leadtype = val),
+                      );
+                    }
+                  }),
               SizedBox(height: 10.0),
               RaisedButton(
                   color: MyColors.lightBlue,
@@ -165,88 +220,134 @@ class _LeadFormPanelState extends State<LeadFormPanel> {
                 _leadtype = leadData.leadtype;
                 return Form(
                   key: _formkey,
-                  child: Column(
-                    children: <Widget>[
-                      // Text(
-                      //   AppLocalizations.of(context).translate('update_lead'),
-                      //   style: TextStyle(fontSize: 18.0),
-                      // ),
-                      SizedBox(height: 20.0),
-                      TextFormField(
-                        decoration: textInputDecoration.copyWith(
-                          hintText:
-                              AppLocalizations.of(context).translate('name'),
-                        ),
-                        initialValue: _name,
-                        validator: (val) => val.isEmpty
-                            ? AppLocalizations.of(context)
-                                .translate('validname')
-                            : null,
-                        onChanged: (val) => setState(() => _nameUpdated = val),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextFormField(
-                        decoration: textInputDecoration.copyWith(
-                          hintText:
-                              AppLocalizations.of(context).translate('email'),
-                        ),
-                        initialValue: _email,
-                        validator: (val) => val.isEmpty
-                            ? AppLocalizations.of(context)
-                                .translate('validemail')
-                            : null,
-                        onChanged: (val) => setState(() => _emailUpdated = val),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextFormField(
-                        decoration: textInputDecoration.copyWith(
-                          hintText: AppLocalizations.of(context)
-                              .translate('phone_number'),
-                        ),
-                        initialValue: _phone,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ], // Only numbers can be entered
-                        validator: (val) => val.isEmpty
-                            ? AppLocalizations.of(context)
-                                .translate('validphone')
-                            : null,
-                        onChanged: (val) => setState(() => _phoneUpdated = val),
-                      ),
-                      SizedBox(height: 20.0),
-                      DropdownButtonFormField(
-                        value: _leadtype,
-                        decoration: textInputDecoration,
-                        items: leadtypes.map((type) {
-                          return DropdownMenuItem(
-                            value: type,
-                            child: //Text('sdfsdf'),
-                                Text(_getLeadTypeName(type)),
-                          );
-                        }).toList(),
-                        onChanged: (val) =>
-                            setState(() => _leadtypeUpdated = val),
-                      ),
-                      SizedBox(height: 10.0),
-                      RaisedButton(
-                          color: MyColors.lightBlue,
-                          child: Text(
-                            AppLocalizations.of(context).translate('update'),
-                            style: TextStyle(color: Colors.white),
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(15),
+                    child: Column(
+                      children: <Widget>[
+                        // Text(
+                        //   AppLocalizations.of(context).translate('update_lead'),
+                        //   style: TextStyle(fontSize: 18.0),
+                        // ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                            hintText:
+                                AppLocalizations.of(context).translate('name'),
                           ),
-                          onPressed: () async {
-                            if (_formkey.currentState.validate()) {
-                              await DatabaseService(uid: userId, docid: docId)
-                                  .updateLeadData(
-                                      _nameUpdated ?? _name,
-                                      _emailUpdated ?? _email,
-                                      _phoneUpdated ?? _phone,
-                                      _leadtypeUpdated ?? _leadtype);
-                              Navigator.pop(context);
-                            }
-                          }),
-                    ],
+                          initialValue: _name,
+                          validator: (val) => val.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('validname')
+                              : null,
+                          onChanged: (val) =>
+                              setState(() => _nameUpdated = val),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                            hintText:
+                                AppLocalizations.of(context).translate('email'),
+                          ),
+                          initialValue: _email,
+                          validator: (val) => val.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('validemail')
+                              : null,
+                          onChanged: (val) =>
+                              setState(() => _emailUpdated = val),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextFormField(
+                          decoration: textInputDecoration.copyWith(
+                            hintText: AppLocalizations.of(context)
+                                .translate('phone_number'),
+                          ),
+                          initialValue: _phone,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ], // Only numbers can be entered
+                          validator: (val) => val.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('validphone')
+                              : null,
+                          onChanged: (val) =>
+                              setState(() => _phoneUpdated = val),
+                        ),
+                        SizedBox(height: 20.0),
+                        // DropdownButtonFormField(
+                        //   value: _leadtype,
+                        //   decoration: textInputDecoration,
+                        //   items: leadtypes.map((type) {
+                        //     return DropdownMenuItem(
+                        //       value: type,
+                        //       child: //Text('sdfsdf'),
+                        //           Text(_getLeadTypeName(type)),
+                        //     );
+                        //   }).toList(),
+                        //   onChanged: (val) =>
+                        //       setState(() => _leadtypeUpdated = val),
+                        // ),
+                        StreamBuilder<UserData>(
+                            //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                            stream:
+                                DatabaseService(uid: userId).userInfo(userId),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData)
+                                return Text("Loading.....");
+                              else {
+                                UserData d = snapshot.data;
+                                List<DropdownMenuItem> types = [];
+                                types.add(
+                                  DropdownMenuItem(
+                                    child: Text(''),
+                                    value: '',
+                                  ),
+                                );
+                                for (var i = 0; i < d.leadtypes.length; i++) {
+                                  //RaisingItem raising = d[i];
+                                  types.add(
+                                    DropdownMenuItem(
+                                      child: Text(
+                                        _getLeadTypeName(d.leadtypes[i]),
+                                      ),
+                                      value: "${d.leadtypes[i]}",
+                                    ),
+                                  );
+                                }
+
+                                return DropdownButtonFormField(
+                                  decoration: textInputDecoration.copyWith(
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('Selected an house'),
+                                  ),
+                                  items: types,
+                                  value: leadData.leadtype,
+                                  onChanged: (val) =>
+                                      setState(() => _leadtype = val),
+                                );
+                              }
+                            }),
+                        SizedBox(height: 10.0),
+                        RaisedButton(
+                            color: MyColors.lightBlue,
+                            child: Text(
+                              AppLocalizations.of(context).translate('update'),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () async {
+                              if (_formkey.currentState.validate()) {
+                                await DatabaseService(uid: userId, docid: docId)
+                                    .updateLeadData(
+                                        _nameUpdated ?? _name,
+                                        _emailUpdated ?? _email,
+                                        _phoneUpdated ?? _phone,
+                                        _leadtypeUpdated ?? _leadtype);
+                                Navigator.pop(context);
+                              }
+                            }),
+                      ],
+                    ),
                   ),
                 );
               } else {

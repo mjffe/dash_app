@@ -5,6 +5,8 @@ class SaleItem {
       {this.id,
       this.name,
       this.value,
+      this.date,
+      this.datemonth,
       this.type,
       this.state,
       this.proposalid,
@@ -21,7 +23,14 @@ class SaleItem {
     return SaleItem(
         id: doc.id,
         name: data['name'] ?? '',
-        value: data['value'] ?? 0,
+        value: data['value'] != null ? data['value'].toDouble() : 0.0,
+        date: data['date'] != null && data['date'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
+            : new DateTime.now(),
+        datemonth: data['date'] != null && data['date'] != ''
+            ? DateTime.fromMillisecondsSinceEpoch((data['date']).seconds * 1000)
+                .month
+            : new DateTime.now().month,
         type: data['type'] ?? '0',
         state: data['state'] ?? '0',
         proposal: data['proposal'] ?? '',
@@ -38,7 +47,9 @@ class SaleItem {
   }
   final String id;
   final String name;
-  final int value;
+  final double value;
+  final DateTime date;
+  final int datemonth;
   final String type;
   final String state;
   final String proposalid;

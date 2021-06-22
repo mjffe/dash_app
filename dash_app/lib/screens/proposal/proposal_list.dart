@@ -1,6 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/proposal.dart';
-import 'package:dashapp/screens/proposal/proposal_form.dart';
+import 'package:dashapp/screens/proposal/proposal_form_panel.dart';
 import 'package:dashapp/screens/proposal/proposal_view_model.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_icons.dart';
@@ -66,18 +66,12 @@ class ProposalList extends StatelessWidget {
                           title: Text(proposal[index].name),
                           subtitle: Text(
                               '${AppLocalizations.of(context).translate('value')}:${proposal[index].value} '),
-                          onTap: () => showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 60),
-                                  child: ProposalForm(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ProposalForm(
                                       proposal[index].createdby,
-                                      proposal[index]
-                                          .id), //SettingsForm(userid),
-                                );
-                              }),
+                                      proposal[index].id))),
                         ),
                       ),
                     ),

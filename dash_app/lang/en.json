@@ -19,6 +19,7 @@
   "invoicing":"Invoicing",
   "objectives":"Objectives",
   "settings":"Settings",
+  "house":"House",
 
   "LeadPage":"LeadPage",
   "name":"Name",
@@ -34,7 +35,10 @@
   "lead_type":"Lead Type",
   "validleadtype":"Please enter a Lead Type",
   "prospecting":"Prospecting ",
-  "buyercustomers":"Buyer customers",
+  "buyercustomers":"Buyer Customers",
+  "site":"Site",
+  "socialnetwork":"Social Network",
+  "reference":"Reference",
 
   "SalePage":"SalePage",
   "new_sale":"New Sale",
@@ -73,6 +77,8 @@
   "saleType":"Type",
   "saleTypeShareshared":"Shared",
   "saleTypeSharefull":"Full",
+  "tolostsale": "Lost Sale",
+  "towonsale": "Create Invoice",
   "ProspectingTimeTitle":"Prospecting Time (h)",
   "ProspectingTimeName":"Time (h)",
   "DateTarget" :"Target",

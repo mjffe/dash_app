@@ -40,7 +40,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
     if (docId.isEmpty)
       return Scaffold(
         appBar:
-            customAppBar(AppLocalizations.of(context).translate('sales')).bar(),
+            customAppBar(AppLocalizations.of(context).translate('invoicing'))
+                .bar(),
         body: Form(
           key: _formkey,
           child: Column(

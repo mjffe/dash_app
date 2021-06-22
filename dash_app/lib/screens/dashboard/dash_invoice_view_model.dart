@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dashapp/models/invoicechart.dart';
-import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ class InvoiceChartViewModel {
   final UserData uData;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Stream<InvoiceChartItem> moviesUserFavouritesStream() {
+  Stream<InvoiceChartItem> invoiceChartStream() {
     Stream<QuerySnapshot> s1 = users
         .doc(uData.uid)
         .collection('objective')
@@ -24,7 +23,14 @@ class InvoiceChartViewModel {
         .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
         .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
         .snapshots();
-    var send = [s1, s2];
+    Stream<QuerySnapshot> s3 = users
+        .doc(uData.uid)
+        .collection('sales')
+        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .snapshots();
+
+    var send = [s1, s2, s3];
     if (uData.role == '0' || uData.role == '1') {
       for (var item in uData.consultants) {
         send.add(users
@@ -33,12 +39,20 @@ class InvoiceChartViewModel {
             .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
             .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
             .snapshots());
+
+        send.add(users
+            .doc(item)
+            .collection('sales')
+            .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
       }
     }
 
     return Rx.combineLatest(send.toList(), (List<QuerySnapshot> values) {
-      List<InvoicingItem> invo;
-      List<InvoicingItem> invoJoin = [];
+      List<ChartItem> itens;
+      List<ChartItem> invo = [];
+      List<ChartItem> sale = [];
       List<ObjectiveItem> obj;
 
       for (var i = 0; i < values.length; i++) {
@@ -48,17 +62,27 @@ class InvoiceChartViewModel {
               .map((doc) => ObjectiveItem.fromFirestore(doc))
               .toList();
         } else {
-          invo = values[i]
+          //print('Document found at path: ${values[i].query}');
+          //print('Document found at path: ${values[i].docs.ref.path}');
+          // for (var doc in values[i].docs) {
+          //    print('Document found at path: ${doc.ref.path}');
+          // }
+          itens = values[i]
               .docs
-              .map((doc) => InvoicingItem.fromFirestore(doc))
+              .map((doc) => ChartItem.fromFirestore(doc))
               .toList();
-          if (invo.length > 0) {
-            invo.forEach((element) => invoJoin.add(element));
+          if (itens.length > 0) {
+            if (itens.first.collection == 'invoicing')
+              itens.forEach((element) => invo.add(element));
+            if (itens.first.collection == 'sales')
+              itens.forEach((element) => sale.add(element));
           }
           //invoJoin.addAll(invo);
         }
       }
-      return InvoiceChartItem(invoices: invoJoin, objectives: obj);
+      sale.removeWhere((item) => item.collection == null);
+
+      return InvoiceChartItem(invoices: invo, objectives: obj, sales: sale);
     });
   }
 }

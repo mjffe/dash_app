@@ -1,5 +1,9 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/user.dart';
+import 'package:dashapp/screens/sales/ShareFull/ShareFull_list.dart';
+import 'package:dashapp/screens/sales/ShareFull/ShareFull_view_model.dart';
+import 'package:dashapp/screens/sales/ShareShared/ShareShared_list.dart';
+import 'package:dashapp/screens/sales/ShareShared/ShareShared_view_model.dart';
 import 'package:dashapp/screens/sales/promisebuysell/promisebuysell_list.dart';
 import 'package:dashapp/screens/sales/sales_list.dart';
 import 'package:dashapp/screens/sales/sales_view_model.dart';
@@ -88,6 +92,42 @@ class PromiseBuySellFiltred extends StatelessWidget {
                 AppLocalizations.of(context).translate('promise_buy_sell'))
             .bar(),
         body: PromiseBuySellList(),
+      ),
+    );
+  }
+}
+
+class SaleTypeShareSharedFiltred extends StatelessWidget {
+  SaleTypeShareSharedFiltred(this.uData);
+  final UserData uData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider<SaleShareSharedViewModel>(
+      create: (_) => SaleShareSharedViewModel(uData: uData),
+      child: Scaffold(
+        backgroundColor: MyColors.appBarBackgroundColor,
+        appBar:
+            customAppBar(AppLocalizations.of(context).translate('sales')).bar(),
+        body: SaleTypeShareSharedList(),
+      ),
+    );
+  }
+}
+
+class SaleTypeShareFullFiltred extends StatelessWidget {
+  SaleTypeShareFullFiltred(this.uData);
+  final UserData uData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Provider<SaleShareFullViewModel>(
+      create: (_) => SaleShareFullViewModel(uData: uData),
+      child: Scaffold(
+        backgroundColor: MyColors.appBarBackgroundColor,
+        appBar:
+            customAppBar(AppLocalizations.of(context).translate('sales')).bar(),
+        body: SaleTypeShareFullList(),
       ),
     );
   }

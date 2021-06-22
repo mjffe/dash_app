@@ -68,14 +68,15 @@ class LineChartStreamData2 extends StatelessWidget {
     final viewModel =
         Provider.of<InvoiceChartViewModel>(context, listen: false);
     return StreamBuilder<InvoiceChartItem>(
-        stream: viewModel.moviesUserFavouritesStream(),
+        stream: viewModel.invoiceChartStream(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Dash> invoicesDash;
+            List<Dash> salesDash;
             List<Dash> objectivesDash;
             if (snapshot.data.invoices.length > 0) {
               Map invoicesgroup = groupBy(
-                  snapshot.data.invoices, (InvoicingItem obj) => obj.datemonth);
+                  snapshot.data.invoices, (ChartItem obj) => obj.datemonth);
               if (invoicesgroup == null) {
                 return Text('data3');
               }
@@ -85,7 +86,7 @@ class LineChartStreamData2 extends StatelessWidget {
                   // 'group': k,
                   // 'list': v,
                   'sumOfduration': v.fold(
-                      0, (prev, InvoicingItem element) => prev + element.value),
+                      0, (prev, ChartItem element) => prev + element.value),
                 };
               });
               invoicesDash = invoicesSum.entries
@@ -94,6 +95,27 @@ class LineChartStreamData2 extends StatelessWidget {
                   .toList();
               invoicesDash
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
+            }
+            if (snapshot.data.sales.length > 0) {
+              Map salesgroup = groupBy(
+                  snapshot.data.sales, (ChartItem obj) => obj.datemonth);
+              // if (salesgroup == null) {
+              //   return Text('data3');
+              // }
+              Map salesSum = Map();
+              salesgroup.forEach((k, v) {
+                salesSum[k] = {
+                  // 'group': k,
+                  // 'list': v,
+                  'sumOfduration': v.fold(
+                      0, (prev, ChartItem element) => prev + element?.value),
+                };
+              });
+              salesDash = salesSum.entries
+                  .map((entry) => Dash(entry.key, entry.value['sumOfduration'],
+                      AppLocalizations.of(context).locale.languageCode))
+                  .toList();
+              salesDash.sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
             if (snapshot.data.objectives.length > 0) {
               Map newMap = groupBy(snapshot.data.objectives,
@@ -118,7 +140,8 @@ class LineChartStreamData2 extends StatelessWidget {
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
             if (invoicesDash != null || objectivesDash != null)
-              return Dash_Invoice2(invoicesDash, objectivesDash, uData);
+              return Dash_Invoice2(
+                  invoicesDash, salesDash, objectivesDash, uData);
             else
               return CircularProgressIndicator();
           }
@@ -128,18 +151,22 @@ class LineChartStreamData2 extends StatelessWidget {
 }
 
 class Dash_Invoice2 extends StatefulWidget {
-  Dash_Invoice2(this.invoicesDash, this.objectivesDash, this.uData);
+  Dash_Invoice2(
+      this.invoicesDash, this.salesDash, this.objectivesDash, this.uData);
   List<Dash> invoicesDash;
+  List<Dash> salesDash;
   List<Dash> objectivesDash;
   final UserData uData;
   @override
   _Dash_InvoiceState2 createState() =>
-      _Dash_InvoiceState2(invoicesDash, objectivesDash, uData);
+      _Dash_InvoiceState2(invoicesDash, salesDash, objectivesDash, uData);
 }
 
 class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
-  _Dash_InvoiceState2(this.invoicesDash, this.objectivesDash, this.uData);
+  _Dash_InvoiceState2(
+      this.invoicesDash, this.salesDash, this.objectivesDash, this.uData);
   List<Dash> invoicesDash;
+  List<Dash> salesDash;
   List<Dash> objectivesDash;
   final UserData uData;
 
@@ -200,23 +227,7 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                 //borderColor: Colors.red,// cor a volta do grafico
                 //series
                 series: <ChartSeries<Dash, String>>[
-                  ColumnSeries(
-                      dataSource: objectivesDash,
-                      xValueMapper: (Dash sales, _) => sales.month,
-                      yValueMapper: (Dash sales, _) => sales.value,
-                      name: AppLocalizations.of(context)
-                          .translate('objectives'), //objectives
-                      //color: Color(0xffec8385),
-                      color: Color(0xffda344d),
-                      //dataLabelSettings: DataLabelSettings(isVisible: true),
-                      markerSettings: MarkerSettings(
-                          isVisible: true,
-                          width: 5,
-                          height: 5,
-                          shape: DataMarkerType.circle,
-                          borderWidth: 2,
-                          borderColor: Color(0xffec8385))),
-                  ColumnSeries(
+                  StackedColumnSeries(
                       dataSource: invoicesDash,
                       xValueMapper: (Dash sales, _) => sales.month,
                       yValueMapper: (Dash sales, _) => sales.value,
@@ -228,9 +239,41 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                           isVisible: true,
                           width: 5,
                           height: 5,
-                          shape: DataMarkerType.circle,
+                          shape: DataMarkerType.horizontalLine,
                           borderWidth: 2,
                           borderColor: Color(0xff006400))),
+                  StackedColumnSeries(
+                      dataSource: salesDash,
+                      xValueMapper: (Dash sales, _) => sales.month,
+                      yValueMapper: (Dash sales, _) => sales.value,
+                      color: Color(0xff90be6d), //95d5b2
+                      name: AppLocalizations.of(context)
+                          .translate('sales'), //invoicing
+                      //dataLabelSettings: DataLabelSettings(isVisible: true),
+                      markerSettings: MarkerSettings(
+                          isVisible: true,
+                          width: 5,
+                          height: 5,
+                          shape: DataMarkerType.horizontalLine,
+                          borderWidth: 2,
+                          borderColor: Color(0xff95d5b2))),
+                  LineSeries(
+                      dataSource: objectivesDash,
+                      xValueMapper: (Dash sales, _) => sales.month,
+                      yValueMapper: (Dash sales, _) => sales.value,
+                      name: AppLocalizations.of(context)
+                          .translate('objectives'), //objectives
+                      //color: Color(0xffec8385),
+                      color: Color(0xffda344d),
+                      //dataLabelSettings: DataLabelSettings(isVisible: true),
+
+                      markerSettings: MarkerSettings(
+                          isVisible: true,
+                          width: 5,
+                          height: 5,
+                          shape: DataMarkerType.circle,
+                          borderWidth: 2,
+                          borderColor: Color(0xffec8385))),
                 ]),
           ),
         ),

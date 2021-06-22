@@ -18,7 +18,7 @@ class ProposalItem {
     return ProposalItem(
         id: doc.id,
         name: data['name'] ?? '',
-        value: data['value'] ?? 0,
+        value: data['value'] != null ? data['value'].toDouble() : 0.0,
         state: data['state'] ?? '0',
         house: data['house'] ?? '',
         houseid: data['houseid'] ?? '',
@@ -32,7 +32,7 @@ class ProposalItem {
   }
   final String id;
   final String name;
-  final int value;
+  final double value;
   final String state; //'0'-> draft '1'-> lost '2'-> won
   final String houseid;
   final String house;

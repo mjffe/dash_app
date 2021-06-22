@@ -13,6 +13,7 @@ class UserData {
   // final String sugars;
   // final int strength;
   final List<dynamic> consultants;
+  final List<dynamic> leadtypes;
   final String role;
   final DateTime filterDateRangeStart;
   final DateTime filterDateRangeEnd;
@@ -22,6 +23,7 @@ class UserData {
       this.name,
       this.role,
       this.consultants,
+      this.leadtypes,
       this.filterDateRangeStart,
       this.filterDateRangeEnd});
 
@@ -33,6 +35,7 @@ class UserData {
         uid: doc.id,
         name: doc.data()['name'] ?? '',
         consultants: doc.data()['consultants'] ?? [],
+        leadtypes: doc.data()['leadtypes'] ?? [],
         role: doc.data()['role'] ?? '',
         filterDateRangeStart: data['filterDateRangeStart'] != null &&
                 data['filterDateRangeStart'] != ''

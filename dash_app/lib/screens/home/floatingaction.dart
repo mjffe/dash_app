@@ -4,7 +4,7 @@ import 'package:dashapp/screens/leads/lead_form_panel.dart';
 import 'package:dashapp/screens/mediationcontract/mediationcontract_form.dart';
 import 'package:dashapp/screens/objective/objective_form.dart';
 import 'package:dashapp/screens/promisebuysell/promisebuysell_form.dart';
-import 'package:dashapp/screens/proposal/proposal_form.dart';
+import 'package:dashapp/screens/proposal/proposal_form_panel.dart';
 import 'package:dashapp/screens/prospectingtime/prospectingtime_form.dart';
 import 'package:dashapp/screens/raisings/raising_form.dart';
 import 'package:dashapp/screens/sales/sales_form_panel.dart';
@@ -117,14 +117,18 @@ class FoatingAction {
         );
       case 7:
         return FloatingActionButton(
-          onPressed: () => showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Container(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
-                  child: ProposalForm(uData.uid, ''), //SettingsForm(userid),
-                );
-              }),
+          // onPressed: () => showModalBottomSheet(
+          //     context: context,
+          //     builder: (context) {
+          //       return Container(
+          //         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 60),
+          //         child: ProposalForm(uData.uid, ''), //SettingsForm(userid),
+          //       );
+          //     }),
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProposalForm(uData.uid, ''))),
           backgroundColor: bgcolor,
           child: icon,
         );

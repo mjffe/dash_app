@@ -1,8 +1,7 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_lead.dart';
-import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_buyer.dart';
-import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_prospecting.dart';
+import 'package:dashapp/screens/dashboard/counters/dash_counters_lead_types.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_raising.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_sale_full.dart';
 import 'package:dashapp/screens/dashboard/counters/dash_counters_sale_shared.dart';
@@ -37,6 +36,49 @@ class _Dash_CountersState extends State<Dash_Counters> {
 
   @override
   Widget build(BuildContext context) {
+    _LeadTypeCount() {
+      ListBody body = ListBody(children: <Widget>[]);
+      //for (String type in uData.leadtypes) {
+      for (var i = 0; i < uData.leadtypes.length; i++) {
+        String type = uData.leadtypes[i];
+
+        body.children.add(
+          GestureDetector(
+            onTap: () {
+              print('type onTap: ${type}');
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LeadTypeFiltred(uData, type)));
+            },
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(children: <Widget>[
+                    CircleAvatar(
+                      backgroundColor: const Color(0xff2A9D8F), //0xff26a69a
+                      child: Icon(
+                        Icons.people,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(width: 5.0),
+                    Text(
+                      AppLocalizations.of(context).translate(type),
+                      style: TextStyle(
+                          color: Colors.black, letterSpacing: 1, fontSize: 14),
+                    ),
+                  ]),
+                  LeadTypeCount(uData, type),
+                ]),
+          ),
+        );
+        if (uData.leadtypes.length != (i + 1))
+          body.children.add(SizedBox(height: 10.0));
+      }
+      return body;
+    }
+
     _showLeadsDialog() {
       return showDialog<void>(
         context: context,
@@ -53,71 +95,72 @@ class _Dash_CountersState extends State<Dash_Counters> {
             content: SingleChildScrollView(
               child: ListBody(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  LeadProspectingFiltred(uData)));
-                    },
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor:
-                                  const Color(0xff2A9D8F), //0xff26a69a
-                              child: Icon(
-                                Icons.people,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('prospecting'),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  letterSpacing: 1,
-                                  fontSize: 14),
-                            ),
-                          ]),
-                          LeadProspectingCount(uData),
-                        ]),
-                  ),
-                  SizedBox(height: 10.0),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  LeadBuyerCustomersFiltred(uData)));
-                    },
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(children: <Widget>[
-                            CircleAvatar(
-                              backgroundColor:
-                                  const Color(0xff2A9D8F), //0xff26a69a
-                              child: Icon(
-                                Icons.people,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              AppLocalizations.of(context)
-                                  .translate('buyercustomers'),
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  letterSpacing: 1,
-                                  fontSize: 14),
-                            ),
-                          ]),
-                          LeadBuyerCustomersCount(uData),
-                        ]),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) =>
+                  //                 LeadProspectingFiltred(uData)));
+                  //   },
+                  //   child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: <Widget>[
+                  //         Row(children: <Widget>[
+                  //           CircleAvatar(
+                  //             backgroundColor:
+                  //                 const Color(0xff2A9D8F), //0xff26a69a
+                  //             child: Icon(
+                  //               Icons.people,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             AppLocalizations.of(context)
+                  //                 .translate('prospecting'),
+                  //             style: TextStyle(
+                  //                 color: Colors.black,
+                  //                 letterSpacing: 1,
+                  //                 fontSize: 14),
+                  //           ),
+                  //         ]),
+                  //         LeadProspectingCount(uData),
+                  //       ]),
+                  // ),
+                  // SizedBox(height: 10.0),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) =>
+                  //                 LeadBuyerCustomersFiltred(uData)));
+                  //   },
+                  //   child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: <Widget>[
+                  //         Row(children: <Widget>[
+                  //           CircleAvatar(
+                  //             backgroundColor:
+                  //                 const Color(0xff2A9D8F), //0xff26a69a
+                  //             child: Icon(
+                  //               Icons.people,
+                  //               color: Colors.white,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             AppLocalizations.of(context)
+                  //                 .translate('buyercustomers'),
+                  //             style: TextStyle(
+                  //                 color: Colors.black,
+                  //                 letterSpacing: 1,
+                  //                 fontSize: 14),
+                  //           ),
+                  //         ]),
+                  //         LeadBuyerCustomersCount(uData),
+                  //       ]),
+                  // ),
+                  _LeadTypeCount()
                 ],
               ),
             ),
@@ -156,7 +199,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  LeadProspectingFiltred(uData)));
+                                  SaleTypeShareSharedFiltred(uData)));
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -170,9 +213,10 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                 color: Colors.white,
                               ),
                             ),
+                            SizedBox(width: 5.0),
                             Text(
                               AppLocalizations.of(context)
-                                  .translate('saleTypeShareshared'),
+                                  .translate('saleTypeSharefull'),
                               style: TextStyle(
                                   color: Colors.black,
                                   letterSpacing: 1,
@@ -189,7 +233,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  LeadBuyerCustomersFiltred(uData)));
+                                  SaleTypeShareFullFiltred(uData)));
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -203,9 +247,10 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                 color: Colors.white,
                               ),
                             ),
+                            SizedBox(width: 5.0),
                             Text(
                               AppLocalizations.of(context)
-                                  .translate('saleTypeSharefull'),
+                                  .translate('saleTypeShareshared'),
                               style: TextStyle(
                                   color: Colors.black,
                                   letterSpacing: 1,

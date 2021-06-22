@@ -123,6 +123,7 @@ class _HomeState extends State<Home> {
         uData.role,
         uData.name,
         uData.consultants,
+        uData.leadtypes,
         newDateRange.start,
         newDateRange.end,
       );
@@ -247,6 +248,7 @@ class _HomeState extends State<Home> {
                     uData.role,
                     uData.name,
                     uData.consultants,
+                    uData.leadtypes,
                     new DateTime(DateTime.now().year, 1, 1),
                     new DateTime(DateTime.now().year, 12, 31),
                   );
@@ -258,6 +260,7 @@ class _HomeState extends State<Home> {
                     uData.role,
                     uData.name,
                     uData.consultants,
+                    uData.leadtypes,
                     new DateTime(DateTime.now().year - 1, 1, 1),
                     new DateTime(DateTime.now().year - 1, 12, 31),
                   );
@@ -525,6 +528,7 @@ class _SubMenuState extends State<SubMenu> {
               uData.role,
               uData.name,
               uData.consultants,
+              uData.leadtypes,
               new DateTime(DateTime.now().year, 1, 1),
               new DateTime(DateTime.now().year, 3, 31),
             );
@@ -536,6 +540,7 @@ class _SubMenuState extends State<SubMenu> {
               uData.role,
               uData.name,
               uData.consultants,
+              uData.leadtypes,
               new DateTime(DateTime.now().year, 4, 1),
               new DateTime(DateTime.now().year, 6, 30),
             );
@@ -547,6 +552,7 @@ class _SubMenuState extends State<SubMenu> {
               uData.role,
               uData.name,
               uData.consultants,
+              uData.leadtypes,
               new DateTime(DateTime.now().year, 7, 1),
               new DateTime(DateTime.now().year, 9, 30),
             );
@@ -558,6 +564,7 @@ class _SubMenuState extends State<SubMenu> {
               uData.role,
               uData.name,
               uData.consultants,
+              uData.leadtypes,
               new DateTime(DateTime.now().year, 10, 1),
               new DateTime(DateTime.now().year, 12, 31),
             );

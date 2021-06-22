@@ -118,6 +118,7 @@ class _SetingsState extends State<Setings> {
                               _role ?? '',
                               data.name,
                               data.consultants,
+                              data.leadtypes,
                               data.filterDateRangeStart,
                               data.filterDateRangeEnd,
                             );

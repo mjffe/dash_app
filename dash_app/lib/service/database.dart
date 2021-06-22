@@ -37,12 +37,14 @@ class DatabaseService {
       String role,
       String name,
       List<dynamic> consultants,
+      List<dynamic> leadtypes,
       DateTime filterDateRangeStart,
       DateTime filterDateRangeEnd) async {
     return await userCollection.doc(uid).set({
       'role': role,
       'name': name,
       'consultants': consultants,
+      'leadtypes': leadtypes,
       'filterDateRangeStart': filterDateRangeStart,
       'filterDateRangeEnd': filterDateRangeEnd
     });
@@ -133,6 +135,7 @@ class DatabaseService {
     return await userCollection.doc(uid).collection('sales').add({
       'name': item.name ?? '',
       'value': item.value ?? 0,
+      'date': item.date ?? DateTime.now(),
       'type': item.type ?? '0',
       'state': item.state ?? '',
       'proposal': item.proposal ?? '',
@@ -150,6 +153,7 @@ class DatabaseService {
         await userCollection.doc(uid).collection('sales').add({
       'name': item.name ?? '',
       'value': item.value ?? 0,
+      'date': item.date ?? DateTime.now(),
       'type': item.type ?? '0',
       'state': item.state ?? '',
       'proposal': item.proposal ?? '',
@@ -168,6 +172,7 @@ class DatabaseService {
       return await userCollection.doc(uid).collection('sales').doc(docid).set({
         'name': item.name ?? '',
         'value': item.value ?? 0,
+        'date': item.date ?? DateTime.now(),
         'type': item.type ?? '0',
         'state': item.state ?? '',
         'proposal': item.proposal ?? '',
@@ -500,6 +505,22 @@ class DatabaseService {
     });
   }
 
+  Future<String> createInvoicingDataFromSale(InvoicingItem item) async {
+    DocumentReference doc =
+        await userCollection.doc(uid).collection('invoicing').add({
+      'name': item.name,
+      'value': item.value,
+      'date': item.date,
+      'sale': item.sale ?? '',
+      'saleid': item.saleid ?? '',
+      'house': item.house ?? '',
+      'houseid': item.houseid ?? '',
+      'createdon': new DateTime.now(),
+      'createdby': uid
+    });
+    return doc.id;
+  }
+
 //update invoicing
   Future<void> updateInvoicingData(InvoicingItem item) async {
     try {
@@ -745,6 +766,16 @@ class DatabaseService {
         .doc(docid)
         .snapshots()
         .map((doc) => RaisingItem.fromFirestore(doc));
+  }
+
+  Stream<List<RaisingItem>> get getAvailableHousesData {
+    var ref = userCollection
+        .doc(uid)
+        .collection('raisings')
+        .orderBy("createdon", descending: true);
+
+    return ref.snapshots().map((list) =>
+        list.docs.map((doc) => RaisingItem.fromFirestore(doc)).toList());
   }
 
   //Obten a lista de sales de um utilizador
