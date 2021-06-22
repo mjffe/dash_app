@@ -30,6 +30,7 @@ class ChartItem {
     String user = doc.reference.parent.path.split('/')[1];
     String collection = doc.reference.parent.path.split('/')[2];
     if (collection == 'sales') {
+      // caso a venda ja tenha avançado ou esteja sido descartada este valor nao sera contabilizado
       String state = data['state'] ?? '0';
       if (state != '0') return new ChartItem();
     }
