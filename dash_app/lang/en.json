@@ -20,7 +20,8 @@
   "objectives":"Objectives",
   "settings":"Settings",
   "house":"House",
-
+  "success_rate":"Success Rate",
+  
   "LeadPage":"LeadPage",
   "name":"Name",
   "validname":"Please enter a name",

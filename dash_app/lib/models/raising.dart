@@ -6,7 +6,7 @@ class RaisingItem {
   factory RaisingItem.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data();
     String user = doc.reference.parent.path.split('/')[1];
-
+    //print('RaisingItem: ${doc.id}');
     return RaisingItem(
         id: doc.id,
         name: data['name'] ?? '',

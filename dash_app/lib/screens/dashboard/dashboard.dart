@@ -4,6 +4,7 @@ import 'package:dashapp/screens/dashboard/dash_invoiceOld.dart';
 import 'package:dashapp/screens/dashboard/dash_invoice.dart';
 import 'package:dashapp/screens/dashboard/dash_piechart.dart';
 import 'package:dashapp/screens/dashboard/dash_prospection.dart';
+import 'package:dashapp/screens/dashboard/dash_rating.dart';
 import 'package:flutter/material.dart';
 
 class Dash extends StatefulWidget {
@@ -50,6 +51,7 @@ class _DashState extends State<Dash> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Dash_Counters(uData),
+          Dash_Rating(uData),
           Dash_PieChart(uData),
           Dash_ProspectingTime(uData),
           //Dash_LineChart(uData),

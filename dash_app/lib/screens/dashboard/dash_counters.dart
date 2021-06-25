@@ -362,7 +362,7 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                     Row(children: <Widget>[
                                       CircleAvatar(
                                         backgroundColor: const Color(
-                                            0xff2A9D8F), //0xff26a69a
+                                            0xff95d5b2), //0xff2A9D8F//0xff26a69a
                                         child: Icon(
                                           Icons.people,
                                           color: Colors.white,
@@ -405,8 +405,8 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   children: <Widget>[
                                     Row(children: <Widget>[
                                       CircleAvatar(
-                                        backgroundColor:
-                                            const Color(0xff118AB2),
+                                        backgroundColor: const Color(
+                                            0xff90be6d), //0xff90be6d//0xff118AB2
                                         child: Icon(
                                           AppIcoons.vendas,
                                           color: Colors.white,
@@ -457,8 +457,8 @@ class _Dash_CountersState extends State<Dash_Counters> {
                                   children: <Widget>[
                                     Row(children: <Widget>[
                                       CircleAvatar(
-                                        backgroundColor:
-                                            const Color(0xffF4A261),
+                                        backgroundColor: const Color(
+                                            0xffffc49b), //0xfffad4c0
                                         child: Icon(
                                           AppIcoons.escrituras,
                                           color: Colors.white,

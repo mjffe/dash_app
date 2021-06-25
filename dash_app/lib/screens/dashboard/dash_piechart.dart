@@ -161,7 +161,7 @@ class PieChart2State extends State {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Indicator(
-                  color: Color(0xffFE7F2D), //0xff0293ee
+                  color: Color(0xff2a9d8f), //0xff0293ee
                   text: AppLocalizations.of(context)
                       .translate('service_presentation'),
                   isSquare: true,
@@ -174,7 +174,7 @@ class PieChart2State extends State {
                   height: 4,
                 ),
                 Indicator(
-                  color: Color(0xffFCCA46), //0xfff8b250
+                  color: Color(0xffe9c46a), //0xfff8b250
                   text: AppLocalizations.of(context)
                       .translate('mediation_contract_abrv'),
                   isSquare: true,
@@ -187,7 +187,7 @@ class PieChart2State extends State {
                   height: 4,
                 ),
                 Indicator(
-                  color: Color(0xffA1C181), //0xff845bef
+                  color: Color(0xfff4a261), //0xff845bef
                   text: AppLocalizations.of(context).translate('proposal'),
                   isSquare: true,
                   fontWeight:
@@ -199,7 +199,7 @@ class PieChart2State extends State {
                   height: 4,
                 ),
                 Indicator(
-                  color: Color(0xff619B8A), //0xff13d38e
+                  color: Color(0xffe76f51), //0xff13d38e
                   text: AppLocalizations.of(context)
                       .translate('promise_buy_sell_abrv'),
                   isSquare: true,
@@ -230,7 +230,7 @@ class PieChart2State extends State {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xffFE7F2D), //D81159- 0xff0293ee
+            color: const Color(0xff2a9d8f), //0xffFE7F2D//D81159- 0xff0293ee
             value: apsCount,
             title: apsCount.toInt().toString(),
             radius: radius,
@@ -241,7 +241,7 @@ class PieChart2State extends State {
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0xffFCCA46), //FFBC42 - 0xfff8b250
+            color: const Color(0xffe9c46a), //0xffc18c5d//FFBC42 - 0xfff8b250
             value: cmiCount,
             title: cmiCount.toInt().toString(),
             radius: radius,
@@ -252,7 +252,7 @@ class PieChart2State extends State {
           );
         case 2:
           return PieChartSectionData(
-            color: const Color(0xffA1C181), //845bef
+            color: const Color(0xfff4a261), //0xffA1C181//845bef
             value: propostasCount,
             title: propostasCount.toInt().toString(),
             radius: radius,
@@ -263,7 +263,7 @@ class PieChart2State extends State {
           );
         case 3:
           return PieChartSectionData(
-            color: const Color(0xff619B8A), //218380- 0xff13d38e
+            color: const Color(0xffe76f51), //0xff619B8A//218380- 0xff13d38e
             value: cpvcCount,
             title: cpvcCount.toInt().toString(),
             radius: radius,

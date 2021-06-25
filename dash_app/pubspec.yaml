@@ -45,6 +45,7 @@ dependencies:
   #syncfusion_flutter_core: ^19.1.63
   #syncfusion_flutter_datepicker: ^19.1.63-beta
   flutter_echarts: ^2.1.0
+  flutter_rating_bar: ^4.0.0
 
   
 dev_dependencies:

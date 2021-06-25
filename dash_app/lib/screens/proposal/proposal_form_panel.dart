@@ -147,8 +147,8 @@ class _ProposalFormState extends State<ProposalForm> {
                           name: _name ?? '',
                           value: _value ?? 0,
                           state: '0',
-                          house: '',
-                          houseid: '',
+                          house: _house,
+                          houseid: _houseid,
                         ));
                         Navigator.pop(context);
                       }
@@ -240,6 +240,58 @@ class _ProposalFormState extends State<ProposalForm> {
                                 ),
                               )),
 
+                          // StreamBuilder<List<RaisingItem>>(
+                          //     //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                          //     stream: DatabaseService(uid: userId, docid: docId)
+                          //         .getAvailableHousesData,
+                          //     builder: (context, snapshot) {
+                          //       if (!snapshot.hasData)
+                          //         return Text("Loading.....");
+                          //       else {
+                          //         List<RaisingItem> d = snapshot.data;
+                          //         List<DropdownMenuItem> houseItems = [];
+                          //           houseItems.add(
+                          //           DropdownMenuItem(
+                          //             child: Text(''),
+                          //             value: '',
+                          //           ),
+                          //         );
+                          //         for (var i = 0; i < d.length; i++) {
+                          //           RaisingItem raising = d[i];
+                          //           houseItems.add(
+                          //             DropdownMenuItem(
+                          //               child: Text(
+                          //                 raising.name,
+                          //                 // style: TextStyle(
+                          //                 //     color: Color(0xff11b719)),
+                          //               ),
+                          //               value: "${raising.id}",
+                          //             ),
+                          //           );
+                          //         }
+                          //         return DropdownButtonFormField(
+                          //             decoration: textInputDecoration.copyWith(
+                          //               hintText: AppLocalizations.of(context)
+                          //                   .translate('Selected an house'),
+                          //             ),
+                          //             //items: houseItems,
+                          //             items: d.map((type) {
+                          //               return DropdownMenuItem(
+                          //                 value: type.id,
+                          //                 child: Text(type.name),
+                          //               );
+                          //             }).toList(),
+                          //             value: data.houseid ?? '',
+                          //             onChanged: (val) {
+                          //               setState(() => _houseid = val);
+                          //               setState(() => _house = d
+                          //                   .where((e) => e.id == val)
+                          //                   .first
+                          //                   .name);
+                          //             });
+                          //       }
+                          //     }),
+
                           StreamBuilder<List<RaisingItem>>(
                               //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
                               stream: DatabaseService(uid: userId, docid: docId)
@@ -250,14 +302,18 @@ class _ProposalFormState extends State<ProposalForm> {
                                 else {
                                   List<RaisingItem> d = snapshot.data;
                                   List<DropdownMenuItem> houseItems = [];
+                                  houseItems.add(
+                                    DropdownMenuItem(
+                                      child: Text(''),
+                                      value: '',
+                                    ),
+                                  );
                                   for (var i = 0; i < d.length; i++) {
                                     RaisingItem raising = d[i];
                                     houseItems.add(
                                       DropdownMenuItem(
                                         child: Text(
                                           raising.name,
-                                          // style: TextStyle(
-                                          //     color: Color(0xff11b719)),
                                         ),
                                         value: "${raising.id}",
                                       ),
@@ -270,12 +326,7 @@ class _ProposalFormState extends State<ProposalForm> {
                                             .translate('Selected an house'),
                                       ),
                                       //items: houseItems,
-                                      items: d.map((type) {
-                                        return DropdownMenuItem(
-                                          value: type.id,
-                                          child: Text(type.name),
-                                        );
-                                      }).toList(),
+                                      items: houseItems,
                                       value: data.houseid,
                                       onChanged: (val) {
                                         setState(() => _houseid = val);
@@ -286,6 +337,7 @@ class _ProposalFormState extends State<ProposalForm> {
                                       });
                                 }
                               }),
+
                           SizedBox(height: 10.0),
                           RaisedButton(
                               color: MyColors.lightBlue,

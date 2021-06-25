@@ -69,7 +69,11 @@ class SaleList extends StatelessWidget {
                           child: ListTile(
                             leading: CircleAvatar(
                               radius: 25,
-                              backgroundColor: MyColors.appBarBackgroundColor,
+                              backgroundColor: sales[index].state == '0'
+                                  ? MyColors.appBarBackgroundColor
+                                  : (sales[index].state == '1'
+                                      ? MyColors.lightRed
+                                      : MyColors.lightGreen),
                               child: Icon(
                                 AppIcoons.vendas,
                                 size: 40,

@@ -2,6 +2,7 @@ import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/models/sale.dart';
+import 'package:dashapp/screens/invoicing/invoicing_form_panel.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_bar.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -25,10 +26,7 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
   final String userId;
   final String docId;
   final _formkey = GlobalKey<FormState>();
-  final List<String> states = [
-    '0',
-    '1',
-  ];
+  final List<String> states = ['0', '1', '2'];
   final List<String> types = [
     '0',
     '1',
@@ -257,8 +255,8 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                 state: _state ?? '0',
                                 proposal: _proposal ?? '',
                                 proposalid: '',
-                                house: '',
-                                houseid: ''));
+                                house: _house ?? '',
+                                houseid: _houseid ?? ''));
                         Navigator.pop(context);
                       }
                     }),
@@ -432,7 +430,7 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                               )),
                           DateTimePicker(
                             dateMask: 'dd/MM/yyyy',
-                            initialValue: _selectedDate.toString(),
+                            initialValue: saleData.date.toString(),
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                             dateLabelText:
@@ -506,7 +504,8 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                       .updateSaleData(new SaleItem(
                                           name: _nameUpdated ?? _name,
                                           value: _valueUpdated ?? _value,
-                                          date: _selectedDate ?? DateTime.now(),
+                                          date: _selectedDateUpdated ??
+                                              _selectedDate,
                                           type: _typeUpdated ?? _type,
                                           state: _stateUpdated ?? _state,
                                           proposal: _proposal ?? '',
@@ -591,7 +590,7 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    SalesFormPanel(
+                                                    InvoicingFormPanel(
                                                         userId, docid)));
                                       }
                                     }),

@@ -93,6 +93,19 @@ class LineChartStreamData2 extends StatelessWidget {
                   .map((entry) => Dash(entry.key, entry.value['sumOfduration'],
                       AppLocalizations.of(context).locale.languageCode))
                   .toList();
+
+              //tenho que ter a certeza que existe uma entrada para todos os meses
+              for (var i = 1; i < 13; i++) {
+                //if (salesDash.any((element) => element.monthNumber != i))
+                if (invoicesDash.firstWhere(
+                        (element) => element.monthNumber == i,
+                        orElse: () => null) ==
+                    null) {
+                  invoicesDash.add(new Dash(
+                      i, 0, AppLocalizations.of(context).locale.languageCode));
+                }
+              }
+
               invoicesDash
                   .sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
@@ -115,6 +128,18 @@ class LineChartStreamData2 extends StatelessWidget {
                   .map((entry) => Dash(entry.key, entry.value['sumOfduration'],
                       AppLocalizations.of(context).locale.languageCode))
                   .toList();
+
+              //tenho que ter a certeza que existe uma entrada para todos os meses
+              for (var i = 1; i < 13; i++) {
+                //if (salesDash.any((element) => element.monthNumber != i))
+                if (salesDash.firstWhere((element) => element.monthNumber == i,
+                        orElse: () => null) ==
+                    null) {
+                  salesDash.add(new Dash(
+                      i, 0, AppLocalizations.of(context).locale.languageCode));
+                }
+              }
+
               salesDash.sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
             }
             if (snapshot.data.objectives.length > 0) {
@@ -229,8 +254,8 @@ class _Dash_InvoiceState2 extends State<Dash_Invoice2> {
                 series: <ChartSeries<Dash, String>>[
                   StackedColumnSeries(
                       dataSource: invoicesDash,
-                      xValueMapper: (Dash sales, _) => sales.month,
-                      yValueMapper: (Dash sales, _) => sales.value,
+                      xValueMapper: (Dash invo, _) => invo.month,
+                      yValueMapper: (Dash invo, _) => invo.value,
                       color: Color(0xff006400),
                       name: AppLocalizations.of(context)
                           .translate('invoicing'), //invoicing

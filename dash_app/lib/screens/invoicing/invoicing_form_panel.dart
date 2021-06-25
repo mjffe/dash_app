@@ -1,5 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/invoicing.dart';
+import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_bar.dart';
 import 'package:dashapp/shared/colors.dart';
@@ -32,6 +33,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
   String _nameUpdated;
   double _valueUpdated;
   String _homeUpdated;
+  String _house = '';
+  String _houseid = '';
   DateTime _selectedDate = DateTime.now();
   DateTime _selectedDateUpdated;
 
@@ -75,16 +78,60 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                 onChanged: (val) => setState(() => _value = double.parse(val)),
               ),
               SizedBox(height: 20.0),
-              TextFormField(
-                decoration: textInputDecoration.copyWith(
-                  hintText: AppLocalizations.of(context).translate('home'),
-                ),
-                initialValue: _home,
-                validator: (val) => val.isEmpty
-                    ? AppLocalizations.of(context).translate('validhome')
-                    : null,
-                onChanged: (val) => setState(() => _home = val),
-              ),
+              // TextFormField(
+              //   decoration: textInputDecoration.copyWith(
+              //     hintText: AppLocalizations.of(context).translate('home'),
+              //   ),
+              //   initialValue: _home,
+              //   validator: (val) => val.isEmpty
+              //       ? AppLocalizations.of(context).translate('validhome')
+              //       : null,
+              //   onChanged: (val) => setState(() => _home = val),
+              // ),
+              StreamBuilder<List<RaisingItem>>(
+                  //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                  stream: DatabaseService(uid: userId, docid: docId)
+                      .getAvailableHousesData,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData)
+                      return Text("Loading.....");
+                    else {
+                      List<RaisingItem> d = snapshot.data;
+                      List<DropdownMenuItem> houseItems = [];
+                      for (var i = 0; i < d.length; i++) {
+                        RaisingItem raising = d[i];
+                        houseItems.add(
+                          DropdownMenuItem(
+                            child: Text(
+                              raising.name,
+                              // style: TextStyle(
+                              //     color: Color(0xff11b719)),
+                            ),
+                            value: "${raising.id}",
+                          ),
+                        );
+                      }
+
+                      return DropdownButtonFormField(
+                          decoration: textInputDecoration.copyWith(
+                            hintText: AppLocalizations.of(context)
+                                .translate('Selected an house'),
+                          ),
+                          //items: houseItems,
+                          items: d.map((type) {
+                            return DropdownMenuItem(
+                              value: type.id,
+                              child: Text(type.name),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            setState(() => _houseid = val);
+                            setState(() => _house =
+                                d.where((e) => e.id == val).first.name);
+                          });
+                    }
+                  }),
+
               SizedBox(height: 20.0),
               DateTimePicker(
                 dateMask: 'dd/MM/yyyy',
@@ -112,7 +159,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                           new InvoicingItem(
                               name: _name ?? '',
                               value: _value ?? 0,
-                              house: _home ?? '',
+                              house: _house ?? '',
+                              houseid: _houseid ?? '',
                               date: _selectedDate ?? DateTime.now()));
                       Navigator.pop(context);
                     }
@@ -124,7 +172,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
     else {
       return Scaffold(
         appBar:
-            customAppBar(AppLocalizations.of(context).translate('sales')).bar(),
+            customAppBar(AppLocalizations.of(context).translate('invoicing'))
+                .bar(),
         body: StreamBuilder<InvoicingItem>(
             stream: DatabaseService(uid: userId, docid: docId).invoicingData,
             builder: (context, snapshot) {
@@ -198,18 +247,62 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                               letterSpacing: 1.2,
                             ),
                           )),
-                      TextFormField(
-                        decoration: textInputDecoration.copyWith(
-                          hintText:
-                              AppLocalizations.of(context).translate('home'),
-                        ),
-                        initialValue: _home,
-                        validator: (val) => val.isEmpty
-                            ? AppLocalizations.of(context)
-                                .translate('validhome')
-                            : null,
-                        onChanged: (val) => setState(() => _homeUpdated = val),
-                      ),
+                      // TextFormField(
+                      //   decoration: textInputDecoration.copyWith(
+                      //     hintText:
+                      //         AppLocalizations.of(context).translate('home'),
+                      //   ),
+                      //   initialValue: _home,
+                      //   validator: (val) => val.isEmpty
+                      //       ? AppLocalizations.of(context)
+                      //           .translate('validhome')
+                      //       : null,
+                      //   onChanged: (val) => setState(() => _homeUpdated = val),
+                      // ),
+                      StreamBuilder<List<RaisingItem>>(
+                          //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                          stream: DatabaseService(uid: userId, docid: docId)
+                              .getAvailableHousesData,
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData)
+                              return Text("Loading.....");
+                            else {
+                              List<RaisingItem> d = snapshot.data;
+                              List<DropdownMenuItem> houseItems = [];
+                              houseItems.add(
+                                DropdownMenuItem(
+                                  child: Text(''),
+                                  value: '',
+                                ),
+                              );
+                              for (var i = 0; i < d.length; i++) {
+                                RaisingItem raising = d[i];
+                                houseItems.add(
+                                  DropdownMenuItem(
+                                    child: Text(
+                                      raising.name,
+                                    ),
+                                    value: "${raising.id}",
+                                  ),
+                                );
+                              }
+
+                              return DropdownButtonFormField(
+                                  decoration: textInputDecoration.copyWith(
+                                    hintText: AppLocalizations.of(context)
+                                        .translate('Selected an house'),
+                                  ),
+                                  //items: houseItems,
+                                  items: houseItems,
+                                  value: data.houseid,
+                                  onChanged: (val) {
+                                    setState(() => _houseid = val);
+                                    setState(() => _house =
+                                        d.where((e) => e.id == val).first.name);
+                                  });
+                            }
+                          }),
+
                       SizedBox(height: 20.0),
                       Align(
                           alignment: Alignment.topLeft,
@@ -252,8 +345,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                                       datemonth: data.datemonth,
                                       sale: data.sale,
                                       saleid: data.saleid,
-                                      house: data.house,
-                                      houseid: data.houseid,
+                                      house: _house ?? data.house,
+                                      houseid: _houseid ?? data.houseid,
                                       createdon: data.createdon,
                                       createdby: data.createdby));
                               Navigator.pop(context);
