@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dashapp/models/invoicing.dart';
-import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/models/rating.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import "package:collection/collection.dart";
 
 class RatingViewModel {
   RatingViewModel({@required this.uData});
   final UserData uData;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Stream<RatingItem> ratingStream() {
+  Stream<List<RatingItem>> ratingStream() {
+    Stream<QuerySnapshot> s0 = users.snapshots();
+
     Stream<QuerySnapshot> s1 = users
         .doc(uData.uid)
         .collection('invoicing')
@@ -25,41 +26,100 @@ class RatingViewModel {
         .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
         .snapshots();
 
-    //var send = [s1, s2];
+    var send = [s0, s1, s2];
+    if (uData.role == '0' || uData.role == '1') {
+      for (var item in uData.consultants) {
+        send.add(users
+            .doc(item)
+            .collection('invoicing')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
+        send.add(users
+            .doc(item)
+            .collection('raisings')
+            .where('createdon',
+                isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
+      }
+    }
 
-    //return Rx.combineLatest(send.toList(), (List<QuerySnapshot> values) {});
+    return Rx.combineLatest(send.toList(), (List<QuerySnapshot> values) {
+      //return Rx.combineLatest2(s1, s2, (QuerySnapshot i, QuerySnapshot r) {
+      List<RatingModelItem> itens = [];
+      List<RatingItem> result = [];
 
-    return Rx.combineLatest2(s1, s2, (QuerySnapshot i, QuerySnapshot r) {
-      int invoicingCount = i.size;
-      int fullsales = 0;
-      int raisingCount = r.size;
-      int raisingsales = 0;
-      // from all invoices in this perios with ones are full (angariadas e vendidas )
-      List<InvoicingItem> invoicingItens =
-          i.docs.map((doc) => InvoicingItem.fromFirestore(doc)).toList();
+      for (var item in values) {
+        itens.addAll(item.docs
+            .map((doc) => RatingModelItem.fromFirestore(doc))
+            .toList());
+      }
 
-      List<RaisingItem> raisingItens =
-          r.docs.map((doc) => RaisingItem.fromFirestore(doc)).toList();
+// preciso de dividir por
+// utilizador
+      Map itensgroup = groupBy(itens, (RatingModelItem obj) => obj.userId);
+      List<UsersItens> listUsersItens = [];
+      //map.forEach((k, v) => list.add(Customer(k, v)));
+      itensgroup.forEach((k, v) => listUsersItens.add(UsersItens(k, v)));
 
-      for (var item in invoicingItens) {
-        if (item.houseid != '') {
-          if (raisingItens.any((element) => element.id == item.houseid)) {
-            fullsales = fullsales + 1;
+      for (var userItem in listUsersItens) {
+        List<RatingModelItem> invoicingItens = [];
+        List<RatingModelItem> raisingItens = [];
+        List<RatingModelItem> userItens = [];
+        int fullsales = 0;
+        int raisingsales = 0;
+
+        for (var item in userItem.itens) {
+          if (item.collection == 'invoicing') invoicingItens.add(item);
+          if (item.collection == 'raisings') raisingItens.add(item);
+          if (item.collection == 'users') userItens.add(item);
+        }
+        print('object');
+
+        for (var item in invoicingItens) {
+          if (item.houseid != '') {
+            if (raisingItens.any((element) => element.id == item.houseid)) {
+              fullsales = fullsales + 1;
+            }
           }
         }
-      }
 
-      for (var item in raisingItens) {
-        if (invoicingItens.any((element) => element.houseid == item.id)) {
-          raisingsales = raisingsales + 1;
+        for (var item in raisingItens) {
+          if (invoicingItens.any((element) => element.houseid == item.id)) {
+            raisingsales = raisingsales + 1;
+          }
+        }
+        if (invoicingItens.length > 0 && raisingItens.length > 0) {
+          result.add(new RatingItem(
+              userId: userItem.userId, // ver onde esta o id
+              userName: userItens
+                  .firstWhere((element) => element.userId == userItem.userId)
+                  .name,
+              invoicingCount: invoicingItens.length,
+              fullsales: fullsales,
+              raisingsales: raisingsales,
+              raisingCount: raisingItens.length,
+              points: invoicingItens.length +
+                  raisingItens.length +
+                  (fullsales * 2)));
         }
       }
-
-      return new RatingItem(
-          invoicingCount: invoicingCount,
-          fullsales: fullsales,
-          raisingsales: raisingsales,
-          raisingCount: raisingCount);
+      return result;
+      //  new RatingItem(
+      //     userId: '', // ver onde esta o id
+      //     invoicingCount: 1,
+      //     fullsales: 1,
+      //     raisingsales: 1,
+      //     raisingCount: 1);
     });
   }
+}
+
+class UsersItens {
+  String userId;
+  List<RatingModelItem> itens;
+
+  UsersItens(this.userId, this.itens);
 }

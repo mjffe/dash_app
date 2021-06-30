@@ -34,6 +34,7 @@ class _ProposalFormState extends State<ProposalForm> {
   double _valueUpdated;
   String _house = "";
   String _houseid = "";
+  List<RaisingItem> raisings = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,114 +47,151 @@ class _ProposalFormState extends State<ProposalForm> {
                   .bar(),
           body: Form(
             key: _formkey,
-            child: Column(
-              children: <Widget>[
-                // Text(
-                //   '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('proposal')}',
-                //   style: TextStyle(fontSize: 18.0),
-                // ),
-                SizedBox(height: 20.0),
-                TextFormField(
-                  decoration: textInputDecoration.copyWith(
-                    hintText: AppLocalizations.of(context).translate('name'),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                children: <Widget>[
+                  // Text(
+                  //   '${AppLocalizations.of(context).translate('new')} ${AppLocalizations.of(context).translate('proposal')}',
+                  //   style: TextStyle(fontSize: 18.0),
+                  // ),
+                  SizedBox(height: 20.0),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "${AppLocalizations.of(context).translate('name')}:",
+                        style: TextStyle(
+                          //fontSize: 10,
+                          letterSpacing: 1.2,
+                        ),
+                      )),
+                  TextFormField(
+                    decoration: textInputDecoration,
+                    // .copyWith(
+                    //   hintText: AppLocalizations.of(context).translate('name'),
+                    // ),
+                    initialValue: _name,
+                    validator: (val) => val.isEmpty
+                        ? AppLocalizations.of(context).translate('validname')
+                        : null,
+                    onChanged: (val) => setState(() => _name = val),
                   ),
-                  initialValue: _name,
-                  validator: (val) => val.isEmpty
-                      ? AppLocalizations.of(context).translate('validname')
-                      : null,
-                  onChanged: (val) => setState(() => _name = val),
-                ),
-                SizedBox(height: 20.0),
-                TextFormField(
-                  decoration: textInputDecoration.copyWith(
-                    hintText: AppLocalizations.of(context).translate('value'),
-                  ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  initialValue: _name,
-                  validator: (val) => val.isEmpty
-                      ? AppLocalizations.of(context).translate('validvalue')
-                      : null,
-                  onChanged: (val) =>
-                      setState(() => _value = double.parse(val)),
-                ),
-                SizedBox(height: 20.0),
-                Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      "${AppLocalizations.of(context).translate('house')}:",
-                      style: TextStyle(
-                        letterSpacing: 1.2,
-                      ),
-                    )),
+                  SizedBox(height: 20.0),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "${AppLocalizations.of(context).translate('value')}:",
+                        style: TextStyle(
+                          //fontSize: 10,
+                          letterSpacing: 1.2,
+                        ),
+                      )),
 
-                StreamBuilder<List<RaisingItem>>(
-                    //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
-                    stream: DatabaseService(uid: userId, docid: docId)
-                        .getAvailableHousesData,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData)
-                        return Text("Loading.....");
-                      else {
-                        List<RaisingItem> d = snapshot.data;
-                        List<DropdownMenuItem> houseItems = [];
-                        for (var i = 0; i < d.length; i++) {
-                          RaisingItem raising = d[i];
-                          houseItems.add(
-                            DropdownMenuItem(
-                              child: Text(
-                                raising.name,
-                                // style: TextStyle(
-                                //     color: Color(0xff11b719)),
+                  TextFormField(
+                    decoration: textInputDecoration,
+                    // .copyWith(
+                    //   hintText: AppLocalizations.of(context).translate('value'),
+                    // ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    initialValue: _name,
+                    validator: (val) => val.isEmpty
+                        ? AppLocalizations.of(context).translate('validvalue')
+                        : null,
+                    onChanged: (val) =>
+                        setState(() => _value = double.parse(val)),
+                  ),
+                  SizedBox(height: 20.0),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "${AppLocalizations.of(context).translate('house')}:",
+                        style: TextStyle(
+                          letterSpacing: 1.2,
+                        ),
+                      )),
+
+                  StreamBuilder<List<RaisingItem>>(
+                      //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                      stream: DatabaseService(uid: userId, docid: docId)
+                          .getAvailableHousesData,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData)
+                          return Text("Loading.....");
+                        else {
+                          List<RaisingItem> d = snapshot.data;
+                          raisings = d;
+                          List<DropdownMenuItem> houseItems = [];
+                          for (var i = 0; i < d.length; i++) {
+                            RaisingItem raising = d[i];
+                            houseItems.add(
+                              DropdownMenuItem(
+                                child: Text(
+                                  raising.name,
+                                  // style: TextStyle(
+                                  //     color: Color(0xff11b719)),
+                                ),
+                                value: "${raising.id}",
                               ),
-                              value: "${raising.id}",
-                            ),
-                          );
+                            );
+                          }
+
+                          return DropdownButtonFormField(
+                              decoration: textInputDecoration.copyWith(
+                                hintText: AppLocalizations.of(context)
+                                    .translate('Selected an house'),
+                              ),
+                              //items: houseItems,
+                              items: d.map((type) {
+                                return DropdownMenuItem(
+                                  value: type.id,
+                                  child: Text(type.name),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                setState(() => _houseid = val);
+                                setState(() => _house =
+                                    d.where((e) => e.id == val).first.name);
+                              });
                         }
+                      }),
 
-                        return DropdownButtonFormField(
-                            decoration: textInputDecoration.copyWith(
-                              hintText: AppLocalizations.of(context)
-                                  .translate('Selected an house'),
-                            ),
-                            //items: houseItems,
-                            items: d.map((type) {
-                              return DropdownMenuItem(
-                                value: type.id,
-                                child: Text(type.name),
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              setState(() => _houseid = val);
-                              setState(() => _house =
-                                  d.where((e) => e.id == val).first.name);
-                            });
-                      }
-                    }),
+                  SizedBox(height: 10.0),
+                  RaisedButton(
+                      color: MyColors.lightBlue,
+                      child: Text(
+                        AppLocalizations.of(context).translate('create'),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        if (_formkey.currentState.validate()) {
+                          // RaisingItem ri;
+                          // if (raisings.length > 0) {
+                          //   ri = raisings
+                          //       .where((e) =>
+                          //           e.id == _houseid ?? data.houseid)
+                          //       .first;
+                          //   ri.state = 'reserved';
+                          //   await DatabaseService(
+                          //           uid: userId, docid: docId)
+                          //       .updateRaisingData(ri);
+                          // }
 
-                SizedBox(height: 10.0),
-                RaisedButton(
-                    color: MyColors.lightBlue,
-                    child: Text(
-                      AppLocalizations.of(context).translate('create'),
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      if (_formkey.currentState.validate()) {
-                        await DatabaseService(uid: userId)
-                            .createProposalData(new ProposalItem(
-                          name: _name ?? '',
-                          value: _value ?? 0,
-                          state: '0',
-                          house: _house,
-                          houseid: _houseid,
-                        ));
-                        Navigator.pop(context);
-                      }
-                    }),
-              ],
+                          await DatabaseService(uid: userId)
+                              .createProposalData(new ProposalItem(
+                            name: _name ?? '',
+                            value: _value ?? 0,
+                            state: '0',
+                            house: _house,
+                            houseid: _houseid,
+                          ));
+                          Navigator.pop(context);
+                        }
+                      }),
+                ],
+              ),
             ),
           ));
     else {
@@ -240,68 +278,20 @@ class _ProposalFormState extends State<ProposalForm> {
                                 ),
                               )),
 
-                          // StreamBuilder<List<RaisingItem>>(
-                          //     //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
-                          //     stream: DatabaseService(uid: userId, docid: docId)
-                          //         .getAvailableHousesData,
-                          //     builder: (context, snapshot) {
-                          //       if (!snapshot.hasData)
-                          //         return Text("Loading.....");
-                          //       else {
-                          //         List<RaisingItem> d = snapshot.data;
-                          //         List<DropdownMenuItem> houseItems = [];
-                          //           houseItems.add(
-                          //           DropdownMenuItem(
-                          //             child: Text(''),
-                          //             value: '',
-                          //           ),
-                          //         );
-                          //         for (var i = 0; i < d.length; i++) {
-                          //           RaisingItem raising = d[i];
-                          //           houseItems.add(
-                          //             DropdownMenuItem(
-                          //               child: Text(
-                          //                 raising.name,
-                          //                 // style: TextStyle(
-                          //                 //     color: Color(0xff11b719)),
-                          //               ),
-                          //               value: "${raising.id}",
-                          //             ),
-                          //           );
-                          //         }
-                          //         return DropdownButtonFormField(
-                          //             decoration: textInputDecoration.copyWith(
-                          //               hintText: AppLocalizations.of(context)
-                          //                   .translate('Selected an house'),
-                          //             ),
-                          //             //items: houseItems,
-                          //             items: d.map((type) {
-                          //               return DropdownMenuItem(
-                          //                 value: type.id,
-                          //                 child: Text(type.name),
-                          //               );
-                          //             }).toList(),
-                          //             value: data.houseid ?? '',
-                          //             onChanged: (val) {
-                          //               setState(() => _houseid = val);
-                          //               setState(() => _house = d
-                          //                   .where((e) => e.id == val)
-                          //                   .first
-                          //                   .name);
-                          //             });
-                          //       }
-                          //     }),
-
                           StreamBuilder<List<RaisingItem>>(
                               //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
                               stream: DatabaseService(uid: userId, docid: docId)
                                   .getAvailableHousesData,
                               builder: (context, snapshot) {
+                                List<RaisingItem> d = [];
+                                List<DropdownMenuItem> houseItems = [];
+
                                 if (!snapshot.hasData)
                                   return Text("Loading.....");
                                 else {
-                                  List<RaisingItem> d = snapshot.data;
-                                  List<DropdownMenuItem> houseItems = [];
+                                  d = snapshot.data;
+                                  raisings = d;
+
                                   houseItems.add(
                                     DropdownMenuItem(
                                       child: Text(''),
@@ -310,6 +300,7 @@ class _ProposalFormState extends State<ProposalForm> {
                                   );
                                   for (var i = 0; i < d.length; i++) {
                                     RaisingItem raising = d[i];
+
                                     houseItems.add(
                                       DropdownMenuItem(
                                         child: Text(
@@ -348,6 +339,18 @@ class _ProposalFormState extends State<ProposalForm> {
                               ),
                               onPressed: () async {
                                 if (_formkey.currentState.validate()) {
+                                  // RaisingItem ri;
+                                  // if (raisings.length > 0) {
+                                  //   ri = raisings
+                                  //       .where((e) =>
+                                  //           e.id == _houseid ?? data.houseid)
+                                  //       .first;
+                                  //   ri.state = 'reserved';
+                                  //   await DatabaseService(
+                                  //           uid: userId, docid: docId)
+                                  //       .updateRaisingData(ri);
+                                  // }
+
                                   await DatabaseService(
                                           uid: userId, docid: docId)
                                       .updateProposalData(new ProposalItem(

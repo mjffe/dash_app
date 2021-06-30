@@ -21,7 +21,8 @@
   "settings":"Settings",
   "house":"House",
   "success_rate":"Success Rate",
-  
+  "points_rating":"Points Rate",
+
   "LeadPage":"LeadPage",
   "name":"Name",
   "validname":"Please enter a name",

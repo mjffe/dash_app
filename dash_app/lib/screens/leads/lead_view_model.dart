@@ -33,7 +33,7 @@ class LeadViewModel {
           }
         }
       }
-
+      finalitem.sort((b, a) => a.createdon.compareTo(b.createdon));
       return finalitem;
     });
   }

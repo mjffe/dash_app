@@ -51,26 +51,29 @@ class DatabaseService {
   }
 
   //create leads
-  Future<void> createLeadData(
-      String name, String email, String phone, String leadtype) async {
+  Future<void> createLeadData(LeadItem item) async {
+    // String name, String email, String phone, String leadtype)
     return await userCollection.doc(uid).collection('leads').add({
-      'email': email,
-      'name': name,
-      'telefone': phone,
-      'leadtype': leadtype,
-      'createdon': new DateTime.now()
+      'email': item.email ?? '',
+      'name': item.name ?? '',
+      'telefone': item.phone ?? '',
+      'leadtype': item.leadtype ?? '',
+      'createdon': item.createdon ?? DateTime.now(),
+      'createdby': item.createdby ?? uid
     });
   }
 
   //update leads
-  Future<void> updateLeadData(
-      String name, String email, String phone, String leadtype) async {
+  Future<void> updateLeadData(LeadItem item) async {
+    //String name, String email, String phone, String leadtype) async {
     try {
       return await userCollection.doc(uid).collection('leads').doc(docid).set({
-        'email': email,
-        'name': name,
-        'telefone': phone,
-        'leadtype': leadtype
+        'email': item.email ?? '',
+        'name': item.name ?? '',
+        'telefone': item.phone ?? '',
+        'leadtype': item.leadtype ?? '',
+        'createdon': item.createdon ?? DateTime.now(),
+        'createdby': item.createdby ?? uid
       });
     } catch (error) {
       print('error updateLeadData: ${error.toString()}');
@@ -578,13 +581,19 @@ class DatabaseService {
     String name,
     double value,
     DateTime date,
+    DateTime createdon,
   ) async {
     try {
       return await userCollection
           .doc(uid)
           .collection('objective')
           .doc(docid)
-          .set({'name': name, 'value': value, 'date': date});
+          .set({
+        'name': name,
+        'value': value,
+        'date': date,
+        'createdon': createdon ?? new DateTime.now()
+      });
     } catch (error) {
       print('error updateObjectiveData: ${error.toString()}');
       return null;

@@ -212,7 +212,8 @@ class _ObjectiveFormState extends State<ObjectiveForm> {
                                 .updateObjectiveData(
                                     _nameUpdated ?? _name,
                                     _valueUpdated ?? _value,
-                                    _selectedDateUpdated ?? _selectedDate);
+                                    _selectedDateUpdated ?? _selectedDate,
+                                    data.createdon);
                             Navigator.pop(context);
                           }
                         }),

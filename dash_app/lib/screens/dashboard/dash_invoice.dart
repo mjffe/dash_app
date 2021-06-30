@@ -1,7 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/dash.dart';
 import 'package:dashapp/models/invoicechart.dart';
-import 'package:dashapp/models/invoicing.dart';
 import 'package:dashapp/models/objectives.dart';
 import 'package:dashapp/models/user.dart';
 import 'package:dashapp/screens/dashboard/dash_invoice_view_model.dart';

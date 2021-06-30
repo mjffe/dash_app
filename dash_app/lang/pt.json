@@ -19,7 +19,9 @@
   "invoicing":"Faturação",
   "objectives":"Objetivos",
   "settings":"Configurações",
+  "house":"Casa",			  
   "success_rate":"Taxa de sucesso",
+  "points_rating":"Rating",							
 
   "LeadPage":"LeadPage",
   "name":"Nome",
@@ -36,6 +38,9 @@
   "validleadtype":"Por favor introduza um Tipo de Lead",
   "prospecting":"Prospecção ",
   "buyercustomers":"Cliente Comprador",
+  "site":"Site",
+  "socialnetwork":"Redes Sociais",
+  "reference":"Referência",						   
 
   "SalePage":"SalePage",
   "new_sale":"Nova Venda",
@@ -48,6 +53,7 @@
   "towon":"Proposta Ganha",
   "tolost":"Proposta Perdida",
   
+
   "InvoicingPage":"InvoicingPage",
   "home":"Home",
   "validhome":"Please enter a Home",
@@ -73,6 +79,8 @@
   "saleType":"Type",
   "saleTypeShareshared":"Shared",
   "saleTypeSharefull":"Full",
+	"tolostsale": "Venda Perdida",
+  "towonsale": "Criar Fatura",						
   "ProspectingTimeTitle":"Tempo de Prospecção (h)",
   "ProspectingTimeName":"Tempo (h)",
   "DateTarget" :"Objetivo",
@@ -92,6 +100,7 @@
   "2quarter":"2º Trimestre",
   "3quarter":"3º Trimestre",
   "4quarter":"4º Trimestre",
-  
+  			   
+
   "end":"end"
 }
