@@ -26,8 +26,8 @@ class InvoiceChartViewModel {
     Stream<QuerySnapshot> s3 = users
         .doc(uData.uid)
         .collection('sales')
-        .where('createdon', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
-        .where('createdon', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+        .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+        .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
         .snapshots();
 
     var send = [s1, s2, s3];
@@ -36,6 +36,13 @@ class InvoiceChartViewModel {
         send.add(users
             .doc(item)
             .collection('invoicing')
+            .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
+            .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
+            .snapshots());
+
+        send.add(users
+            .doc(item)
+            .collection('sales')
             .where('date', isGreaterThanOrEqualTo: uData.filterDateRangeStart)
             .where('date', isLessThanOrEqualTo: uData.filterDateRangeEnd)
             .snapshots());
@@ -71,6 +78,7 @@ class InvoiceChartViewModel {
               .docs
               .map((doc) => ChartItem.fromFirestore(doc))
               .toList();
+          itens.removeWhere((item) => item.collection == null);
           if (itens.length > 0) {
             if (itens.first.collection == 'invoicing')
               itens.forEach((element) => invo.add(element));
@@ -80,7 +88,7 @@ class InvoiceChartViewModel {
           //invoJoin.addAll(invo);
         }
       }
-      sale.removeWhere((item) => item.collection == null);
+      //sale.removeWhere((item) => item.collection == null);
 
       return InvoiceChartItem(invoices: invo, objectives: obj, sales: sale);
     });

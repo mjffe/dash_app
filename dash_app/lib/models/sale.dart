@@ -9,6 +9,7 @@ class SaleItem {
       this.datemonth,
       this.type,
       this.state,
+      this.statereason,
       this.proposalid,
       this.proposal,
       this.house,
@@ -33,6 +34,7 @@ class SaleItem {
             : new DateTime.now().month,
         type: data['type'] ?? '0',
         state: data['state'] ?? '0',
+        statereason: data['statereason'] ?? '0',
         proposal: data['proposal'] ?? '',
         proposalid: data['proposalid'] ?? '',
         house: data['house'] ?? '',
@@ -52,6 +54,7 @@ class SaleItem {
   final int datemonth;
   final String type;
   final String state;
+  final String statereason;
   final String proposalid;
   final String proposal;
   final String houseid;

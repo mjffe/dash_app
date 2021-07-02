@@ -35,7 +35,7 @@ class RaisingViewModel {
           }
         }
       }
-      finalitem.sort((a, b) => a.createdon.compareTo(b.createdon));
+      finalitem.sort((b, a) => a.createdon.compareTo(b.createdon));
       return finalitem;
     });
   }

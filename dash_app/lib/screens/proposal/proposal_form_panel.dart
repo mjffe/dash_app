@@ -424,6 +424,7 @@ class _ProposalFormState extends State<ProposalForm> {
                                                         _valueUpdated ?? _value,
                                                     type: '0',
                                                     state: '0',
+                                                    statereason: '0',
                                                     proposal:
                                                         _nameUpdated ?? _name,
                                                     proposalid: data.id,
