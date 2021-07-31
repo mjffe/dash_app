@@ -20,7 +20,11 @@
   "objectives":"Objetivos",
   "settings":"Configurações",
   "house":"Casa",			  
+	"lead":"Lead",			
   "success_rate":"Taxa de sucesso",
+	 "retention_rate":"Retention Rate",
+  "retention_rate_leads":"Taxa de Retenção de Leads",
+  "retention_rate_rasing":"Taxa de Retenção de Angariações",
   "points_rating":"Rating",							
 
   "LeadPage":"LeadPage",
@@ -85,6 +89,7 @@
   "ProspectingTimeName":"Tempo (h)",
   "DateTarget" :"Objetivo",
   "date":"Data",
+  "expirationdate":"Data de Expiração",
   "validdate":"Por favor introduza uma data valida",
 
   "direction":"Direção",

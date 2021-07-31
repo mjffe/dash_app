@@ -1,5 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/invoicing.dart';
+import 'package:dashapp/models/lead.dart';
 import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/models/sale.dart';
 import 'package:dashapp/screens/invoicing/invoicing_form_panel.dart';
@@ -47,6 +48,8 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
   String _houseid = '';
   String _houseUpdated;
   String _houseidUpdated;
+  String _lead;
+  String _leadid;
   DateTime _selectedDate = DateTime.now();
   DateTime _selectedDateUpdated;
 
@@ -174,6 +177,57 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                             });
                       }
                     }),
+                SizedBox(height: 20.0),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "${AppLocalizations.of(context).translate('lead')}:",
+                      style: TextStyle(
+                        letterSpacing: 1.2,
+                      ),
+                    )),
+                StreamBuilder<List<LeadItem>>(
+                    //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                    stream:
+                        DatabaseService(uid: userId, docid: docId).getleads(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return Text("Loading.....");
+                      else {
+                        List<LeadItem> d = snapshot.data;
+                        List<DropdownMenuItem> leadItems = [];
+                        for (var i = 0; i < d.length; i++) {
+                          LeadItem lead = d[i];
+                          leadItems.add(
+                            DropdownMenuItem(
+                              child: Text(
+                                lead.name,
+                                // style: TextStyle(
+                                //     color: Color(0xff11b719)),
+                              ),
+                              value: "${lead.id}",
+                            ),
+                          );
+                        }
+                        return DropdownButtonFormField(
+                            decoration: textInputDecoration.copyWith(
+                              hintText: AppLocalizations.of(context)
+                                  .translate('SelectedLead'),
+                            ),
+                            //items: houseItems,
+                            items: d.map((type) {
+                              return DropdownMenuItem(
+                                value: type.id,
+                                child: Text(type.name),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              setState(() => _leadid = val);
+                              setState(() => _lead =
+                                  d.where((e) => e.id == val).first.name);
+                            });
+                      }
+                    }),
 
                 SizedBox(height: 20.0),
                 TextFormField(
@@ -248,18 +302,21 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                     ),
                     onPressed: () async {
                       if (_formkey.currentState.validate()) {
-                        await DatabaseService(uid: userId).createSaleData(
-                            new SaleItem(
-                                name: _name ?? '',
-                                value: _value ?? 0,
-                                type: _type ?? '0',
-                                date: _selectedDate ?? DateTime.now(),
-                                state: '0',
-                                statereason: _state ?? '0',
-                                proposal: _proposal ?? '',
-                                proposalid: '',
-                                house: _house ?? '',
-                                houseid: _houseid ?? ''));
+                        await DatabaseService(uid: userId)
+                            .createSaleData(new SaleItem(
+                          name: _name ?? '',
+                          value: _value ?? 0,
+                          type: _type ?? '0',
+                          date: _selectedDate ?? DateTime.now(),
+                          state: '0',
+                          statereason: _state ?? '0',
+                          proposal: _proposal ?? '',
+                          proposalid: '',
+                          house: _house ?? '',
+                          houseid: _houseid ?? '',
+                          lead: _lead ?? '',
+                          leadid: _leadid ?? '',
+                        ));
                         Navigator.pop(context);
                       }
                     }),
@@ -391,6 +448,63 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                     });
                               }
                             }),
+                        SizedBox(height: 20.0),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "${AppLocalizations.of(context).translate('lead')}:",
+                              style: TextStyle(
+                                letterSpacing: 1.2,
+                              ),
+                            )),
+                        StreamBuilder<List<LeadItem>>(
+                            //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                            stream: DatabaseService(uid: userId, docid: docId)
+                                .getleads(),
+                            builder: (context, snapshot) {
+                              List<LeadItem> d = [];
+                              List<DropdownMenuItem> houseItems = [];
+
+                              if (!snapshot.hasData)
+                                return Text("Loading.....");
+                              else {
+                                d = snapshot.data;
+                                houseItems.add(
+                                  DropdownMenuItem(
+                                    child: Text(''),
+                                    value: '',
+                                  ),
+                                );
+                                for (var i = 0; i < d.length; i++) {
+                                  LeadItem raising = d[i];
+
+                                  houseItems.add(
+                                    DropdownMenuItem(
+                                      child: Text(
+                                        raising.name,
+                                      ),
+                                      value: "${raising.id}",
+                                    ),
+                                  );
+                                }
+
+                                return DropdownButtonFormField(
+                                    decoration: textInputDecoration.copyWith(
+                                      hintText: AppLocalizations.of(context)
+                                          .translate('Selected an lead'),
+                                    ),
+                                    //items: houseItems,
+                                    items: houseItems,
+                                    value: saleData.leadid,
+                                    onChanged: (val) {
+                                      setState(() => _leadid = val);
+                                      setState(() => _lead = d
+                                          .where((e) => e.id == val)
+                                          .first
+                                          .name);
+                                    });
+                              }
+                            }),
 
                         SizedBox(height: 20.0),
                         Container(
@@ -513,6 +627,8 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                         house: _houseUpdated ?? saleData.house,
                                         houseid:
                                             _houseidUpdated ?? saleData.houseid,
+                                        lead: _lead ?? saleData.lead,
+                                        leadid: _leadid ?? saleData.leadid,
                                         createdby: saleData.createdby,
                                         createdon: saleData.createdon ??
                                             new DateTime.now()));
@@ -542,6 +658,9 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                               proposalid: saleData.proposalid,
                                               house: saleData.house,
                                               houseid: saleData.houseid,
+                                              lead: _lead ?? saleData.lead,
+                                              leadid:
+                                                  _leadid ?? saleData.leadid,
                                               createdby: saleData.createdby,
                                               createdon: saleData.createdon ??
                                                   new DateTime.now()));
@@ -570,6 +689,9 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                               proposalid: saleData.proposalid,
                                               house: saleData.house,
                                               houseid: saleData.houseid,
+                                              lead: _lead ?? saleData.lead,
+                                              leadid:
+                                                  _leadid ?? saleData.leadid,
                                               createdby: saleData.createdby,
                                               createdon: saleData.createdon ??
                                                   new DateTime.now()));
@@ -582,6 +704,9 @@ class _SalesFormPanelState extends State<SalesFormPanel> {
                                                       _valueUpdated ?? _value,
                                                   house: saleData.house,
                                                   houseid: saleData.houseid,
+                                                  lead: _lead ?? saleData.lead,
+                                                  leadid: _leadid ??
+                                                      saleData.leadid,
                                                   date: DateTime.now(),
                                                   sale: _nameUpdated ?? _name,
                                                   saleid: docId));

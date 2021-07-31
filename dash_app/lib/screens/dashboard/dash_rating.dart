@@ -94,7 +94,9 @@ class _RatingState extends State<Rating> {
   final UserData uData;
   final List<RatingItem> itens;
   //double _rating;
-  double _userRating = 2.5; //3.0;
+  double _userRating = 0; //3.0;
+  double _ratingraisinglosts = 0; //3.0;
+  double _ratingleads = 0;
   // int _ratingBarMode = 1;
   // double _initialRating = 2.0;
   // bool _isRTLMode = false;
@@ -105,6 +107,8 @@ class _RatingState extends State<Rating> {
     RatingItem item =
         itens.firstWhere((element) => element.userId == uData.uid);
     _userRating = 5 * item.raisingsales / item.raisingCount;
+    _ratingraisinglosts = 5 * item.raisinglost / item.raisingCount;
+    _ratingleads = 5 * item.leadnvoicingCount / item.leadCount;
     return Container(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -115,10 +119,13 @@ class _RatingState extends State<Rating> {
                 //SizedBox(width: 0),
                 Padding(
                   padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                  child: Text(
-                    AppLocalizations.of(context).translate('success_rate'),
-                    style: TextStyle(
-                        color: Colors.black, letterSpacing: 1, fontSize: 14),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.50,
+                    child: Text(
+                      AppLocalizations.of(context).translate('success_rate'),
+                      style: TextStyle(
+                          color: Colors.black, letterSpacing: 1, fontSize: 14),
+                    ),
                   ),
                 ),
                 SizedBox(width: 5.0),
@@ -129,8 +136,67 @@ class _RatingState extends State<Rating> {
                     color: Color(0xffFCCA46),
                   ),
                   itemCount: 5,
-                  itemSize: 40.0,
+                  itemSize: 30.0,
                   unratedColor: Colors.amber.withAlpha(50),
+                  direction: _isVertical ? Axis.vertical : Axis.horizontal,
+                )
+              ]),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                //SizedBox(width: 0),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.50,
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('retention_rate_leads'),
+                      style: TextStyle(
+                          color: Colors.black, letterSpacing: 1, fontSize: 14),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5.0),
+                RatingBarIndicator(
+                  rating: _ratingleads,
+                  itemBuilder: (context, index) => Icon(
+                    Icons.people,
+                    color: Color(0xff95d5b2), //
+                  ),
+                  itemCount: 5,
+                  itemSize: 30.0,
+                  unratedColor: Color(0xffccebda), //0xffccebda//0xffdef2e7
+                  direction: _isVertical ? Axis.vertical : Axis.horizontal,
+                )
+              ]),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                //SizedBox(width: 0),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.50,
+                    child: Text(
+                      AppLocalizations.of(context)
+                          .translate('retention_rate_rasing'),
+                      style: TextStyle(
+                          color: Colors.black, letterSpacing: 1, fontSize: 14),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5.0),
+                RatingBarIndicator(
+                  rating: _ratingraisinglosts,
+                  itemBuilder: (context, index) => Icon(
+                    Icons.home,
+                    color: Color(0xffE76F51), //const Color(0xffE76F51), /
+                  ),
+                  itemCount: 5,
+                  itemSize: 30.0,
+                  unratedColor: Color(
+                      0xfff3b9aa), //Colors.amber.withAlpha(50),//f0a794//f0a794//f3b9aa
                   direction: _isVertical ? Axis.vertical : Axis.horizontal,
                 )
               ]),
@@ -171,7 +237,7 @@ class _ClassificationPointsState extends State<ClassificationPoints> {
       //         yValueMapper: (RatingItem invo, _) => invo.points,
       //       )
       //     ]);
-      double chartheight = 55.0 * itens.length;
+      double chartheight = 45.0 * itens.length;
       return Container(
         height: chartheight, // height of the Container widget
         //width: 250, // width of the Container widget

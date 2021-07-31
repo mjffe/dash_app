@@ -1,5 +1,6 @@
 import 'package:dashapp/app_localizations.dart';
 import 'package:dashapp/models/invoicing.dart';
+import 'package:dashapp/models/lead.dart';
 import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/app_bar.dart';
@@ -37,6 +38,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
   String _houseid = '';
   String _houseUpdated;
   String _houseidUpdated;
+  String _lead;
+  String _leadid;
   DateTime _selectedDate = DateTime.now();
   DateTime _selectedDateUpdated;
 
@@ -83,16 +86,6 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                       setState(() => _value = double.parse(val)),
                 ),
                 SizedBox(height: 20.0),
-                // TextFormField(
-                //   decoration: textInputDecoration.copyWith(
-                //     hintText: AppLocalizations.of(context).translate('home'),
-                //   ),
-                //   initialValue: _home,
-                //   validator: (val) => val.isEmpty
-                //       ? AppLocalizations.of(context).translate('validhome')
-                //       : null,
-                //   onChanged: (val) => setState(() => _home = val),
-                // ),
                 StreamBuilder<List<RaisingItem>>(
                     //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
                     stream: DatabaseService(uid: userId, docid: docId)
@@ -136,7 +129,57 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                             });
                       }
                     }),
-
+                SizedBox(height: 20.0),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "${AppLocalizations.of(context).translate('lead')}:",
+                      style: TextStyle(
+                        letterSpacing: 1.2,
+                      ),
+                    )),
+                StreamBuilder<List<LeadItem>>(
+                    //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                    stream:
+                        DatabaseService(uid: userId, docid: docId).getleads(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return Text("Loading.....");
+                      else {
+                        List<LeadItem> d = snapshot.data;
+                        List<DropdownMenuItem> leadItems = [];
+                        for (var i = 0; i < d.length; i++) {
+                          LeadItem lead = d[i];
+                          leadItems.add(
+                            DropdownMenuItem(
+                              child: Text(
+                                lead.name,
+                                // style: TextStyle(
+                                //     color: Color(0xff11b719)),
+                              ),
+                              value: "${lead.id}",
+                            ),
+                          );
+                        }
+                        return DropdownButtonFormField(
+                            decoration: textInputDecoration.copyWith(
+                              hintText: AppLocalizations.of(context)
+                                  .translate('SelectedLead'),
+                            ),
+                            //items: houseItems,
+                            items: d.map((type) {
+                              return DropdownMenuItem(
+                                value: type.id,
+                                child: Text(type.name),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              setState(() => _leadid = val);
+                              setState(() => _lead =
+                                  d.where((e) => e.id == val).first.name);
+                            });
+                      }
+                    }),
                 SizedBox(height: 20.0),
                 DateTimePicker(
                   dateMask: 'dd/MM/yyyy',
@@ -166,6 +209,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                                 value: _value ?? 0,
                                 house: _house ?? '',
                                 houseid: _houseid ?? '',
+                                lead: _lead ?? '',
+                                leadid: _leadid ?? '',
                                 date: _selectedDate ?? DateTime.now()));
                         Navigator.pop(context);
                       }
@@ -313,6 +358,63 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                                     });
                               }
                             }),
+                        SizedBox(height: 20.0),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "${AppLocalizations.of(context).translate('lead')}:",
+                              style: TextStyle(
+                                letterSpacing: 1.2,
+                              ),
+                            )),
+                        StreamBuilder<List<LeadItem>>(
+                            //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                            stream: DatabaseService(uid: userId, docid: docId)
+                                .getleads(),
+                            builder: (context, snapshot) {
+                              List<LeadItem> d = [];
+                              List<DropdownMenuItem> houseItems = [];
+
+                              if (!snapshot.hasData)
+                                return Text("Loading.....");
+                              else {
+                                d = snapshot.data;
+                                houseItems.add(
+                                  DropdownMenuItem(
+                                    child: Text(''),
+                                    value: '',
+                                  ),
+                                );
+                                for (var i = 0; i < d.length; i++) {
+                                  LeadItem raising = d[i];
+
+                                  houseItems.add(
+                                    DropdownMenuItem(
+                                      child: Text(
+                                        raising.name,
+                                      ),
+                                      value: "${raising.id}",
+                                    ),
+                                  );
+                                }
+
+                                return DropdownButtonFormField(
+                                    decoration: textInputDecoration.copyWith(
+                                      hintText: AppLocalizations.of(context)
+                                          .translate('Selected an lead'),
+                                    ),
+                                    //items: houseItems,
+                                    items: houseItems,
+                                    value: data.leadid,
+                                    onChanged: (val) {
+                                      setState(() => _leadid = val);
+                                      setState(() => _lead = d
+                                          .where((e) => e.id == val)
+                                          .first
+                                          .name);
+                                    });
+                              }
+                            }),
 
                         SizedBox(height: 20.0),
                         Align(
@@ -359,6 +461,8 @@ class _InvoicingFormPanelState extends State<InvoicingFormPanel> {
                                         house: _houseUpdated ?? data.house,
                                         houseid:
                                             _houseidUpdated ?? data.houseid,
+                                        lead: _lead ?? data.lead,
+                                        leadid: _leadid ?? data.leadid,
                                         createdon: data.createdon,
                                         createdby: data.createdby));
                                 Navigator.pop(context);

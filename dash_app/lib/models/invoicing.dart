@@ -12,6 +12,8 @@ class InvoicingItem {
       this.saleid,
       this.house,
       this.houseid,
+      this.lead,
+      this.leadid,
       this.createdby});
 
   factory InvoicingItem.fromFirestore(DocumentSnapshot doc) {
@@ -38,6 +40,8 @@ class InvoicingItem {
         saleid: data['saleid'] ?? '',
         house: data['house'] ?? '',
         houseid: data['houseid'] ?? '',
+        lead: data['lead'] ?? '',
+        leadid: data['leadid'] ?? '',
         createdby: data['createdby'] != null && data['createdby'] != ''
             ? data['createdby']
             : user);
@@ -51,6 +55,8 @@ class InvoicingItem {
   final String sale;
   final String houseid;
   final String house;
+  final String leadid;
+  final String lead;
   final DateTime createdon;
   final String createdby;
 }

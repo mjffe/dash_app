@@ -4,18 +4,24 @@ class RatingItem {
   RatingItem(
       {this.userId,
       this.userName,
+      this.leadCount,
       this.invoicingCount,
+      this.leadnvoicingCount,
       this.fullsales,
       this.raisingCount,
       this.raisingsales,
+      this.raisinglost,
       this.points});
 
   final String userId;
   final String userName;
+  final int leadCount;
+  final int leadnvoicingCount;
   final int invoicingCount;
   final int fullsales;
   final int raisingCount;
   final int raisingsales;
+  final int raisinglost;
   final int points;
 }
 
@@ -25,7 +31,9 @@ class RatingModelItem {
       this.userId,
       this.collection,
       this.name,
+      this.raisingexpirationdate,
       this.houseid,
+      this.leadid,
       this.createdon,
       this.createdby});
 
@@ -43,11 +51,17 @@ class RatingModelItem {
             ? doc.reference.parent.path.split('/')[2]
             : 'users',
         name: data["name"] ?? '',
+        raisingexpirationdate:
+            data['expirationdate'] != null && data['expirationdate'] != ''
+                ? DateTime.fromMillisecondsSinceEpoch(
+                    (data['expirationdate']).seconds * 1000)
+                : new DateTime.now(),
         createdon: data['createdon'] != null && data['createdon'] != ''
             ? DateTime.fromMillisecondsSinceEpoch(
                 (data['createdon']).seconds * 1000)
             : new DateTime.now(),
         houseid: data['houseid'] ?? '',
+        leadid: data['leadid'] ?? '',
         createdby: data['createdby'] != null && data['createdby'] != ''
             ? data['createdby']
             : user);
@@ -57,6 +71,8 @@ class RatingModelItem {
   final String collection;
   final String name;
   final String houseid;
+  final String leadid;
+  final DateTime raisingexpirationdate;
   final DateTime createdon;
   final String createdby;
 }

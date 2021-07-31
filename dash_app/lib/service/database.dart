@@ -97,8 +97,13 @@ class DatabaseService {
 
   //create raisings
   Future<void> createRaisingData(RaisingItem item) async {
-    return await userCollection.doc(uid).collection('raisings').add(
-        {'name': item.name, 'createdon': new DateTime.now(), 'createdby': uid});
+    return await userCollection.doc(uid).collection('raisings').add({
+      'name': item.name,
+      'state': item.state ?? '0',
+      'expirationdate': item.expirationdate ?? DateTime.now(),
+      'createdon': new DateTime.now(),
+      'createdby': uid
+    });
   }
 
 //update raisings
@@ -110,6 +115,8 @@ class DatabaseService {
           .doc(docid)
           .set({
         'name': item.name ?? '',
+        'state': item.state ?? '0',
+        'expirationdate': item.expirationdate ?? DateTime.now(),
         'createdon': item.createdon ?? DateTime.now(),
         'createdby': item.createdby ?? uid
       });
@@ -140,7 +147,8 @@ class DatabaseService {
       'value': item.value ?? 0,
       'date': item.date ?? DateTime.now(),
       'type': item.type ?? '0',
-      'state': item.state ?? '',
+      'state': item.state ?? '0',
+      'statereason': item.statereason ?? '0',
       'proposal': item.proposal ?? '',
       'proposalid': item.proposalid ?? '',
       'house': item.house ?? '',
@@ -164,6 +172,8 @@ class DatabaseService {
       'proposalid': item.proposalid ?? '',
       'house': item.house ?? '',
       'houseid': item.houseid ?? '',
+      'lead': item.lead ?? '',
+      'leadid': item.leadid ?? '',
       'createdon': new DateTime.now(),
       'createdby': uid
     });
@@ -184,6 +194,8 @@ class DatabaseService {
         'proposalid': item.proposalid ?? '',
         'house': item.house ?? '',
         'houseid': item.houseid ?? '',
+        'lead': item.lead ?? '',
+        'leadid': item.leadid ?? '',
         'createdon': new DateTime.now(),
         'createdby': uid
       });
@@ -330,6 +342,8 @@ class DatabaseService {
       'state': item.state ?? '0',
       'house': item.house ?? '',
       'houseid': item.houseid ?? '',
+      'lead': item.lead ?? '',
+      'leadid': item.leadid ?? '',
       'createdon': new DateTime.now(),
       'createdby': uid
     });
@@ -348,6 +362,8 @@ class DatabaseService {
         'state': item.state ?? '0',
         'house': item.house ?? '',
         'houseid': item.houseid ?? '',
+        'lead': item.lead ?? '',
+        'leadid': item.leadid ?? '',
         'createdon': item.createdon ?? new DateTime.now(),
         'createdby': item.createdby ?? uid
       });
@@ -369,6 +385,8 @@ class DatabaseService {
         'state': item.state ?? '1',
         'house': item.house ?? '',
         'houseid': item.houseid ?? '',
+        'lead': item.lead ?? '',
+        'leadid': item.leadid ?? '',
         'createdon': item.createdon ?? new DateTime.now(),
         'createdby': item.createdby ?? uid
       });
@@ -390,6 +408,8 @@ class DatabaseService {
         'state': item.state ?? '2',
         'house': item.house ?? '',
         'houseid': item.houseid ?? '',
+        'lead': item.lead ?? '',
+        'leadid': item.leadid ?? '',
         'createdon': item.createdon ?? new DateTime.now(),
         'createdby': item.createdby ?? uid
       });
@@ -505,6 +525,8 @@ class DatabaseService {
       'saleid': item.saleid ?? '',
       'house': item.house ?? '',
       'houseid': item.houseid ?? '',
+      'lead': item.lead ?? '',
+      'leadid': item.leadid ?? '',
       'createdon': new DateTime.now(),
       'createdby': uid
     });
@@ -520,6 +542,8 @@ class DatabaseService {
       'saleid': item.saleid ?? '',
       'house': item.house ?? '',
       'houseid': item.houseid ?? '',
+      'lead': item.lead ?? '',
+      'leadid': item.leadid ?? '',
       'createdon': new DateTime.now(),
       'createdby': uid
     });
@@ -541,6 +565,8 @@ class DatabaseService {
         'saleid': item.saleid ?? '',
         'house': item.house ?? '',
         'houseid': item.houseid ?? '',
+        'lead': item.lead ?? '',
+        'leadid': item.leadid ?? '',
         'createdon': item.createdon ?? new DateTime.now(),
         'createdby': item.createdby ?? uid
       });

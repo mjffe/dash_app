@@ -4,6 +4,7 @@ import 'package:dashapp/service/database.dart';
 import 'package:dashapp/shared/colors.dart';
 import 'package:dashapp/shared/constants.dart';
 import 'package:dashapp/shared/loading.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 
 class RaisingForm extends StatefulWidget {
@@ -24,6 +25,8 @@ class _RaisingFormState extends State<RaisingForm> {
   // form values
   String _name = '';
   String _nameUpdated;
+  DateTime _selectedDate = DateTime.now().add(Duration(days: 365));
+  DateTime _selectedDateUpdated;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +52,28 @@ class _RaisingFormState extends State<RaisingForm> {
                   : null,
               onChanged: (val) => setState(() => _name = val),
             ),
+            SizedBox(height: 20.0),
+            Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "${AppLocalizations.of(context).translate('expirationdate')}:",
+                  style: TextStyle(
+                    letterSpacing: 1.2,
+                  ),
+                )),
+            DateTimePicker(
+              dateMask: 'dd/MM/yyyy',
+              initialValue: _selectedDate.toString(),
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2100),
+              dateLabelText: AppLocalizations.of(context).translate('date'),
+              onChanged: (val) =>
+                  setState(() => _selectedDateUpdated = DateTime.parse(val)),
+              validator: (val) => val.isEmpty
+                  ? AppLocalizations.of(context).translate('validdate')
+                  : null,
+              //onSaved: (val) => print(val),
+            ),
             SizedBox(height: 10.0),
             RaisedButton(
                 color: MyColors.lightBlue,
@@ -59,7 +84,10 @@ class _RaisingFormState extends State<RaisingForm> {
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
                     await DatabaseService(uid: userId)
-                        .createRaisingData(new RaisingItem(name: _name ?? ''));
+                        .createRaisingData(new RaisingItem(
+                      name: _name ?? '',
+                      expirationdate: _selectedDateUpdated ?? DateTime.now(),
+                    ));
                     Navigator.pop(context);
                   }
                 }),
@@ -98,6 +126,29 @@ class _RaisingFormState extends State<RaisingForm> {
                           : null,
                       onChanged: (val) => setState(() => _nameUpdated = val),
                     ),
+                    SizedBox(height: 20.0),
+                    Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "${AppLocalizations.of(context).translate('expirationdate')}:",
+                          style: TextStyle(
+                            letterSpacing: 1.2,
+                          ),
+                        )),
+                    DateTimePicker(
+                      dateMask: 'dd/MM/yyyy',
+                      initialValue: _selectedDate.toString(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      dateLabelText:
+                          AppLocalizations.of(context).translate('date'),
+                      onChanged: (val) => setState(
+                          () => _selectedDateUpdated = DateTime.parse(val)),
+                      validator: (val) => val.isEmpty
+                          ? AppLocalizations.of(context).translate('validdate')
+                          : null,
+                      //onSaved: (val) => print(val),
+                    ),
                     SizedBox(height: 10.0),
                     RaisedButton(
                         color: MyColors.lightBlue,
@@ -110,6 +161,8 @@ class _RaisingFormState extends State<RaisingForm> {
                             await DatabaseService(uid: userId, docid: docId)
                                 .updateRaisingData(new RaisingItem(
                                     name: _nameUpdated ?? _name,
+                                    expirationdate:
+                                        _selectedDateUpdated ?? DateTime.now(),
                                     createdon: data.createdon,
                                     createdby: data.createdby));
                             Navigator.pop(context);

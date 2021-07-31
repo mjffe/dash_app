@@ -20,7 +20,11 @@
   "objectives":"Objectives",
   "settings":"Settings",
   "house":"House",
+  "lead":"Lead",
   "success_rate":"Success Rate",
+  "retention_rate":"Retention Rate",
+  "retention_rate_leads":"Leads Retention",
+  "retention_rate_rasing":"Rasing Retention",
   "points_rating":"Points Rate",
 
   "LeadPage":"LeadPage",
@@ -85,6 +89,7 @@
   "ProspectingTimeName":"Time (h)",
   "DateTarget" :"Target",
   "date":"Date",
+  "expirationdate":"Expiration Date",
   "validdate":"Please enter a Date",
 
   "direction":"Direction",

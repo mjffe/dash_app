@@ -14,6 +14,8 @@ class SaleItem {
       this.proposal,
       this.house,
       this.houseid,
+      this.lead,
+      this.leadid,
       this.createdon,
       this.createdby});
 
@@ -39,6 +41,8 @@ class SaleItem {
         proposalid: data['proposalid'] ?? '',
         house: data['house'] ?? '',
         houseid: data['houseid'] ?? '',
+        lead: data['lead'] ?? '',
+        leadid: data['leadid'] ?? '',
         createdon: data['createdon'] != null && data['createdon'] != ''
             ? DateTime.fromMillisecondsSinceEpoch(
                 (data['createdon']).seconds * 1000)
@@ -59,6 +63,8 @@ class SaleItem {
   final String proposal;
   final String houseid;
   final String house;
+  final String leadid;
+  final String lead;
   final DateTime createdon;
   final String createdby;
 }

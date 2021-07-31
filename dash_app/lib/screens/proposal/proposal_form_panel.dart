@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dashapp/app_localizations.dart';
+import 'package:dashapp/models/lead.dart';
 import 'package:dashapp/models/proposal.dart';
 import 'package:dashapp/models/raising.dart';
 import 'package:dashapp/models/sale.dart';
@@ -32,8 +33,10 @@ class _ProposalFormState extends State<ProposalForm> {
   String _nameUpdated;
   double _value = 0;
   double _valueUpdated;
-  String _house = "";
-  String _houseid = "";
+  String _house;
+  String _houseid;
+  String _lead;
+  String _leadid;
   List<RaisingItem> raisings = [];
 
   @override
@@ -112,7 +115,6 @@ class _ProposalFormState extends State<ProposalForm> {
                           letterSpacing: 1.2,
                         ),
                       )),
-
                   StreamBuilder<List<RaisingItem>>(
                       //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
                       stream: DatabaseService(uid: userId, docid: docId)
@@ -158,6 +160,57 @@ class _ProposalFormState extends State<ProposalForm> {
                         }
                       }),
 
+                  SizedBox(height: 20.0),
+                  Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "${AppLocalizations.of(context).translate('lead')}:",
+                        style: TextStyle(
+                          letterSpacing: 1.2,
+                        ),
+                      )),
+                  StreamBuilder<List<LeadItem>>(
+                      //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                      stream:
+                          DatabaseService(uid: userId, docid: docId).getleads(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData)
+                          return Text("Loading.....");
+                        else {
+                          List<LeadItem> d = snapshot.data;
+                          List<DropdownMenuItem> leadItems = [];
+                          for (var i = 0; i < d.length; i++) {
+                            LeadItem lead = d[i];
+                            leadItems.add(
+                              DropdownMenuItem(
+                                child: Text(
+                                  lead.name,
+                                  // style: TextStyle(
+                                  //     color: Color(0xff11b719)),
+                                ),
+                                value: "${lead.id}",
+                              ),
+                            );
+                          }
+                          return DropdownButtonFormField(
+                              decoration: textInputDecoration.copyWith(
+                                hintText: AppLocalizations.of(context)
+                                    .translate('SelectedLead'),
+                              ),
+                              //items: houseItems,
+                              items: d.map((type) {
+                                return DropdownMenuItem(
+                                  value: type.id,
+                                  child: Text(type.name),
+                                );
+                              }).toList(),
+                              onChanged: (val) {
+                                setState(() => _leadid = val);
+                                setState(() => _lead =
+                                    d.where((e) => e.id == val).first.name);
+                              });
+                        }
+                      }),
                   SizedBox(height: 10.0),
                   RaisedButton(
                       color: MyColors.lightBlue,
@@ -186,6 +239,8 @@ class _ProposalFormState extends State<ProposalForm> {
                             state: '0',
                             house: _house,
                             houseid: _houseid,
+                            lead: _lead,
+                            leadid: _leadid,
                           ));
                           Navigator.pop(context);
                         }
@@ -277,7 +332,6 @@ class _ProposalFormState extends State<ProposalForm> {
                                   letterSpacing: 1.2,
                                 ),
                               )),
-
                           StreamBuilder<List<RaisingItem>>(
                               //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
                               stream: DatabaseService(uid: userId, docid: docId)
@@ -328,6 +382,63 @@ class _ProposalFormState extends State<ProposalForm> {
                                       });
                                 }
                               }),
+                          SizedBox(height: 20.0),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "${AppLocalizations.of(context).translate('lead')}:",
+                                style: TextStyle(
+                                  letterSpacing: 1.2,
+                                ),
+                              )),
+                          StreamBuilder<List<LeadItem>>(
+                              //https://github.com/whatsupcoders/FlutterDropDown/blob/master/lib/main.dart
+                              stream: DatabaseService(uid: userId, docid: docId)
+                                  .getleads(),
+                              builder: (context, snapshot) {
+                                List<LeadItem> d = [];
+                                List<DropdownMenuItem> houseItems = [];
+
+                                if (!snapshot.hasData)
+                                  return Text("Loading.....");
+                                else {
+                                  d = snapshot.data;
+                                  houseItems.add(
+                                    DropdownMenuItem(
+                                      child: Text(''),
+                                      value: '',
+                                    ),
+                                  );
+                                  for (var i = 0; i < d.length; i++) {
+                                    LeadItem raising = d[i];
+
+                                    houseItems.add(
+                                      DropdownMenuItem(
+                                        child: Text(
+                                          raising.name,
+                                        ),
+                                        value: "${raising.id}",
+                                      ),
+                                    );
+                                  }
+
+                                  return DropdownButtonFormField(
+                                      decoration: textInputDecoration.copyWith(
+                                        hintText: AppLocalizations.of(context)
+                                            .translate('Selected an lead'),
+                                      ),
+                                      //items: houseItems,
+                                      items: houseItems,
+                                      value: data.leadid,
+                                      onChanged: (val) {
+                                        setState(() => _leadid = val);
+                                        setState(() => _lead = d
+                                            .where((e) => e.id == val)
+                                            .first
+                                            .name);
+                                      });
+                                }
+                              }),
 
                           SizedBox(height: 10.0),
                           RaisedButton(
@@ -359,6 +470,8 @@ class _ProposalFormState extends State<ProposalForm> {
                                           state: data.state,
                                           house: _house ?? data.house,
                                           houseid: _houseid ?? data.houseid,
+                                          lead: _lead ?? data.lead,
+                                          leadid: _leadid ?? data.leadid,
                                           createdby: data.createdby,
                                           createdon: data.createdon));
                                   Navigator.pop(context);
@@ -387,6 +500,9 @@ class _ProposalFormState extends State<ProposalForm> {
                                                     state: '1',
                                                     house: data.house,
                                                     houseid: data.houseid,
+                                                    lead: _lead ?? data.lead,
+                                                    leadid:
+                                                        _leadid ?? data.leadid,
                                                     createdby: data.createdby,
                                                     createdon: data.createdon));
                                         Navigator.pop(context);
@@ -413,24 +529,27 @@ class _ProposalFormState extends State<ProposalForm> {
                                                     state: '2',
                                                     house: data.house,
                                                     houseid: data.houseid,
+                                                    lead: _lead ?? data.lead,
+                                                    leadid:
+                                                        _leadid ?? data.leadid,
                                                     createdby: data.createdby,
                                                     createdon: data.createdon));
-                                        String docid = await DatabaseService(
-                                                uid: userId)
-                                            .createSaleFromProposalData(
-                                                new SaleItem(
-                                                    name: '',
-                                                    value:
-                                                        _valueUpdated ?? _value,
-                                                    type: '0',
-                                                    state: '0',
-                                                    statereason: '0',
-                                                    proposal:
-                                                        _nameUpdated ?? _name,
-                                                    proposalid: data.id,
-                                                    house: data.house ?? '',
-                                                    houseid:
-                                                        data.houseid ?? ''));
+                                        String docid =
+                                            await DatabaseService(uid: userId)
+                                                .createSaleFromProposalData(
+                                                    new SaleItem(
+                                          name: '',
+                                          value: _valueUpdated ?? _value,
+                                          type: '0',
+                                          state: '0',
+                                          statereason: '0',
+                                          proposal: _nameUpdated ?? _name,
+                                          proposalid: data.id,
+                                          house: data.house ?? '',
+                                          houseid: data.houseid ?? '',
+                                          lead: _lead ?? data.lead,
+                                          leadid: _leadid ?? data.leadid,
+                                        ));
 
                                         Navigator.push(
                                             context,

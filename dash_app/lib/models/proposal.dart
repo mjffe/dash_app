@@ -8,6 +8,8 @@ class ProposalItem {
       this.state,
       this.house,
       this.houseid,
+      this.lead,
+      this.leadid,
       this.createdon,
       this.createdby});
 
@@ -22,6 +24,8 @@ class ProposalItem {
         state: data['state'] ?? '0',
         house: data['house'] ?? '',
         houseid: data['houseid'] ?? '',
+        lead: data['lead'] ?? '',
+        leadid: data['leadid'] ?? '',
         createdon: data['createdon'] != null && data['createdon'] != ''
             ? DateTime.fromMillisecondsSinceEpoch(
                 (data['createdon']).seconds * 1000)
@@ -36,6 +40,8 @@ class ProposalItem {
   final String state; //'0'-> draft '1'-> lost '2'-> won
   final String houseid;
   final String house;
+  final String leadid;
+  final String lead;
   final DateTime createdon;
   final String createdby;
 }
