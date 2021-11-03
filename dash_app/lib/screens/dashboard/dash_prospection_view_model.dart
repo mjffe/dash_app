@@ -46,7 +46,7 @@ class DashProspectionViewModel {
         }
       }
 
-      return item;
+      return time;
     });
   }
 }

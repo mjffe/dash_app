@@ -14,6 +14,7 @@ class ProspectingTimeItem {
     Map data = doc.data();
     String user = doc.reference.parent.path.split('/')[1];
     try {
+      print("ProspectingTime data x");
       return ProspectingTimeItem(
           id: doc.id,
           name: data['name'] ?? '',
@@ -33,7 +34,7 @@ class ProspectingTimeItem {
               : new DateTime.now().month,
           createdby: user ?? '');
     } catch (e) {
-      print("ProspectingTime ${e}");
+      // print("ProspectingTime ${e}");
       return ProspectingTimeItem();
     }
   }

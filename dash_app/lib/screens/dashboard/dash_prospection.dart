@@ -73,7 +73,7 @@ class _Dash_ProspectionState extends State<Dash_Prospection> {
               data.sort((a, b) => a.monthNumber.compareTo(b.monthNumber));
               //data.sortBy((Dash element) => element.monthNumber);
               // .sortedBy((Dash element) => element.monthNumber);
-              //print(data.toString());
+              print(data.toString());
               return Container(
                   child: Container(
                 padding: new EdgeInsets.symmetric(vertical: 2.5, horizontal: 5),
